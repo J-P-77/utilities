@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project basedir="." default="">
+	<antversion property="ANT.VERSION"/>
+
+	<tstamp>
+		<format property="TODAY_DATE" pattern="M.dd.yyyy"/>
+		<format property="TODAY_TIME" pattern="hh:mm aa"/>
+	</tstamp>
+	
+	<property file="project.properties"/>
+	
+	<condition property="HAVE.MANIFEST">
+		<and>
+			<isset property="manifest.file"/>
+			<not>
+				<equals arg1="${manifest.file}" arg2="" trim="true"/>
+			</not>
+			<available file="${manifest.file}"/>
+		</and>
+	</condition>
+	
+	<condition property="HAVE.EXTERNAL.LIBS">
+		<and>
+			<isset property="project.resource.external"/>
+			<not>
+				<equals arg1="${project.resource.external}" arg2="" trim="true"/>
+			</not>
+			<available file="${project.resource.external}"/>
+		</and>
+	</condition>
+	
+	<condition property="HAVE.INTERNAL.LIBS">
+		<and>
+			<isset property="project.resource.internal"/>
+			<not>
+				<equals arg1="${project.resource.internal}" arg2="" trim="true"/>
+			</not>
+			<available file="${project.resource.internal}"/>
+		</and>
+	</condition>
+	
+	<condition property="HAVE.REF">
+		<and>
+			<isset property="project.ref.antfile"/>
+			<not>
+				<equals arg1="${project.ref.antfile}" arg2="" trim="true"/>
+			</not>
+			<available file="${project.ref.antfile}"/>
+		</and>
+	</condition>
+
+	<target name="print-info">
+		<echo message="Ant Version: ${ANT.VERSION}"/>
+		<echo message="Build Date: ${TODAY_DATE}"/>
+		<echo message="Build Time: ${TODAY_TIME}"/>
+	</target>
+	
+	<target name="init-required">
+		<mkdir dir="${project.dist}"/>
+		<mkdir dir="${project.bin}"/>
+		
+		<antcall target="init-libs"/>
+		<antcall target="init-manifest"/>
+	</target>
+	
+	<target name="init-libs" if="HAVE.LIBS">
+		<mkdir dir="${project.dist}/libs"/>
+	</target>
+	
+	<target name="init-manifest" if="HAVE.MANIFEST">
+		<mkdir dir="${project.bin}/META-INF"/>
+	</target>
+	
+	<target name="clean" depends="print-info">
+		<delete dir="${project.dist}"/>
+		<delete dir="${project.bin}"/>
+		
+		<antcall target="clean-references"/>
+	</target>
+	
+	<target name="compile-classes" depends="clean,init-required">
+		<javac compiler="javac1.7" destdir="${project.bin}"
+				classpath="${compiler.classpath}"
+				source="${compiler.source.version}"
+				target="${compiler.target.version}"
+				listfiles="${compiler.listfiles}">
+				
+			<src path="${project.src}"/>
+			<include name="${compiler.includes}"/>
+			<exclude name="${compiler.excludes}"/>
+			
+			<compilerarg line="${compiler.args}"/>
+		</javac>
+	</target>	
+	
+	<target name="copy-resources">
+		<antcall target="copy-resources-internal"/>
+		<antcall target="copy-resources-external"/>
+	</target>
+	
+	<target name="copy-resources-internal" if="HAVE.INTERNAL.LIBS">
+		<copy todir="${project.bin}">
+			<fileset dir="${project.resource.internal}"/>
+		</copy>
+	</target>
+	
+	<target name="copy-resources-external" if="HAVE.EXTERNAL.LIBS">
+		<copy todir="${project.dist}/libs">
+			<fileset dir="${project.resource.external}"/>
+		</copy>
+	</target>
+	
+	<target name="copy-manifest">
+		<!--<fail message="No Manifest File">
+			<condition>
+				<or>
+					<isset property="HAVE.MANIFEST"/>
+					<isfalse value="${HAVE.MANIFEST}"/>
+				</or>
+			</condition>
+		</fail>-->
+		
+		<copy file="${manifest.file}" tofile="${project.bin}/META-INF/MANIFEST.MF" overwrite="true"/>
+	</target>
+	
+	<target name="build-references" if="HAVE.REF">
+		<ant antfile="${project.ref.antfile}" target="make-jar-with-manifest" inheritAll="false">
+			<property name="project.dist" value="${project.ref.output}"/>
+		</ant>
+	</target>
+	
+	<target name="clean-references" if="HAVE.REF">
+		<ant antfile="${project.ref.antfile}" target="clean" inheritAll="false">
+			<property name="project.dist" value="${project.ref.output}"/>
+		</ant>
+	</target>
+	
+	<target name="make-jar-with-manifest"  depends="print-info,clean,init-required,copy-resources,copy-manifest,build-references,compile-classes">		
+		<manifest file="${project.bin}/META-INF/MANIFEST.MF">
+			<attribute name="Built-By" value="${manifest.property.builtby}"/>
+			<attribute name="Build-Date" value="${TODAY_DATE}"/>
+			<attribute name="Class-Path" value="${manifest.property.classpath}"/>
+			<attribute name="Main-Class" value="${manifest.property.mainclass}"/>
+		</manifest>
+		
+		<jar 	destfile="${project.jar.path}/${project.jar.name}"
+				keepcompression="false"
+				compress="false"
+				manifest="${project.bin}/META-INF/MANIFEST.MF" filesetmanifest="skip" whenmanifestonly="create">
+				
+			<fileset dir="${project.bin}"/>
+		</jar>
+	</target>
+	
+	<target name="make-jar-without-manifest" depends="print-info,clean,init-required,copy-resources,build-references,compile-classes">				
+		<jar 	destfile="${project.jar.path}/${project.jar.name}" 
+				keepcompression="false" 
+				compress="false"
+				filesetmanifest="skip" whenmanifestonly="skip">
+				
+			<fileset dir="${project.bin}"/>
+			
+			<manifest>
+				<attribute name="Built-By" value="${manifest.property.builtby}"/>
+				<attribute name="Build-Date" value="${TODAY_DATE}"/>
+				<attribute name="Class-Path" value="${manifest.property.classpath}"/>
+			</manifest>
+		</jar>
+	</target>
+</project>
