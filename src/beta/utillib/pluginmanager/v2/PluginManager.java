@@ -36,292 +36,253 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * February 1, 2011 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class PluginManager implements ZipJarConstants {
 	private static final DebugLogger _LOG_ = LogManager.getInstance().getLogger(PluginManager.class);
-	
-    public static final String _PLUGIN_DIRECTORY_ = "plugins";
-    public static final String _CLASSS_EXT_ = ".class";
+
+	public static final String _PLUGIN_DIRECTORY_ = "plugins";
+	public static final String _CLASSS_EXT_ = ".class";
 
 	private final Class<?> _PLUGIN_INTERFACE;
 
-    private final ResizingArray<IPluginListener> _PLUGINLISTENERS = new ResizingArray<IPluginListener>(1, 1);
+	private final ResizingArray<IPluginListener> _PLUGINLISTENERS = new ResizingArray<IPluginListener>(1, 1);
 
 	private ResizingArray<PluginInfo> _PluginInfo = new ResizingArray<PluginInfo>(1, 2);
 	private ResizingArray<String> _BlackList = new ResizingArray<String>(0, 3);
 
-    public PluginManager(Class<?> plugininterface) {
-        if(plugininterface == null) {
-            throw new RuntimeException("Variable[plugininterface] - Is Null");
-        }
-        
-        _PLUGIN_INTERFACE = plugininterface;
-    }
-    
-    public void addPluginListener(IPluginListener listener) {
-        _PLUGINLISTENERS.put(listener);
-    }
-    
-    public void removePluginListener(int index) {
-        _PLUGINLISTENERS.removeAt(index);
-    }
-    
-    public void removePluginListener(IPluginListener listener) {
-        _PLUGINLISTENERS.removeAll(listener);
-    }
+	private final boolean _CREATE_INSTANCE;
 
-    public int pluginListenerCount() {
-        return _PLUGINLISTENERS.length();
-    }
+	public PluginManager(Class<?> plugininterface) {
+		this(plugininterface, true);
+	}
 
-    /**
-     * If You Are Done With Object Use Should checkOut The Object
-     * @param index
-     * @return Plugin Instance
-     */
-    public Object getPlugin(int index) {
-        final IPluginInfo P_INFO = getPluginInfoByIndex(index, true);
+	public PluginManager(Class<?> plugininterface, boolean createinstance) {
+		if(plugininterface == null) {
+			throw new RuntimeException("Variable[plugininterface] - Is Null");
+		}
 
-        return (P_INFO == null ? null : P_INFO.getPlugin());
-    }
-    
-    /**
-     * If You Are Done With Object Use Should checkOut The Object
-     * @param pluginname
-     * @return Plugin Instance
-     */
-    public Object getPlugin(String pluginname) {
-        final IPluginInfo P_INFO = getPluginInfoByName(pluginname, true);
+		_PLUGIN_INTERFACE = plugininterface;
+		_CREATE_INSTANCE = createinstance;
+	}
 
-        return (P_INFO == null ? null : P_INFO.getPlugin());
-    }
+	public void addPluginListener(IPluginListener listener) {
+		_PLUGINLISTENERS.put(listener);
+	}
 
-    /**
-     * If You Are Done With Object Use Should checkOut The Object
-     * @param index
-     * @return
-     */
-    public IPluginInfo getPluginInfoAt(int index) {
-        return getPluginInfoByIndex(index, true);
-    }
+	public void removePluginListener(int index) {
+		_PLUGINLISTENERS.removeAt(index);
+	}
 
-    /**
-     * If You Are Done With Object Use Should checkOut The Object
-     * @param pluginname
-     * @return
-     */
-    public IPluginInfo getPluginInfo(String pluginname) {
-        return getPluginInfoByName(pluginname, true);
-    }
+	public void removePluginListener(IPluginListener listener) {
+		_PLUGINLISTENERS.removeAll(listener);
+	}
 
-    public int getPluginInfoIndex(String pluginname) {
-        for(int X = 0; X < _PluginInfo.length(); X++) {
-            final PluginInfo P_INFO = _PluginInfo.getAt(X);
-            
-            if(P_INFO._PluginName.equalsIgnoreCase(pluginname)) {
-                return X;
-            }
-        }
-        
-        return -1;
-    }
+	public int pluginListenerCount() {
+		return _PLUGINLISTENERS.length();
+	}
 
-    /**
-     * Tells If The Plugin Is In Use (Please Checkout When Done With Plugin)
-     * @param pluginname
-     */
-    public void checkOut(int index) {
-        if(_PluginInfo.validIndex(index)) {
-            _PluginInfo.getAt(index).checkOut();
-        }
-    }
+	/**
+	 * If You Are Done With Object Use Should checkOut The Object
+	 * 
+	 * @param index
+	 * @return Plugin Instance
+	 */
+	public Object getPlugin(int index) {
+		final IPluginInfo P_INFO = getPluginInfoByIndex(index);
 
-    /**
-     * Tells If The Plugin Is In Use (Please Checkout When Done With Plugin)
-     * @param pluginname
-     */
-    public void checkOut(IPluginInfo plugin) {
-        if(plugin != null) {
-            if(plugin instanceof PluginInfo) {
-                final PluginInfo P_INFO = (PluginInfo)plugin;
+		return (P_INFO == null ? null : P_INFO.getPlugin());
+	}
 
-                P_INFO.checkOut();
-            }
-        }
-    }
+	/**
+	 * If You Are Done With Object Use Should checkOut The Object
+	 * 
+	 * @param pluginname
+	 * @return Plugin Instance
+	 */
+	public Object getPlugin(String pluginname) {
+		final IPluginInfo P_INFO = getPluginInfoByName(pluginname);
 
-    /**
-     * Tells If The Plugin Is In Use (Please Checkout When Done With Plugin)
-     * @param pluginname
-     */
-    public void checkOut(String pluginname) {
-        for(int X = 0; X < _PluginInfo.length(); X++) {
-            final PluginInfo P_INFO = _PluginInfo.getAt(X);
+		return (P_INFO == null ? null : P_INFO.getPlugin());
+	}
 
-            if(P_INFO._PluginName.equalsIgnoreCase(pluginname)) {
-                P_INFO.checkOut();
-            }
-        }
-    }
+	/**
+	 * If You Are Done With Object Use Should checkOut The Object
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public IPluginInfo getPluginInfoAt(int index) {
+		return getPluginInfoByIndex(index);
+	}
 
-    public boolean isPluginInUse(int index) {
-        final IPluginInfo P_INFO = getPluginInfoByIndex(index, false);
+	/**
+	 * If You Are Done With Object Use Should checkOut The Object
+	 * 
+	 * @param pluginname
+	 * @return
+	 */
+	public IPluginInfo getPluginInfo(String pluginname) {
+		return getPluginInfoByName(pluginname);
+	}
 
-        return (P_INFO == null ? false : ((PluginInfo)P_INFO).inUse());
-    }
+	public int getPluginInfoIndex(String pluginname) {
+		for(int X = 0; X < _PluginInfo.length(); X++) {
+			final PluginInfo P_INFO = _PluginInfo.getAt(X);
 
-    public boolean isPluginInUse(String pluginname) {
-        final IPluginInfo P_INFO = getPluginInfoByName(pluginname, false);
+			if(P_INFO._PluginName.equalsIgnoreCase(pluginname)) {
+				return X;
+			}
+		}
 
-        return (P_INFO == null ? false : ((PluginInfo)P_INFO).inUse());
-    }
+		return -1;
+	}
 
-    public boolean isPluginDisabled(int index) {
-        return !isPluginEnabled(index);
-    }
-    
-    public boolean isPluginDisabled(String pluginname) {
-        return !isPluginEnabled(pluginname);
-    }
-    
-    public boolean isPluginEnabled(int index) {
-        final IPluginInfo P_INFO = getPluginInfoAt(index);
-        
-        return (P_INFO == null ? false : P_INFO.isEnabled());
-    }
-    
-    public boolean isPluginEnabled(String pluginname) {
-        final IPluginInfo P_INFO = getPluginInfo(pluginname);
-        
-        return (P_INFO == null ? false : P_INFO.isEnabled());
-    }
-    
-    public int pluginCount() {
-        return _PluginInfo.length();
-    }
-    
+	public boolean isPluginDisabled(int index) {
+		return !isPluginEnabled(index);
+	}
+
+	public boolean isPluginDisabled(String pluginname) {
+		return !isPluginEnabled(pluginname);
+	}
+
+	public boolean isPluginEnabled(int index) {
+		final IPluginInfo P_INFO = getPluginInfoAt(index);
+
+		return (P_INFO == null ? false : P_INFO.isEnabled());
+	}
+
+	public boolean isPluginEnabled(String pluginname) {
+		final IPluginInfo P_INFO = getPluginInfo(pluginname);
+
+		return (P_INFO == null ? false : P_INFO.isEnabled());
+	}
+
+	public int pluginCount() {
+		return _PluginInfo.length();
+	}
+
 	public Class<?> getPluginInterface() {
 		return _PLUGIN_INTERFACE;
 	}
 
-    //Load Lib Directory
+	// Load Lib Directory
 	public void loadDirectory() {
 		loadDirectory(FileUtil.getHomePath(_PLUGIN_DIRECTORY_));
 	}
 
-    //Load Lib Directory
+	// Load Lib Directory
 	public void loadDirectory(String directory) {
 		loadDirectory(new File(directory));
 	}
-	
+
 	public void loadDirectory(File directory) {
 		if(directory == null) {
-            _LOG_.printError(
-                new RuntimeException("Variable[directory] - Is Null"));
-        } else if(!directory.exists()) {
-            _LOG_.printError(
-                new RuntimeException(directory.getPath() + " Does Not Exists"));
-        } else if(!directory.isDirectory()) {
-            _LOG_.printError(
-                new RuntimeException("Variable[directory] - Is Not A Directory"));
-        } else {
+			_LOG_.printError(new RuntimeException("Variable[directory] - Is Null"));
+		} else if(!directory.exists()) {
+			_LOG_.printError(new RuntimeException(directory.getPath() + " Does Not Exists"));
+		} else if(!directory.isDirectory()) {
+			_LOG_.printError(new RuntimeException("Variable[directory] - Is Not A Directory"));
+		} else {
 			final File[] FILES = directory.listFiles();
 			for(int X = 0; X < FILES.length; X++) {
-                if(FILES[X].isFile()) {
-                    if(FileUtil.isFileType(FILES[X], JarClassLoader._JAR_MAGIC_NUMBER_)) {
-                        loadLibrary(FILES[X]);
-                    }
-                }
+				if(FILES[X].isFile()) {
+					if(FileUtil.isFileType(FILES[X], JarClassLoader._JAR_MAGIC_NUMBER_)) {
+						loadLibrary(FILES[X]);
+					}
+				}
 			}
 		}
 	}
-	
-    //Loads Library
+
+	// Loads Library
 	public void loadLibrary(String file) {
 		loadLibrary(new File(file));
 	}
-	
+
 	public void loadLibrary(String libname, ClassLoader ploader, String[] classes) {
 		if(libname == null) {
 			throw new RuntimeException("Variable[libname] - Is Null");
 		}
-		
+
 		if(ploader == null) {
 			throw new RuntimeException("Variable[ploader] - Is Null");
 		}
-		
+
 		if(classes == null) {
 			throw new RuntimeException("Variable[classes] - Is Null");
 		}
-		
+
 		final PluginClassLoader PLUGIN_LOADER;
-        try {
-        	PLUGIN_LOADER = new PluginClassLoader(ploader, classes);
-        	
-            //Load Plugins
-            for(int X = 0; X < PLUGIN_LOADER.pluginCount(); X++) {
-                final String PLUGIN_CLASS = PLUGIN_LOADER.getPluginClassName(X);
+		try {
+			PLUGIN_LOADER = new PluginClassLoader(ploader, classes);
 
-                //Check to See if Plugin Is Allowed To Load
-                if(isClassBlackListed(PLUGIN_CLASS)) {
-                    _LOG_.printInformation("Plugin[" + PLUGIN_CLASS + "] Is Blacklisted - Plugin Did Not Load");
-                } else {
-                    final PluginInfo PINFO = new PluginInfo();
+			// Load Plugins
+			for(int X = 0; X < PLUGIN_LOADER.pluginCount(); X++) {
+				final String PLUGIN_CLASS = PLUGIN_LOADER.getPluginClassName(X);
 
-                    PINFO._File = null;
-                    PINFO._LibName = libname;
-                    PINFO._ClassLoader = PLUGIN_LOADER.getClassLoader();
+				// Check to See if Plugin Is Allowed To Load
+				if(isClassBlackListed(PLUGIN_CLASS)) {
+					_LOG_.printInformation("Plugin[" + PLUGIN_CLASS + "] Is Blacklisted - Plugin Did Not Load");
+				} else {
+					final PluginInfo PINFO = new PluginInfo();
 
-                    PINFO._PluginClassName = PLUGIN_CLASS;
-                    PINFO._Plugin_Class = PLUGIN_LOADER.loadPluginClass(PINFO._PluginClassName);
+					PINFO._File = null;
+					PINFO._LibName = libname;
+					PINFO._ClassLoader = PLUGIN_LOADER.getClassLoader();
 
-                    if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, PINFO._Plugin_Class)) {
-                        _LOG_.printError(new RuntimeException("Variable[PINFO._Plugin_Class] - " + PINFO._Plugin_Class.getName() + " - Does Not Implement Interface"));
+					PINFO._PluginClassName = PLUGIN_CLASS;
+					PINFO._Plugin_Class = PLUGIN_LOADER.loadPluginClass(PINFO._PluginClassName);
 
-                        PINFO._Plugin_Class = null;
-                        PINFO._Plugin_Instance = null;
-                        PINFO._Enabled = false;
-                    } else {
-                        PINFO._Enabled = newInstance(PINFO, new Parameter[0]);
-                    }
+					if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, PINFO._Plugin_Class)) {
+						_LOG_.printError(new RuntimeException("Variable[PINFO._Plugin_Class] - " + PINFO._Plugin_Class.getName() + " - Does Not Implement Interface"));
 
-                    if(PINFO._Enabled/* && PINFO._Plugin_Instance != null*/) {
-                        final String PNAME = getPluginName(PINFO._Plugin_Instance);
+						PINFO._Plugin_Class = null;
+						PINFO._Plugin_Instance = null;
+						PINFO._Enabled = false;
+					} else {
+						if(_CREATE_INSTANCE) {
+							PINFO._Enabled = newInstance(PINFO, new Parameter[0]);
+						}
+					}
 
-                        if(PNAME == null) {
-                            PINFO._PluginName = PINFO._PluginClassName;
-                        } else {
-                            PINFO._PluginName = PNAME;
-                        }
+					if(PINFO._Enabled/* && PINFO._Plugin_Instance != null */) {
+						final String PNAME = getPluginName(PINFO._Plugin_Instance);
 
-                        _PluginInfo.put(PINFO);
-                        //[Plugin Event] - Plugin Added
-                        sendEvent(Event.PLUGIN_ADDED, PINFO);
-                    }
-                }
-            }
-        } catch(Exception e) {
-            _LOG_.printError("While Loading Plugin");
-            _LOG_.printError(e);
-        }
+						if(PNAME == null) {
+							PINFO._PluginName = PINFO._PluginClassName;
+						} else {
+							PINFO._PluginName = PNAME;
+						}
+
+						_PluginInfo.put(PINFO);
+						// [Plugin Event] - Plugin Added
+						sendEvent(Event.PLUGIN_ADDED, PINFO);
+					}
+				}
+			}
+		} catch(Exception e) {
+			_LOG_.printError("While Loading Plugin");
+			_LOG_.printError(e);
+		}
 	}
-	
+
 	public void loadLibrary(File ford) {
 		if(ford == null) {
 			throw new RuntimeException("Variable[ford] - Is Null");
 		}
-		
+
 		final IPluginClassScanner SCANNER;
-        
+
 		if(ford.isFile()) {
 			if(FileUtil.isFileType(ford, _JAR_MAGIC_NUMBER_)) {
 				SCANNER = new JarScanner(ford);
@@ -331,663 +292,613 @@ public class PluginManager implements ZipJarConstants {
 		} else {
 			SCANNER = new DirectoryScanner(ford, false);
 		}
-		
-		final String[] P_CLASSES = SCANNER.getPluginClassesNames(_PLUGIN_INTERFACE);
-		
-		if(P_CLASSES != null && P_CLASSES.length > 0) {
-		    final PluginClassLoader PLUGIN_LOADER;
-		    try {
-		    	final MyClassloader MYLOADER;
-		        if(ford.isFile()) {
-		        	MYLOADER = new JarClassLoader(ford, null, null);
-		        } else {
-		        	MYLOADER = new DirectoryClassLoader(ford, null, null);
-		        }
-		        
-		        PLUGIN_LOADER = new PluginClassLoader(MYLOADER, P_CLASSES);
-		        
-		        //Load Plugins
-		        for(int X = 0; X < PLUGIN_LOADER.pluginCount(); X++) {
-		            final String PLUGIN_CLASS = PLUGIN_LOADER.getPluginClassName(X);
-		
-		            //Check to See if Plugin Is Allowed To Load
-		            if(isClassBlackListed(PLUGIN_CLASS)) {
-		                _LOG_.printInformation("Plugin[" + PLUGIN_CLASS + "] - Plugin Did Not Load Is Blacklisted ");
-		            } else {
-		                final PluginInfo PINFO = new PluginInfo();
-		
-		                PINFO._File = ford;
-		                PINFO._LibName = ford.getName();
-		                PINFO._ClassLoader = PLUGIN_LOADER.getClassLoader();
-		
-		                PINFO._PluginClassName = PLUGIN_CLASS;
-		                PINFO._Plugin_Class = PLUGIN_LOADER.loadPluginClass(PINFO._PluginClassName);
-		
-		                if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, PINFO._Plugin_Class)) {
-		                    _LOG_.printError(new RuntimeException("Plugin Class: " + PINFO._PluginClassName + " - Does Not Implement Interface"));
-		
-		                    PINFO._Plugin_Class = null;
-		                    PINFO._Plugin_Instance = null;
-		                    PINFO._Enabled = false;
-		                } else {
-		                    PINFO._Enabled = newInstance(PINFO, new Parameter[0]);
-		                }
-		
-		                if(PINFO._Enabled) {
-		                    final String PNAME = getPluginName(PINFO._Plugin_Instance);
-		
-		                    if(PNAME == null) {
-		                        PINFO._PluginName = PINFO._PluginClassName;
-		                    } else {
-		                        PINFO._PluginName = PNAME;
-		                    }
 
-		                    _PluginInfo.put(PINFO);
-		                    //[Plugin Event] - Plugin Added
-		                    sendEvent(Event.PLUGIN_ADDED, PINFO);
-		                    
-		                    _LOG_.printInformation("Plugin[" + PINFO._PluginClassName + "] - Plugin Loaded");
-		                }
-		            }
-		        }
-		    } catch(FileNotFoundException e) {
-		        _LOG_.printError("Plugin: " + ford.getPath() + " Not Found");
-		    } catch(InvalidFileTypeException e) {
-		        _LOG_.printError("Plugin: " + ford.getPath() + " Not A Jar\\Zip File");
-		    } catch(Exception e) {
-		        _LOG_.printError("While Loading Plugin: " + ford.getPath());
-		        _LOG_.printError(e);
-		    }
+		final String[] P_CLASSES = SCANNER.getPluginClassesNames(_PLUGIN_INTERFACE);
+
+		if(P_CLASSES != null && P_CLASSES.length > 0) {
+			final PluginClassLoader PLUGIN_LOADER;
+			try {
+				final MyClassloader MYLOADER;
+				if(ford.isFile()) {
+					MYLOADER = new JarClassLoader(ford, null, null);
+				} else {
+					MYLOADER = new DirectoryClassLoader(ford, null, null);
+				}
+
+				PLUGIN_LOADER = new PluginClassLoader(MYLOADER, P_CLASSES);
+
+				// Load Plugins
+				for(int X = 0; X < PLUGIN_LOADER.pluginCount(); X++) {
+					final String PLUGIN_CLASS = PLUGIN_LOADER.getPluginClassName(X);
+
+					// Check to See if Plugin Is Allowed To Load
+					if(isClassBlackListed(PLUGIN_CLASS)) {
+						_LOG_.printInformation("Plugin[" + PLUGIN_CLASS + "] - Plugin Did Not Load Is Blacklisted ");
+					} else {
+						final PluginInfo PINFO = new PluginInfo();
+
+						PINFO._File = ford;
+						PINFO._LibName = ford.getName();
+						PINFO._ClassLoader = PLUGIN_LOADER.getClassLoader();
+
+						PINFO._PluginClassName = PLUGIN_CLASS;
+						PINFO._Plugin_Class = PLUGIN_LOADER.loadPluginClass(PINFO._PluginClassName);
+
+						if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, PINFO._Plugin_Class)) {
+							_LOG_.printError(new RuntimeException("Plugin Class: " + PINFO._PluginClassName + " - Does Not Implement Interface"));
+
+							PINFO._Plugin_Class = null;
+							PINFO._Plugin_Instance = null;
+							PINFO._Enabled = false;
+						} else {
+							if(_CREATE_INSTANCE) {
+								PINFO._Enabled = newInstance(PINFO, new Parameter[0]);
+							} else {
+								PINFO._Enabled = true;
+							}
+						}
+
+						if(PINFO._Enabled) {
+							final String PNAME = getPluginName(PINFO._Plugin_Instance);
+
+							if(PNAME == null) {
+								PINFO._PluginName = PINFO._PluginClassName;
+							} else {
+								PINFO._PluginName = PNAME;
+							}
+
+							_PluginInfo.put(PINFO);
+							// [Plugin Event] - Plugin Added
+							sendEvent(Event.PLUGIN_ADDED, PINFO);
+
+							_LOG_.printInformation("Plugin[" + PINFO._PluginClassName + "] - Plugin Loaded");
+						}
+					}
+				}
+			} catch(FileNotFoundException e) {
+				_LOG_.printError("Plugin: " + ford.getPath() + " Not Found");
+			} catch(InvalidFileTypeException e) {
+				_LOG_.printError("Plugin: " + ford.getPath() + " Not A Jar\\Zip File");
+			} catch(Exception e) {
+				_LOG_.printError("While Loading Plugin: " + ford.getPath());
+				_LOG_.printError(e);
+			}
 		}
 	}
 
 	public void loadClass(Class<?> clazz, Parameter... parameters) {
 		if(clazz == null) {
-            _LOG_.printError(new RuntimeException("Variable[clazz] - Is Null"));
-        } else {
-            //Check to See if Plugin Is Allowed To Load
-            if(isClassBlackListed(clazz.getName())) {
-                _LOG_.printInformation("Plugin: " + clazz.getName() + " Is Blacklisted(Plugin Did Not Load)");
-            } else {
-                if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, clazz)) {
-                    _LOG_.printError(new RuntimeException("Plugin Class: " + clazz.getName() + " - Does Not Implement Interface"));
-                } else {
-                    try {
-                        final PluginInfo PINFO = new PluginInfo();
+			_LOG_.printError(new RuntimeException("Variable[clazz] - Is Null"));
+		} else {
+			// Check to See if Plugin Is Allowed To Load
+			if(isClassBlackListed(clazz.getName())) {
+				_LOG_.printInformation("Plugin: " + clazz.getName() + " Is Blacklisted(Plugin Did Not Load)");
+			} else {
+				if(!ClassUtil.implementsInterface(_PLUGIN_INTERFACE, clazz)) {
+					_LOG_.printError(new RuntimeException("Plugin Class: " + clazz.getName() + " - Does Not Implement Interface"));
+				} else {
+					try {
+						final PluginInfo PINFO = new PluginInfo();
 
-                        PINFO._File = null;
-                        PINFO._LibName = null;
-                        PINFO._ClassLoader = null;
+						PINFO._File = null;
+						PINFO._LibName = null;
+						PINFO._ClassLoader = clazz.getClassLoader();
 
-                        PINFO._PluginClassName = clazz.getName();
-                        PINFO._Plugin_Class = clazz;
+						PINFO._PluginClassName = clazz.getName();
+						PINFO._Plugin_Class = clazz;
 
-                        PINFO._Enabled = newInstance(PINFO, parameters);
+						if(_CREATE_INSTANCE) {
+							PINFO._Enabled = newInstance(PINFO, parameters);
+						} else {
+							PINFO._Enabled = true;
+						}
 
-                        if(PINFO._Enabled/* && PINFO._Plugin_Instance != null*/) {
-                            final String PNAME = getPluginName(PINFO._Plugin_Instance);
+						if(PINFO._Enabled/* && PINFO._Plugin_Instance != null */) {
+							final String PNAME = getPluginName(PINFO._Plugin_Instance);
 
-                            if(PNAME == null) {
-                                PINFO._PluginName = PINFO._PluginClassName;
-                            } else {
-                                PINFO._PluginName = PNAME;
-                            }
+							if(PNAME == null) {
+								PINFO._PluginName = PINFO._PluginClassName;
+							} else {
+								PINFO._PluginName = PNAME;
+							}
 
-                            _PluginInfo.put(PINFO);
-                            //[Plugin Event] - Plugin Added
-                            sendEvent(Event.PLUGIN_ADDED, PINFO);
-                            
-                            _LOG_.printInformation("Plugin[" + PINFO._PluginClassName + "] - Plugin Loaded");
-                        }
-                    } catch (Exception e) {
-                        _LOG_.printError("While Loading Plugin: " + clazz.getName());
-                        _LOG_.printError(e);
-                    }
-                }
-            }
+							_PluginInfo.put(PINFO);
+							// [Plugin Event] - Plugin Added
+							sendEvent(Event.PLUGIN_ADDED, PINFO);
+
+							_LOG_.printInformation("Plugin[" + PINFO._PluginClassName + "] - Plugin Loaded");
+						}
+					} catch(Exception e) {
+						_LOG_.printError("While Loading Plugin: " + clazz.getName());
+						_LOG_.printError(e);
+					}
+				}
+			}
 		}
 	}
 
-    public void unloadLib(String libname) {//Jar/Zip File Name (ex. Example.jar)
-        for(int X = 0; X < _PluginInfo.length(); X++) {
-            PluginInfo TempInfo = _PluginInfo.getAt(X);
-            
-            if(TempInfo._LibName != null) {
-                if(libname.equals(TempInfo._LibName)) {
-                    unloadPlugin(X);
-                }
-            }
-        }
-    }
-    
-    //UnLoads Plugin
-	public void unloadPlugin(String pluginname) {
-        final int INDEX = getPluginInfoIndex(pluginname);
-        
-        if(INDEX != -1) {
-            unloadPlugin(INDEX);
-        }
-    }
-    
-	public void unloadPlugin(int pluginindex) {
-        if(_PluginInfo.validIndex(pluginindex)) {
-            enablePlugin(pluginindex, false);
+	public void unloadLib(String libname) {// Jar/Zip File Name (ex. Example.jar)
+		for(int X = 0; X < _PluginInfo.length(); X++) {
+			PluginInfo TempInfo = _PluginInfo.getAt(X);
 
-            final PluginInfo PINFO = _PluginInfo.getAt(pluginindex);
-
-            if(PINFO.inUse()) {
-                _LOG_.printWarning("Plugin: " + PINFO._PluginClassName + " Could Still Be In Use");
-            }
-
-            PINFO._File = null;
-            PINFO._LibName = null;
-            PINFO._PluginName = null;
-            PINFO._Plugin_Instance = null;
-            PINFO._Plugin_Class = null;
-            PINFO._ClassLoader = null;
-            PINFO._PluginClassName = null;
-            
-            _PluginInfo.removeAt(pluginindex);
-            //[Plugin Event] - Plugin Unload (Removed)
-            sendEvent(Event.PLUGIN_REMOVED, PINFO);
-        }
+			if(TempInfo._LibName != null) {
+				if(libname.equals(TempInfo._LibName)) {
+					unloadPlugin(X);
+				}
+			}
+		}
 	}
 
-    //UnLoads Plugin
-	public void unloadPlugin(String pluginname, boolean onlycloseifnotinuse) {
-        final int INDEX = getPluginInfoIndex(pluginname);
+	// UnLoads Plugin
+	public void unloadPlugin(String pluginname) {
+		final int INDEX = getPluginInfoIndex(pluginname);
 
-        if(INDEX != -1) {
-            unloadPlugin(INDEX, onlycloseifnotinuse);
-        }
-    }
+		if(INDEX != -1) {
+			unloadPlugin(INDEX);
+		}
+	}
 
-	public void unloadPlugin(int pluginindex, boolean onlycloseifnotinuse) {
-        if(_PluginInfo.validIndex(pluginindex)) {
-            enablePlugin(pluginindex, false);
+	public void unloadPlugin(int pluginindex) {
+		if(_PluginInfo.validIndex(pluginindex)) {
+			enablePlugin(pluginindex, false);
 
-            final PluginInfo PINFO = _PluginInfo.getAt(pluginindex);
+			final PluginInfo PINFO = _PluginInfo.getAt(pluginindex);
 
-            if(PINFO.inUse()) {
-                _LOG_.printWarning("Plugin: " + PINFO._PluginClassName + " - Still In Use");
-            }
+			PINFO._File = null;
+			PINFO._LibName = null;
+			PINFO._PluginName = null;
+			PINFO._Plugin_Instance = null;
+			PINFO._Plugin_Class = null;
+			PINFO._ClassLoader = null;
+			PINFO._PluginClassName = null;
 
-            if((!PINFO.inUse() && onlycloseifnotinuse) || (!onlycloseifnotinuse && PINFO.inUse())) {
-                PINFO._File = null;
-                PINFO._LibName = null;
-                PINFO._PluginName = null;
-                PINFO._Plugin_Instance = null;
-                PINFO._Plugin_Class = null;
-                PINFO._ClassLoader = null;
-                PINFO._PluginClassName = null;
-
-                _PluginInfo.removeAt(pluginindex);
-                //[Plugin Event] - Plugin Unload (Removed)
-                sendEvent(Event.PLUGIN_REMOVED, PINFO);
-            }
-        }
+			_PluginInfo.removeAt(pluginindex);
+			// [Plugin Event] - Plugin Unload (Removed)
+			sendEvent(Event.PLUGIN_REMOVED, PINFO);
+		}
 	}
 
 	public void unloadAllPlugins() {
-        for(int X = (_PluginInfo.length() - 1); X > -1; X--) {
-            unloadPlugin(X);
-        }
+		for(int X = (_PluginInfo.length() - 1); X > -1; X--) {
+			unloadPlugin(X);
+		}
 	}
-    
-    //Enable Lib Plugin
+
+	// Enable Lib Plugin
 	public void enablePlugin(int pluginindex, boolean enable) {
-        if(_PluginInfo.validIndex(pluginindex)) {
-            final PluginInfo PINFO = _PluginInfo.getAt(pluginindex);
-            
-            if(PINFO != null) {
-                PINFO._Enabled = enable;
-                //[Plugin Event] - Plugin Enabled (Enabled or Disabled)
-                if(enable) {
-                    sendEvent(Event.PLUGIN_ENABLE, PINFO);//Plugin Enabled
-                    _LOG_.printInformation("Plugin" + PINFO.getPluginName() + " -  Is Enabled");
-                } else {
-                    sendEvent(Event.PLUGIN_DISABLED, PINFO);//Plugin Disabled
-                    _LOG_.printInformation("Plugin: " + PINFO.getPluginName() + " - Is Disabled");
-                }
-            }
-        }
+		if(_PluginInfo.validIndex(pluginindex)) {
+			final PluginInfo PINFO = _PluginInfo.getAt(pluginindex);
+
+			if(PINFO != null) {
+				PINFO._Enabled = enable;
+				// [Plugin Event] - Plugin Enabled (Enabled or Disabled)
+				if(enable) {
+					sendEvent(Event.PLUGIN_ENABLE, PINFO);// Plugin Enabled
+					_LOG_.printInformation("Plugin" + PINFO.getPluginName() + " -  Is Enabled");
+				} else {
+					sendEvent(Event.PLUGIN_DISABLED, PINFO);// Plugin Disabled
+					_LOG_.printInformation("Plugin: " + PINFO.getPluginName() + " - Is Disabled");
+				}
+			}
+		}
 	}
-    
+
 	public void enablePlugin(String pluginname, boolean enable) {
-        int Index = getPluginInfoIndex(pluginname);
-        
-        if(Index != -1) {
-            enablePlugin(Index, enable);
-        }
+		int Index = getPluginInfoIndex(pluginname);
+
+		if(Index != -1) {
+			enablePlugin(Index, enable);
+		}
 	}
-       
-    //Enable or Disables All Plugins
+
+	// Enable or Disables All Plugins
 	public void enableAllPlugins(boolean enable) {
 		for(int X = 0; X < _PluginInfo.length(); X++) {
-            enablePlugin(X, enable);
-        }
+			enablePlugin(X, enable);
+		}
 	}
 
-    /**
-     * Ex. javax.swing.JButton
-     * @param classname
-     */
-    public void addBlackListClass(String classname) {
-        if(classname != null && classname.length() > 0) {
-            if(!isClassBlackListed(classname)) {
-                _BlackList.put(classname);
-            }
-        }
-    }
-    
-    /**
-     * Ex. javax.swing.JButton
-     * @param classname
-     */
-    public void removeBlackListClass(String classname) {
-        if(classname != null && classname.length() > 0) {
-            for(int X = 0; X < _BlackList.length();) {
-                if(classname.equals(_BlackList.getAt(X))) {
-                    _BlackList.removeAt(X);
-                } else {
-                    X++;
-                }
-            }
-        }
-    }
-    
-    /**
-     * Ex. javax.swing.JButton
-     * @param classname
-     * @return
-     */
-    public boolean isClassBlackListed(String classname) {
-        if(classname == null || classname.length() == 0) {
-            return false;
-        } else {
-            for(int X = 0; X < _BlackList.length(); X++) {
-                if(_BlackList.getAt(X).endsWith(classname)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    private void sendEvent(Event event, IPluginInfo plugininfo) {
-//        final PluginEvent EVENT = new PluginEvent(event, plugininfo, obj);
-
-    	synchronized (_PLUGINLISTENERS) {
-	        for(int X = 0; X < _PLUGINLISTENERS.length(); X++) {
-	            final IPluginListener LISTENER = _PLUGINLISTENERS.getAt(X);
-	            
-	            if(LISTENER != null) {
-	                LISTENER.handleEvent(event, plugininfo);
-	//                LISTENER.handleEvent(EVENT);
-	            }
-	        }
+	/**
+	 * Ex. javax.swing.JButton
+	 * 
+	 * @param classname
+	 */
+	public void addBlackListClass(String classname) {
+		if(classname != null && classname.length() > 0) {
+			if(!isClassBlackListed(classname)) {
+				_BlackList.put(classname);
+			}
 		}
-    }
+	}
 
-    private PluginInfo getPluginInfoByIndex(int index, boolean checkin) {
-        if(_PluginInfo.validIndex(index)) {
-            if(checkin) {
-                _PluginInfo.getAt(index).checkIn();
-            }
+	/**
+	 * Ex. javax.swing.JButton
+	 * 
+	 * @param classname
+	 */
+	public void removeBlackListClass(String classname) {
+		if(classname != null && classname.length() > 0) {
+			for(int X = 0; X < _BlackList.length();) {
+				if(classname.equals(_BlackList.getAt(X))) {
+					_BlackList.removeAt(X);
+				} else {
+					X++;
+				}
+			}
+		}
+	}
 
-            return _PluginInfo.getAt(index);
-        }
+	/**
+	 * Ex. javax.swing.JButton
+	 * 
+	 * @param classname
+	 * @return
+	 */
+	public boolean isClassBlackListed(String classname) {
+		if(classname == null || classname.length() == 0) {
+			return false;
+		} else {
+			for(int X = 0; X < _BlackList.length(); X++) {
+				if(_BlackList.getAt(X).endsWith(classname)) {
+					return true;
+				}
+			}
 
-        return null;
-    }
+			return false;
+		}
+	}
 
-    private IPluginInfo getPluginInfoByName(String pluginname, boolean checkin) {
-        for(int X = 0; X < _PluginInfo.length(); X++) {
-            final PluginInfo P_INFO = _PluginInfo.getAt(X);
+	private void sendEvent(Event event, IPluginInfo plugininfo) {
+// final PluginEvent EVENT = new PluginEvent(event, plugininfo, obj);
 
-            if(P_INFO._PluginName.equalsIgnoreCase(pluginname)) {
-                if(checkin) {
-                    P_INFO.checkIn();
-                }
-                
-                return P_INFO;
-            }
-        }
+		synchronized(_PLUGINLISTENERS) {
+			for(int X = 0; X < _PLUGINLISTENERS.length(); X++) {
+				final IPluginListener LISTENER = _PLUGINLISTENERS.getAt(X);
 
-        return null;
-    }
+				if(LISTENER != null) {
+					LISTENER.handleEvent(event, plugininfo);
+					// LISTENER.handleEvent(EVENT);
+				}
+			}
+		}
+	}
 
-    private boolean isPluginInterface(Class<?> aclass) {
-        return (aclass == _PLUGIN_INTERFACE);
-    }
+	private PluginInfo getPluginInfoByIndex(int index) {
+		if(_PluginInfo.validIndex(index)) {
+			return _PluginInfo.getAt(index);
+		}
 
-    
-    //STATIC
-    private static boolean newInstance(PluginInfo pinfo, Parameter... parameters) {
-        try {
-            if(parameters == null || parameters.length == 0) {
-                pinfo._Plugin_Instance = pinfo.getClass().newInstance();
-            } else {
-                final Class<?>[] CLASSES = new Class[parameters.length];
-                final Object[] ARGUMENTS = new Object[parameters.length];
+		return null;
+	}
 
-                for(int X = 0; X < parameters.length; X++) {
-                    CLASSES[X] = parameters[X].getType();
-                    ARGUMENTS[X] = parameters[X].getArgument();
-                }
+	private IPluginInfo getPluginInfoByName(String pluginname) {
+		for(int X = 0; X < _PluginInfo.length(); X++) {
+			final PluginInfo P_INFO = _PluginInfo.getAt(X);
 
-                final Constructor<?> CONSTRUCTOR = pinfo.getClass().getConstructor(CLASSES);
+			if(P_INFO._PluginName.equalsIgnoreCase(pluginname)) {
+				return P_INFO;
+			}
+		}
 
-                if(CONSTRUCTOR != null) {
-                    pinfo._Plugin_Instance = pinfo.getClass().newInstance();
-                }
-            }
+		return null;
+	}
 
-            return pinfo.getPlugin() != null;
-        } catch(InstantiationException e) {
-            _LOG_.printError("Failed To Create Instance For Plugin: " + pinfo.getPluginClassName());
-        } catch(IllegalAccessException e) {
-            _LOG_.printError("Does Not Have A Public Constructor For Plugin: " + pinfo.getPluginClassName());
-        } catch (Exception e) {
-            _LOG_.printError("While Loading Plugin: " + pinfo.getPluginClassName());
-            _LOG_.printError(e);
-        }
+	private boolean isPluginInterface(Class<?> aclass) {
+		return (aclass == _PLUGIN_INTERFACE);
+	}
 
-        return false;
-    }
+	// STATIC
+	private static boolean newInstance(PluginInfo pinfo, Parameter... parameters) {
+		try {
+			if(parameters == null || parameters.length == 0) {
+				pinfo._Plugin_Instance = pinfo.getClass().newInstance();
+			} else {
+				final Class<?>[] CLASSES = new Class[parameters.length];
+				final Object[] ARGUMENTS = new Object[parameters.length];
 
-    private static String getPluginName(Object clazz) {
-        Method M = null;
-        try {
-            M = clazz.getClass().getMethod("getPluginName");
+				for(int X = 0; X < parameters.length; X++) {
+					CLASSES[X] = parameters[X].getType();
+					ARGUMENTS[X] = parameters[X].getArgument();
+				}
 
-            final Object OBJ = M.invoke(clazz);
+				final Constructor<?> CONSTRUCTOR = pinfo.getClass().getConstructor(CLASSES);
 
-            if(OBJ instanceof String) {
-                return (String)OBJ;
-            }
-        } catch (Exception e) {}
+				if(CONSTRUCTOR != null) {
+					pinfo._Plugin_Instance = CONSTRUCTOR.newInstance(ARGUMENTS);
+				}
+			}
 
-        return null;
-    }
+			return pinfo.getPlugin() != null;
+		} catch(InstantiationException e) {
+			_LOG_.printError("Failed To Create Instance For Plugin: " + pinfo.getPluginClassName());
+		} catch(IllegalAccessException e) {
+			_LOG_.printError("Does Not Have A Public Constructor For Plugin: " + pinfo.getPluginClassName());
+		} catch(Exception e) {
+			_LOG_.printError("While Loading Plugin: " + pinfo.getPluginClassName());
+			_LOG_.printError(e);
+		}
 
-    //CLASSES
-    private class PluginInfo implements IPluginInfo {
-        private File _File = null;
-        private String _LibName = null;
-        private String _PluginName = null;
-        private Object _Plugin_Instance = null;
-        private Class<?> _Plugin_Class = null;
-        private ClassLoader _ClassLoader = null;
-        private String _PluginClassName = null;
-        private boolean _Enabled = false;
+		return false;
+	}
 
-        private int _InUseCount = 0;
+	private static String getPluginName(Object clazz) {
+		Method M = null;
+		try {
+			M = clazz.getClass().getMethod("getPluginName");
 
-        @Override
-        public File getFile() {
-            return _File;
-        }
+			final Object OBJ = M.invoke(clazz);
 
-        @Override
-        public String getJarFileName() {
-            return _LibName;
-        }
+			if(OBJ instanceof String) {
+				return (String)OBJ;
+			}
+		} catch(Exception e) {}
 
-        @Override
-        public String getPluginName() {
-            return _PluginName;
-        }
+		return null;
+	}
 
-        @Override
-        public Object getPlugin() {
-            return _Plugin_Instance;
-        }
+	// CLASSES
+	private class PluginInfo implements IPluginInfo {
+		private File _File = null;
+		private String _LibName = null;
+		private String _PluginName = null;
+		private Object _Plugin_Instance = null;
+		private Class<?> _Plugin_Class = null;
+		private ClassLoader _ClassLoader = null;
+		private String _PluginClassName = null;
+		private boolean _Enabled = false;
 
-        @Override
-        public Class<?> getPluginClass() {
-            return _Plugin_Class;
-        }
+		@Override
+		public File getFile() {
+			return _File;
+		}
 
-        @Override
-        public ClassLoader getClassLoader() {
-            return _ClassLoader;
-        }
+		@Override
+		public String getJarFileName() {
+			return _LibName;
+		}
 
-        @Override
-        public String getPluginClassName() {
-            return _PluginClassName;
-        }
+		@Override
+		public String getPluginName() {
+			return _PluginName;
+		}
 
-        @Override
-        public boolean isEnabled() {
-            return _Enabled;
-        }
+		@Override
+		public Object getPlugin() {
+			return _Plugin_Instance;
+		}
 
-        private void checkOut() {
-            if(_InUseCount > 0) {
-                _InUseCount--;
-            }
-        }
+		@Override
+		public Class<?> getPluginClass() {
+			return _Plugin_Class;
+		}
 
-        private void checkIn() {
-            _InUseCount++;
-        }
+		@Override
+		public ClassLoader getClassLoader() {
+			return _ClassLoader;
+		}
 
-        private boolean inUse() {
-            return _InUseCount > 0;
-        }
-    }
+		@Override
+		public String getPluginClassName() {
+			return _PluginClassName;
+		}
 
-    private interface IPluginClassScanner {
-        public String[] getPluginClassesNames(Class<?> ainterface);
-    }
+		@Override
+		public boolean isEnabled() {
+			return _Enabled;
+		}
+	}
 
-    private class JarScanner implements IPluginClassScanner {
-        private final File _FILE;
+	private interface IPluginClassScanner {
+		public String[] getPluginClassesNames(Class<?> ainterface);
+	}
 
-        public JarScanner(File jarfile) {
-            _FILE = jarfile;
-        }
+	private class JarScanner implements IPluginClassScanner {
+		private final File _FILE;
 
-        @Override
-        public String[] getPluginClassesNames(Class<?> ainterface) {
-            final ResizingArray<String> CLASSES = new ResizingArray<String>();
+		public JarScanner(File jarfile) {
+			_FILE = jarfile;
+		}
 
-            JarFile JarFile = null;
-            try {
-                JarFile = new JarFile(_FILE);
+		@Override
+		public String[] getPluginClassesNames(Class<?> ainterface) {
+			final ResizingArray<String> CLASSES = new ResizingArray<String>();
 
-                final MyStringBuffer FILENAME_BUFFER = new MyStringBuffer(32);
+			JarFile JarFile = null;
+			try {
+				JarFile = new JarFile(_FILE);
 
-                final Enumeration<JarEntry> ENTRIES = JarFile.entries();
-                while(ENTRIES.hasMoreElements()) {
-                    final JarEntry ENTRY = ENTRIES.nextElement();
+				final MyStringBuffer FILENAME_BUFFER = new MyStringBuffer(32);
 
-                    if(!ENTRY.isDirectory()) {
-                        FILENAME_BUFFER.append(ENTRY.getName());
+				final Enumeration<JarEntry> ENTRIES = JarFile.entries();
+				while(ENTRIES.hasMoreElements()) {
+					final JarEntry ENTRY = ENTRIES.nextElement();
 
-                        if(FILENAME_BUFFER.endsWith("Plugin.class")) {
-                            //Removes File Extension(*.class)
-                            final int INDEX =  FILENAME_BUFFER.lastIndexOf('.');
-                            if(INDEX != -1) {
-                                FILENAME_BUFFER.reset(INDEX);
+					if(!ENTRY.isDirectory()) {
+						FILENAME_BUFFER.append(ENTRY.getName());
 
-                                //Reformat String Ex. From [javax/swing/JButton] To [javax.swing.JButton]
-                                FILENAME_BUFFER.replace('/', '.');
+						if(FILENAME_BUFFER.endsWith("Plugin.class")) {
+							// Removes File Extension(*.class)
+							final int INDEX = FILENAME_BUFFER.lastIndexOf('.');
+							if(INDEX != -1) {
+								FILENAME_BUFFER.reset(INDEX);
 
-                                //MAYBE
-                                //Check to See if Plugin Is Allowed
-//                                if(isClassBlackListed(FILENAME_BUFFER.toString())) {
-//                                    _DEBUGHANDLER.printInformation("Plugin: " + FILENAME_BUFFER.toString() + " Is Blacklisted");
-//                                } else {
-                                    CLASSES.put(FILENAME_BUFFER.toString());
-//                                }
-                            }
-                        }
+								// Reformat String Ex. From
+								// [javax/swing/JButton] To [javax.swing.JButton]
+								FILENAME_BUFFER.replace('/', '.');
 
-                        FILENAME_BUFFER.reset();
-                    }
-                }
-            } catch (Exception e) {
-            	_LOG_.printError(e);
-            } finally {
+								// MAYBE
+								// Check to See if Plugin Is Allowed
+//								if(isClassBlackListed(FILENAME_BUFFER.toString())) {
+//							 		_DEBUGHANDLER.printInformation("Plugin: " + FILENAME_BUFFER.toString() + " Is Blacklisted");
+//							 	} else {
+								CLASSES.put(FILENAME_BUFFER.toString());
+//							 	}
+							}
+						}
+
+						FILENAME_BUFFER.reset();
+					}
+				}
+			} catch(Exception e) {
+				_LOG_.printError(e);
+			} finally {
 				if(JarFile != null) {
 					try {
 						JarFile.close();
 					} catch(Exception e) {}
 					JarFile = null;
 				}
-            }
-            
-            return (CLASSES.length() > 0 ? CLASSES.toArray(new String[CLASSES.length()]) : null);
-        }
-    }
+			}
 
-    private class DirectoryScanner implements IPluginClassScanner {
-        private final File _DIRECTORY;
-        private final boolean _INCLUDE;
+			return (CLASSES.length() > 0 ? CLASSES.toArray(new String[CLASSES.length()]) : null);
+		}
+	}
 
-        public DirectoryScanner(File directory, boolean include) {
-            _DIRECTORY = directory;
-            _INCLUDE = include;
-        }
+	private class DirectoryScanner implements IPluginClassScanner {
+		private final File _DIRECTORY;
+		private final boolean _INCLUDE;
 
-        @Override
-        public String[] getPluginClassesNames(Class<?> ainterface) {
-            final ResizingArray<String> CLASSES = new ResizingArray<String>();
+		public DirectoryScanner(File directory, boolean include) {
+			_DIRECTORY = directory;
+			_INCLUDE = include;
+		}
 
-            scanDir(_DIRECTORY, CLASSES);
+		@Override
+		public String[] getPluginClassesNames(Class<?> ainterface) {
+			final ResizingArray<String> CLASSES = new ResizingArray<String>();
 
-            return (CLASSES.length() > 0 ? CLASSES.toArray(new String[CLASSES.length()]) : null);
-        }
+			scanDir(_DIRECTORY, CLASSES);
 
-        private void scanDir(File directroy, ResizingArray<String> output) {
-            if(directroy.exists() && directroy.isDirectory()) {
-                final MyStringBuffer FILENAME_BUFFER = new MyStringBuffer(32);
+			return (CLASSES.length() > 0 ? CLASSES.toArray(new String[CLASSES.length()]) : null);
+		}
 
-                final File[] FILES = directroy.listFiles();
+		private void scanDir(File directroy, ResizingArray<String> output) {
+			if(directroy.exists() && directroy.isDirectory()) {
+				final MyStringBuffer FILENAME_BUFFER = new MyStringBuffer(32);
 
-                for(int X = 0; X < FILES.length; X++) {
-                    if(FILES[X].isDirectory()) {
-                        if(_INCLUDE) {
-                            scanDir(FILES[X], output);
-                        }
-                    } else {
-                        if(FILES[X].exists()) {
-                            FILENAME_BUFFER.append(FileUtil.removeDirectory(_DIRECTORY, FILES[X]));
+				final File[] FILES = directroy.listFiles();
 
-                            if(FILENAME_BUFFER.endsWith("Plugin.class")) {
-                                //Removes File Extension(*.class)
-                                final int INDEX =  FILENAME_BUFFER.lastIndexOf('.');
-                                if(INDEX != -1) {
-                                    FILENAME_BUFFER.reset(INDEX);
+				for(int X = 0; X < FILES.length; X++) {
+					if(FILES[X].isDirectory()) {
+						if(_INCLUDE) {
+							scanDir(FILES[X], output);
+						}
+					} else {
+						if(FILES[X].exists()) {
+							FILENAME_BUFFER.append(FileUtil.removeDirectory(_DIRECTORY, FILES[X]));
 
-                                    //Reformat String Ex. From [javax/swing/JButton] To [javax.swing.JButton]
-                                    FILENAME_BUFFER.replace('/', '.');
+							if(FILENAME_BUFFER.endsWith("Plugin.class")) {
+								// Removes File Extension(*.class)
+								final int INDEX = FILENAME_BUFFER.lastIndexOf('.');
+								if(INDEX != -1) {
+									FILENAME_BUFFER.reset(INDEX);
 
-                                    //MAYBE
-                                    //Check to See if Plugin Is Allowed
-//                                    if(isClassBlackListed(FILENAME_BUFFER.toString())) {
-//                                        _DEBUGHANDLER.printInformation("Plugin: " + FILENAME_BUFFER.toString() + " Is Blacklisted");
-//                                    } else {
-                                        output.put(FILENAME_BUFFER.toString());
-//                                    }
-                                }
-                            }
+									// Reformat String Ex. From
+									// [javax/swing/JButton] To [javax.swing.JButton]
+									FILENAME_BUFFER.replace('/', '.');
 
-                            FILENAME_BUFFER.reset();
-                        }
-                    }
-                }
-            }
-        }
-    }
+									// MAYBE
+									// Check to See if Plugin Is Allowed
+//									if(isClassBlackListed(FILENAME_BUFFER.toString())) {
+//								 		_DEBUGHANDLER.printInformation("Plugin: " + FILENAME_BUFFER.toString() + " Is Blacklisted");
+//								 	} else {
+									output.put(FILENAME_BUFFER.toString());
+//								 	}
+								}
+							}
 
-    private class PluginClassLoader {
-    	private final ClassLoader _CLASSLOADER;
-    	
-        private final String[] _PLUGIN_CLASSES;
-        
-        public PluginClassLoader(ClassLoader classloader, String[] pclasses)  {
-            if(classloader == null) {
-                throw new RuntimeException("Variable[classloader] - Is Null");
-            }
-            
-            if(pclasses == null) {
-                throw new RuntimeException("Variable[pclasses] - Is Null");
-            }
+							FILENAME_BUFFER.reset();
+						}
+					}
+				}
+			}
+		}
+	}
 
-            _CLASSLOADER = classloader;
-            _PLUGIN_CLASSES = pclasses;
-        }
+	private class PluginClassLoader {
+		private final ClassLoader _CLASSLOADER;
 
-        public ClassLoader getClassLoader() {
-            return _CLASSLOADER;
-        }
+		private final String[] _PLUGIN_CLASSES;
 
-        /**
-         *
-         * @param index
-         * @return Class Name At Index
-         */
-        public String getPluginClassName(int index) {
-        	if(validIndex(index)) {
-            	return _PLUGIN_CLASSES[index];
-        	}
-        	
-        	return null;
-        }
+		public PluginClassLoader(ClassLoader classloader, String[] pclasses) {
+			if(classloader == null) {
+				throw new RuntimeException("Variable[classloader] - Is Null");
+			}
 
-        /**
-         *
-         * @return The Number Of Available Plugin Class
-         */
-        public int pluginCount() {
-            return _PLUGIN_CLASSES.length;
-        }
+			if(pclasses == null) {
+				throw new RuntimeException("Variable[pclasses] - Is Null");
+			}
 
-        private boolean pluginClassNameExists(String classname) {
-        	for(int X = 0; X < _PLUGIN_CLASSES.length; X++) {
-        		if(_PLUGIN_CLASSES[X].equals(classname)) {
-        			return true;
-        		}
-        	}
-        	
-        	return false;
-        }
-        
-        /**
-         * Does Not Create New Instance Of Class
-         * @param classname
-         * @return
-         */
-        private Class<?> loadPluginClass(String classname) {//Ex. javax.swing.JButton
-        	if(pluginClassNameExists(classname)) {
-	            try {
-	                final Class<?> CLASS = _CLASSLOADER.loadClass(classname);
-	
-	                if(CLASS != null) {
-	                    if(!isPluginInterface(CLASS) && ClassUtil.implementsInterface(_PLUGIN_INTERFACE, CLASS)) {
-	                        if(CLASS.isInterface()) {
-	                            return null;
-	                        } else {
-	                            return CLASS;
-	                        }
-	                    }
-	                }
-	            } catch (Exception e) {
-	                _LOG_.printError("Plugin: " + classname + " Failed To Load");
-	                _LOG_.printError(e);
-	            }
-        	}
-        	
-        	return null;
-        }
-        
-        private boolean validIndex(int index) {
-            return (index >= 0 && index < _PLUGIN_CLASSES.length);
-        }
-    }
+			_CLASSLOADER = classloader;
+			_PLUGIN_CLASSES = pclasses;
+		}
+
+		public ClassLoader getClassLoader() {
+			return _CLASSLOADER;
+		}
+
+		/**
+		 * 
+		 * @param index
+		 * @return Class Name At Index
+		 */
+		public String getPluginClassName(int index) {
+			if(validIndex(index)) {
+				return _PLUGIN_CLASSES[index];
+			}
+
+			return null;
+		}
+
+		/**
+		 * 
+		 * @return The Number Of Available Plugin Class
+		 */
+		public int pluginCount() {
+			return _PLUGIN_CLASSES.length;
+		}
+
+		private boolean pluginClassNameExists(String classname) {
+			for(int X = 0; X < _PLUGIN_CLASSES.length; X++) {
+				if(_PLUGIN_CLASSES[X].equals(classname)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * Does Not Create New Instance Of Class
+		 * 
+		 * @param classname
+		 * @return
+		 */
+		private Class<?> loadPluginClass(String classname) {// Ex. javax.swing.JButton
+			if(pluginClassNameExists(classname)) {
+				try {
+					final Class<?> CLASS = _CLASSLOADER.loadClass(classname);
+
+					if(CLASS != null) {
+						if(!isPluginInterface(CLASS) && ClassUtil.implementsInterface(_PLUGIN_INTERFACE, CLASS)) {
+							if(CLASS.isInterface()) {
+								return null;
+							} else {
+								return CLASS;
+							}
+						}
+					}
+				} catch(Exception e) {
+					_LOG_.printError("Plugin: " + classname + " Failed To Load");
+					_LOG_.printError(e);
+				}
+			}
+
+			return null;
+		}
+
+		private boolean validIndex(int index) {
+			return (index >= 0 && index < _PLUGIN_CLASSES.length);
+		}
+	}
 }

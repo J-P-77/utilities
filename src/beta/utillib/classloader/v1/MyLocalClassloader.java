@@ -20,123 +20,123 @@ import java.util.jar.Manifest;
  * </pre>
  */
 public abstract class MyLocalClassloader extends MyClassloader implements ClassConstants {
-    private LoadedJarsManager _Manager;
-    private Manifest _Manifest;   
-    
-    protected MyLocalClassloader() {
-        super(getSystemClassLoader());
-    }
+	private LoadedJarsManager _Manager;
+	private Manifest _Manifest;
 
-    protected MyLocalClassloader(ClassLoader parent) {
-        super(parent);
-    }
+	protected MyLocalClassloader() {
+		super(getSystemClassLoader());
+	}
 
-    public void setManifest(Manifest manifest) {
-        _Manifest = manifest;
-    }
+	protected MyLocalClassloader(ClassLoader parent) {
+		super(parent);
+	}
 
-    public Manifest getManifest() {
-        return _Manifest;
-    }
+	public void setManifest(Manifest manifest) {
+		_Manifest = manifest;
+	}
 
-    protected void setLoadedJarsManager(LoadedJarsManager manager) {
-        _Manager = manager;
-    }
+	public Manifest getManifest() {
+		return _Manifest;
+	}
 
-    public LoadedJarsManager getLoadedJarsManager() {
-        return _Manager;
-    }
+	protected void setLoadedJarsManager(LoadedJarsManager manager) {
+		_Manager = manager;
+	}
 
-    public void callMainMethod(String[] args) {
-        if(_Manifest == null) {
-            _LOG.printWarning("No Manifest");
-        } else {
-            final Attributes MAIN = _Manifest.getMainAttributes();
+	public LoadedJarsManager getLoadedJarsManager() {
+		return _Manager;
+	}
 
-            if(MAIN == null) {
-                _LOG.printWarning("No Main Attributes");
-            } else {
-                final String MAIN_CLASS = MAIN.getValue("Main-Class");//Attributes.Name.CLASS_PATH
+	public void callMainMethod(String[] args) {
+		if(_Manifest == null) {
+			_LOG.printWarning("No Manifest");
+		} else {
+			final Attributes MAIN = _Manifest.getMainAttributes();
 
-                if(MAIN_CLASS != null && MAIN_CLASS.length() > 0) {
-                    callMainMethod(MAIN_CLASS, args);
-                }
-            }
-        }
-    }
+			if(MAIN == null) {
+				_LOG.printWarning("No Main Attributes");
+			} else {
+				final String MAIN_CLASS = MAIN.getValue("Main-Class");//Attributes.Name.CLASS_PATH
 
-    protected void loadDepends(File defaultlibdir, Manifest manifest) {
-        if(defaultlibdir == null) {
-            throw new RuntimeException("Variable[defaultlibdir] - Is Null");
-        }
+				if(MAIN_CLASS != null && MAIN_CLASS.length() > 0) {
+					callMainMethod(MAIN_CLASS, args);
+				}
+			}
+		}
+	}
 
-        if(!defaultlibdir.exists()) {
-            throw new RuntimeException(defaultlibdir.getPath() + " Does Not Exists");
-        }
+	protected void loadDepends(File defaultlibdir, Manifest manifest) {
+		if(defaultlibdir == null) {
+			throw new RuntimeException("Variable[defaultlibdir] - Is Null");
+		}
 
-        if(!defaultlibdir.isDirectory()) {
-            throw new RuntimeException(defaultlibdir.getPath() + " Is Not A Directory");
-        }
-        
-        if(manifest != null) {
-            final Attributes MAIN = manifest.getMainAttributes();
+		if(!defaultlibdir.exists()) {
+			throw new RuntimeException(defaultlibdir.getPath() + " Does Not Exists");
+		}
 
-            if(MAIN != null) {
-                final String ATTRIBUTE = MAIN.getValue("Class-Path");
+		if(!defaultlibdir.isDirectory()) {
+			throw new RuntimeException(defaultlibdir.getPath() + " Is Not A Directory");
+		}
 
-                if(ATTRIBUTE != null && ATTRIBUTE.length() > 0) {
-                    final String[] SPLIT = ATTRIBUTE.split(" ");
+		if(manifest != null) {
+			final Attributes MAIN = manifest.getMainAttributes();
 
-                    if(SPLIT.length > 0) {
-                        for(int X = 0; X < SPLIT.length; X++) {
-                            if(SPLIT[X].length() > 0) {
-                                File Lib_File = new File(SPLIT[X].replace('/', FileUtil._S_c)).getAbsoluteFile();
+			if(MAIN != null) {
+				final String ATTRIBUTE = MAIN.getValue("Class-Path");
 
-                                if(!Lib_File.exists()) {
-                                    Lib_File = new File(defaultlibdir, SPLIT[X].replace('/', FileUtil._S_c));
-                                }
+				if(ATTRIBUTE != null && ATTRIBUTE.length() > 0) {
+					final String[] SPLIT = ATTRIBUTE.split(" ");
 
-                                if(!Lib_File.exists()) {
-                                    _LOG.printError("Depends File: " + Lib_File.getPath() + " Not Found");
-                                } else {
-                                    MyClassloader Loader = null;
-                                    try {
-                                        if(_Manager != null) {///////////
-                                            final int INDEX = _Manager.isLoadedIndex(Lib_File.getName());
+					if(SPLIT.length > 0) {
+						for(int X = 0; X < SPLIT.length; X++) {
+							if(SPLIT[X].length() > 0) {
+								File Lib_File = new File(SPLIT[X].replace('/', FileUtil._S_c)).getAbsoluteFile();
 
-                                            if(INDEX > -1) {
-                                                _LOG.printInformation("Allready Loaded: " + Lib_File.getPath());
-                                                continue;
-                                            }
-                                        }///////////
+								if(!Lib_File.exists()) {
+									Lib_File = new File(defaultlibdir, SPLIT[X].replace('/', FileUtil._S_c));
+								}
 
-                                        if(Lib_File.isFile()) {
-                                            if(FileUtil.isFileType(Lib_File, JarClassLoader._JAR_MAGIC_NUMBER_)) {
-                                                Loader = new JarClassLoader(Lib_File, this, null);
-                                            } else {
-                                                _LOG.printWarning("Not A Zip/Jar File: " + Lib_File.getPath());
-                                                continue;
-                                            }
-                                        } else {
-                                            Loader = new DirectoryClassLoader(Lib_File, this, null);
-                                        }
-                                        
-                                        _DEPENDS.put(Loader);
+								if(!Lib_File.exists()) {
+									_LOG.printError("Depends File: " + Lib_File.getPath() + " Not Found");
+								} else {
+									MyClassloader Loader = null;
+									try {
+										if(_Manager != null) {///////////
+											final int INDEX = _Manager.isLoadedIndex(Lib_File.getName());
 
-                                        if(_Manager != null) {///////////
-                                            _Manager.add(Lib_File.getName(), Loader);
-                                        }///////////
+											if(INDEX > -1) {
+												_LOG.printInformation("Allready Loaded: " + Lib_File.getPath());
+												continue;
+											}
+										}///////////
 
-                                        _LOG.printInformation("Loaded Depend: " + Lib_File.getPath());
-                                    } catch (Exception e) {
-                                        _LOG.printError(e);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+										if(Lib_File.isFile()) {
+											if(FileUtil.isFileType(Lib_File, JarClassLoader._JAR_MAGIC_NUMBER_)) {
+												Loader = new JarClassLoader(Lib_File, this, null);
+											} else {
+												_LOG.printWarning("Not A Zip/Jar File: " + Lib_File.getPath());
+												continue;
+											}
+										} else {
+											Loader = new DirectoryClassLoader(Lib_File, this, null);
+										}
+
+										_DEPENDS.put(Loader);
+
+										if(_Manager != null) {///////////
+											_Manager.add(Lib_File.getName(), Loader);
+										}///////////
+
+										_LOG.printInformation("Loaded Depend: " + Lib_File.getPath());
+									} catch(Exception e) {
+										_LOG.printError(e);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

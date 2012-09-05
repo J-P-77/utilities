@@ -130,26 +130,11 @@ public class InterfaceWrapper {
 	public void removeClass(String classname) {
 		unregisterMethods(classname);
 		_CLASSES.remove(classname);
-//        for(int X = (_CLASSES.count() - 1); X > -1; X--) {
-//            if(_CLASSES.getAt(X).getName().equals(classname)) {
-//                unregisterMethods(classname);
-//
-//                _CLASSES.removeAt(X);
-//            }
-//        }
 	}
 
 	public void removeClass(Class<?> clazz) {
 		unregisterMethods(clazz);
 		_CLASSES.remove(clazz.getName());
-
-//        for(int X = (_CLASSES.count() - 1); X > -1; X--) {
-//            if(_CLASSES.getAt(X).equals(clazz)) {
-//                unregisterMethods(clazz);
-//                
-//                _CLASSES.removeAt(X);
-//            }
-//        }
 	}
 
 	public void removeClass(int index) {
@@ -282,11 +267,11 @@ public class InterfaceWrapper {
 		return (METHODS.length() > 0 ? METHODS.toArray(new InterfaceMethod[METHODS.length()]) : null);
 	}
 
-	public IClassMethodCall getMethodByNameWPN(String name, String... parameterclassnames) {
-		return getMethodWPN(name, "void", parameterclassnames);
+	public IClassMethodCall getMethodWPN(String name, String... parameterclassnames) {
+		return getMethodRWPN(name, "void", parameterclassnames);
 	}
 
-	public IClassMethodCall getMethodWPN(String name, String returntype, String... parametertypes) {
+	public IClassMethodCall getMethodRWPN(String name, String returntype, String... parametertypes) {
 		if(name == null) {
 			throw new RuntimeException("Variable[name] - Is Null");
 		}
@@ -328,11 +313,11 @@ public class InterfaceWrapper {
 		return null;
 	}
 
-	public IClassMethodCall getMethodByNameWPC(String name, Class<?>... parametertypes) {
-		return getMethodWPC(name, void.class, parametertypes);
+	public IClassMethodCall getMethodWPC(String name, Class<?>... parametertypes) {
+		return getMethodRWPC(name, void.class, parametertypes);
 	}
 
-	public IClassMethodCall getMethodWPC(String name, Class<?> returntype, Class<?>... parametertypes) {
+	public IClassMethodCall getMethodRWPC(String name, Class<?> returntype, Class<?>... parametertypes) {
 		if(name == null) {
 			throw new RuntimeException("Variable[name] - Is Null");
 		}

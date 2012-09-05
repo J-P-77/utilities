@@ -171,6 +171,7 @@ public class InstanceWrapper {
 		if(name == null) {
 			throw new RuntimeException("Variable[name] - Is Null");
 		}
+
 		final ResizingArray<IMethodCall> METHODS = new ResizingArray<IMethodCall>();
 
 		for(int X = 0; X < _METHODS.length; X++) {
@@ -184,17 +185,21 @@ public class InstanceWrapper {
 		return (METHODS.length() > 0 ? METHODS.toArray(new IMethodCall[METHODS.length()]) : null);
 	}
 
-	public IMethodCall getMethodByNameWPN(String name, String... parameterclassnames) {
-		return getMethodWPN(name, "void", parameterclassnames);
+	public IMethodCall getMethodWPN(String name, String... parameterclassnames) {
+		return getMethodRWPN(name, "void", parameterclassnames);
 	}
 
 	/**
 	 * 
-	 * @param name name of method
-	 * @param parameterclassnames class names
+	 * @param name
+	 *            name of method
+	 * @param returntype
+	 *            return type by class name
+	 * @param parameterclassnames
+	 *            class names
 	 * @return
 	 */
-	public IMethodCall getMethodWPN(String name, String returntype, String... parametertypes) {
+	public IMethodCall getMethodRWPN(String name, String returntype, String... parametertypes) {
 		if(name == null) {
 			throw new RuntimeException("Variable[name] - Is Null");
 		}
@@ -232,17 +237,21 @@ public class InstanceWrapper {
 		return null;
 	}
 
-	public IMethodCall getMethodByNameWPC(String name, Class<?>... parametertypes) {
-		return getMethodWPC(name, void.class, parametertypes);
+	public IMethodCall getMethodWPC(String name, Class<?>... parametertypes) {
+		return getMethodRWPC(name, void.class, parametertypes);
 	}
 
 	/**
 	 * 
-	 * @param name name of method
-	 * @param parametertypes Classes
+	 * @param name
+	 *            name of method
+	 * @param returntype
+	 *            return type by class
+	 * @param parametertypes
+	 *            Classes
 	 * @return
 	 */
-	public IMethodCall getMethodWPC(String name, Class<?> returntype, Class<?>... parametertypes) {
+	public IMethodCall getMethodRWPC(String name, Class<?> returntype, Class<?>... parametertypes) {
 		if(name == null) {
 			throw new RuntimeException("Variable[name] - Is Null");
 		}
@@ -255,7 +264,7 @@ public class InstanceWrapper {
 			final MethodCall METHOD_CALL = _METHODS[X];
 
 			if(METHOD_CALL.getMethodName().equals(name)) {
-				if(!returntype.equals(METHOD_CALL.getReturnType().getCanonicalName())) {
+				if(!returntype.equals(METHOD_CALL.getReturnType())) {
 					continue;
 				}
 
