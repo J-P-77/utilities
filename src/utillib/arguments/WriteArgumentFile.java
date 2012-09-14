@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.1</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -21,36 +22,35 @@ import java.io.FileOutputStream;
  * </pre>
  */
 public class WriteArgumentFile extends ArgumentOutput {
-    protected final File _File;
-    
-    public WriteArgumentFile(String filename) throws FileNotFoundException {
-        this(new File(filename));
-    }
-    
-    public WriteArgumentFile(File file) throws FileNotFoundException {
-        super(new FileOutputStream(file));
+	protected final File _File;
 
-        _File = file;
-		
+	public WriteArgumentFile(String filename) throws FileNotFoundException {
+		this(new File(filename));
+	}
+
+	public WriteArgumentFile(File file) throws FileNotFoundException {
+		super(new FileOutputStream(file));
+
+		_File = file;
+
 		setLineEnding(Line_Ending.WINDOWS);
-    }
+	}
 
-    public File getFile() {
-        return _File;
-    }
+	public File getFile() {
+		return _File;
+	}
 
-    public static WriteArgumentFile create(String file) {
-        return create(new File(file));
-    }
+	public static WriteArgumentFile create(String file) {
+		return create(new File(file));
+	}
 
-    public static WriteArgumentFile create(File file) {
-        try {
-            return new WriteArgumentFile(file);
-        } catch (Exception e) {}
+	public static WriteArgumentFile create(File file) {
+		try {
+			return new WriteArgumentFile(file);
+		} catch(Exception e) {}
 
-        return null;
-    }
-
+		return null;
+	}
 
 //    public boolean write() {
 //        return write(false);

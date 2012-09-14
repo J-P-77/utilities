@@ -1,91 +1,89 @@
 package beta.utillib.queue;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public abstract class QueueTask implements Runnable {
-    private static final int _STATUS_CANCELING_ = 0;
-    private static final int _STATUS_CANCELED_ = 1;
-    private static final int _STATUS_DONE_ = 2;
+	private static final int _STATUS_CANCELING_ = 0;
+	private static final int _STATUS_CANCELED_ = 1;
+	private static final int _STATUS_DONE_ = 2;
 
-    private int _Status = -1;
+	private int _Status = -1;
 
-    private boolean _Pause = false;
+	private boolean _Pause = false;
 
-    private int _Priority = Thread.NORM_PRIORITY;
+	private int _Priority = Thread.NORM_PRIORITY;
 
-    public void setPriority(int priority) {
-        if(priority > Thread.MAX_PRIORITY || priority < Thread.MIN_PRIORITY) {
-            throw new RuntimeException("Variable[priority] - Illegal Argument");
-        }
+	public void setPriority(int priority) {
+		if(priority > Thread.MAX_PRIORITY || priority < Thread.MIN_PRIORITY) {
+			throw new RuntimeException("Variable[priority] - Illegal Argument");
+		}
 
-        _Priority = priority;
-    }
+		_Priority = priority;
+	}
 
-    public int getPriority() {
-        return _Priority;
-    }
+	public int getPriority() {
+		return _Priority;
+	}
 
-    /**
-     * Call To Cancel Task
-     */
-    public void cancel() {
-        _Status = _STATUS_CANCELING_;
-    }
+	/**
+	 * Call To Cancel Task
+	 */
+	public void cancel() {
+		_Status = _STATUS_CANCELING_;
+	}
 
-    public boolean isCanceling() {
-        return _Status == _STATUS_CANCELING_;
-    }
+	public boolean isCanceling() {
+		return _Status == _STATUS_CANCELING_;
+	}
 
-    /**
-     * Call When The Task Has Canceled
-     */
-    protected void canceled() {
-        _Status = _STATUS_CANCELED_;
-    }
-    
-    public boolean isCanceled() {
-        return _Status == _STATUS_CANCELED_;
-    }
+	/**
+	 * Call When The Task Has Canceled
+	 */
+	protected void canceled() {
+		_Status = _STATUS_CANCELED_;
+	}
 
-    /**
-     * Call If Task Has Successfully Completed
-     */
-    public void done() {
-        _Status = _STATUS_DONE_;
-    }
+	public boolean isCanceled() {
+		return _Status == _STATUS_CANCELED_;
+	}
 
-    public boolean isDone() {
-        return _Status == _STATUS_DONE_;
-    }
+	/**
+	 * Call If Task Has Successfully Completed
+	 */
+	public void done() {
+		_Status = _STATUS_DONE_;
+	}
 
-    public boolean isRunning() {
-        if(_Status == -1) {
-            return true;
-        }
+	public boolean isDone() {
+		return _Status == _STATUS_DONE_;
+	}
 
-        return (!isCanceling() && !isCanceled()) && !isDone();
-    }
+	public boolean isRunning() {
+		if(_Status == -1) {
+			return true;
+		}
 
-    public void pause(boolean value) {
-        _Pause = value;
-    }
+		return (!isCanceling() && !isCanceled()) && !isDone();
+	}
 
-    public boolean isPaused() {
-        return _Pause;
-    }
+	public void pause(boolean value) {
+		_Pause = value;
+	}
 
-    public abstract String getName();
+	public boolean isPaused() {
+		return _Pause;
+	}
+
+	public abstract String getName();
 
 //    @Override
 //    public abstract void run();
 
-    @Override
-    public String toString() {
-        return getName();
-    }
-    
-    
-    
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

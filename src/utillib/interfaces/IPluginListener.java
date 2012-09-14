@@ -4,7 +4,7 @@ import beta.utillib.pluginmanager.v1.IPluginInfo;
 
 /**
  * 
- * @author Dalton Dell
+ * @author Justin Palinkas
  */
 public interface IPluginListener {
 // public static final int _EVENT_PLUGIN_ADDED_ = 0;

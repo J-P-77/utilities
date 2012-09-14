@@ -1,6 +1,6 @@
 package utillib.dialogs;
 
-//import utillib.arrays.ResizingArray;
+// import utillib.arrays.ResizingArray;
 
 import utillib.utilities.ImageUtil;
 import utillib.utilities.PositionWindow;
@@ -31,7 +31,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -42,92 +43,92 @@ import javax.imageio.ImageIO;
  * </pre>
  */
 public class FrmSplashBeta extends JWindow implements WindowConstants {
-    public static final String _DEFAULT_BACKGROUND_RESOURCE_ = "/resources/images/blank.jpg";
+	public static final String _DEFAULT_BACKGROUND_RESOURCE_ = "/resources/images/blank.jpg";
 	public static final int _BASE_HEIGHT_ = 236;
 	public static final int _BASE_WIDTH_ = 400;
-    	
-	private Image _Background_Image = null;
-    private Image _Image = null;
 
-    private static final ImageIcon _CLOSE_EXITED_ = new ImageIcon(ImageUtil.loadImageFromSystemResource("/resources/images/close exited.png"));
-    private static final ImageIcon _CLOSE_ENTERED_ = new ImageIcon(ImageUtil.loadImageFromSystemResource("/resources/images/close entered.png"));
+	private Image _Background_Image = null;
+	private Image _Image = null;
+
+	private static final ImageIcon _CLOSE_EXITED_ = new ImageIcon(ImageUtil.loadImageFromSystemResource("/resources/images/close exited.png"));
+	private static final ImageIcon _CLOSE_ENTERED_ = new ImageIcon(ImageUtil.loadImageFromSystemResource("/resources/images/close entered.png"));
 
 //    private ResizingArray<Runnable> _Runnables = new ResizingArray<Runnable>(0);
 
-    private SplashComponent _Painter = null;
+	private SplashComponent _Painter = null;
 
-    private int _CloseAction = DO_NOTHING_ON_CLOSE;
+	private int _CloseAction = DO_NOTHING_ON_CLOSE;
 
-    /**
+	/**
      *
      */
 	public FrmSplashBeta() {
 		this(ImageUtil.loadImageFromSystemResource(_DEFAULT_BACKGROUND_RESOURCE_));
 	}
 
-    /**
-     *
-     * @param max
-     */
+	/**
+	 * 
+	 * @param max
+	 */
 	public FrmSplashBeta(Image background) {
 		this(background, null);
 	}
 
-    /**
-     *
-     * @param max
-     * @param background
-     * @param image
-     */
+	/**
+	 * 
+	 * @param max
+	 * @param background
+	 * @param image
+	 */
 	public FrmSplashBeta(Image background, Image image) {
 //        if(background == null) {
 //            throw new RuntimeException("Class[" + getClass().getName() + "] - Method[Constructor] - Variable[background] - Is Null");
 //        }
-        
-        initComponents();
-        
-        setBackgroundImage(background);
+
+		initComponents();
+
+		setBackgroundImage(background);
 
 		if(image != null) {
-            setImage(image);
-        }
+			setImage(image);
+		}
 	}
-    
+
 	private void initComponents() {
-        _Painter = new SplashComponent(this);
+		_Painter = new SplashComponent(this);
 
-        super.setSize(_BASE_WIDTH_, _BASE_HEIGHT_);
-        super.getContentPane().add(_Painter);
+		super.setSize(_BASE_WIDTH_, _BASE_HEIGHT_);
+		super.getContentPane().add(_Painter);
 
-        PositionWindow.quickToCenter(this);
-    }
+		PositionWindow.quickToCenter(this);
+	}
 
 //    public void runOnApplicationExit(Runnable runnable) {
 //        _Runnables.put(runnable);
 //    }
 
-    public void setCloseAction(int closeaction) {
-        if(closeaction >= 0 && closeaction <= 3) {
-            _CloseAction = closeaction;
-        } else {
-            throw new RuntimeException("Variable[closeaction] - Choose: DO_NOTHING_ON_CLOSE, HIDE_ON_CLOSE, DISPOSE_ON_CLOSE, or EXIT_ON_CLOSE");
-        }
-    }
+	public void setCloseAction(int closeaction) {
+		if(closeaction >= 0 && closeaction <= 3) {
+			_CloseAction = closeaction;
+		} else {
+			throw new RuntimeException("Variable[closeaction] - Choose: DO_NOTHING_ON_CLOSE, HIDE_ON_CLOSE, DISPOSE_ON_CLOSE, or EXIT_ON_CLOSE");
+		}
+	}
 
-    public void setBackgroundImage(Image image) {
-        _Background_Image = image;
-        super.repaint();
-    }
+	public void setBackgroundImage(Image image) {
+		_Background_Image = image;
+		super.repaint();
+	}
 
 	public void setBackgroundImage(String path) {
 		setBackGroundImage(new File(path));
 	}
 
-    public void setBackGroundImage(File path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[filepath] - Is Null");
-        } else if(!path.exists()) {
-             throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
+	public void setBackGroundImage(File path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[filepath] - Is Null");
+		} else if(!path.exists()) {
+			throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
 		}
 
 		try {
@@ -135,341 +136,343 @@ public class FrmSplashBeta extends JWindow implements WindowConstants {
 			_Image = TempImage.getScaledInstance(_BASE_WIDTH_, _BASE_HEIGHT_, Image.SCALE_DEFAULT);
 			TempImage = null;
 
-            super.repaint();
-		} catch (IOException e) {
+			super.repaint();
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
-	
-    public void setBackGroundImage(URL url) {
-        if(url == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	}
+
+	public void setBackGroundImage(URL url) {
+		if(url == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
 		try {
 			BufferedImage TempImage = ImageIO.read(url);
 			_Image = TempImage.getScaledInstance(_BASE_WIDTH_, _BASE_HEIGHT_, Image.SCALE_DEFAULT);
-            TempImage = null;
+			TempImage = null;
 
-            super.repaint();
-		} catch (IOException e) {
+			super.repaint();
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
+	}
 
-    public void setImage(Image image) {
-        if(image == null) {
-            throw new RuntimeException("Variable[image] - Is Null");
-        }
+	public void setImage(Image image) {
+		if(image == null) {
+			throw new RuntimeException("Variable[image] - Is Null");
+		}
 
-        _Image = image;
-        super.repaint();
-    }
+		_Image = image;
+		super.repaint();
+	}
 
 	public void setImage(String path) {
 		setImage(new File(path));
 	}
 
-    public void setImage(File path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[filepath] - Is Null");
-        } else if(!path.exists()) {
-             throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
+	public void setImage(File path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[filepath] - Is Null");
+		} else if(!path.exists()) {
+			throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
 		}
 
 		try {
 			BufferedImage TempImage = ImageIO.read(path);
 			_Image = null;
-            _Image = TempImage;
-            TempImage = null;
+			_Image = TempImage;
+			TempImage = null;
 
-            super.repaint();
-		} catch (IOException e) {
+			super.repaint();
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
+	}
 
-    public void setImage(URL url) {
-        if(url == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public void setImage(URL url) {
+		if(url == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
 		try {
 			BufferedImage TempImage = ImageIO.read(url);
 			_Image = null;
-            _Image = TempImage;
-            TempImage = null;
+			_Image = TempImage;
+			TempImage = null;
 
-            super.repaint();
-		} catch (IOException e) {
+			super.repaint();
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
-	
+	}
+
 	public void setBackgroundColor(String color) {
 		final Color COLOR = ColorUtil.convertStrToColor(color);
-		
+
 		if(COLOR != null) {
 			super.getContentPane().setBackground(COLOR);
 		}
 	}
 
-    public void setText(String text) {
-        _Painter.getTotal().setText(text);
-    }
+	public void setText(String text) {
+		_Painter.getTotal().setText(text);
+	}
 
-    public String getText() {
-        return _Painter.getTotal().getText();
-    }
+	public String getText() {
+		return _Painter.getTotal().getText();
+	}
 
-    public SplashComponent.Progress getCurrent() {
-        return _Painter.getCurrent();
-    }
+	public SplashComponent.Progress getCurrent() {
+		return _Painter.getCurrent();
+	}
 
-    public SplashComponent.Progress getTotal() {
-        return _Painter.getTotal();
-    }
-    
-    public void reset() {
-        PositionWindow.quickToCenter(this);
+	public SplashComponent.Progress getTotal() {
+		return _Painter.getTotal();
+	}
 
-        _Image = null;
-    }
+	public void reset() {
+		PositionWindow.quickToCenter(this);
 
-    public SplashComponent getSplashComponent() {
-        return _Painter;
-    }
+		_Image = null;
+	}
 
-    //CLASSES
-    public class SplashComponent extends JComponent {
-        private final Window _WINDOW;
+	public SplashComponent getSplashComponent() {
+		return _Painter;
+	}
 
-        private final Progress _TOTAL;
-        private final Progress _CURRENT;
+	//CLASSES
+	public class SplashComponent extends JComponent {
+		private final Window _WINDOW;
 
-        public SplashComponent(Window window) {
-            initComponents();
+		private final Progress _TOTAL;
+		private final Progress _CURRENT;
 
-            _WINDOW = window;
+		public SplashComponent(Window window) {
+			initComponents();
 
-            _TOTAL = new TotalProgress(progressTotal);
-            _CURRENT = new CurrentProgress(progressCurrent);
-        }
+			_WINDOW = window;
 
-        private void initComponents() {
-            super.setLayout(null);
+			_TOTAL = new TotalProgress(progressTotal);
+			_CURRENT = new CurrentProgress(progressCurrent);
+		}
 
-            progressCurrent = new JProgressBar();
+		private void initComponents() {
+			super.setLayout(null);
+
+			progressCurrent = new JProgressBar();
 //XXX (Possible Internal Bug - When JProgressBar Height Is Set To 10 [setBounds(22, 196, 316, 10)]
-            progressCurrent.setBounds(22, _BASE_HEIGHT_ - 40, 316, 12);
-            super.add(progressCurrent);
+			progressCurrent.setBounds(22, _BASE_HEIGHT_ - 40, 316, 12);
+			super.add(progressCurrent);
 
-            progressTotal = new JProgressBar();
-            progressTotal.setBounds(22, _BASE_HEIGHT_ - 40 + 10 + 2, 356 - 40, 12);
-            super.add(progressTotal);
+			progressTotal = new JProgressBar();
+			progressTotal.setBounds(22, _BASE_HEIGHT_ - 40 + 10 + 2, 356 - 40, 12);
+			super.add(progressTotal);
 
-            lblPercent = new JLabel("0%");
-            lblPercent.setForeground(Color.WHITE);
-            lblPercent.setHorizontalAlignment(JLabel.CENTER);
-            lblPercent.setVerticalAlignment(JLabel.CENTER);
-            lblPercent.setBounds(356 - 20 + 2, _BASE_HEIGHT_ - 40, 40, 20);//40
-            super.add(lblPercent);
+			lblPercent = new JLabel("0%");
+			lblPercent.setForeground(Color.WHITE);
+			lblPercent.setHorizontalAlignment(JLabel.CENTER);
+			lblPercent.setVerticalAlignment(JLabel.CENTER);
+			lblPercent.setBounds(356 - 20 + 2, _BASE_HEIGHT_ - 40, 40, 20);//40
+			super.add(lblPercent);
 
-            lblInfo = new JLabel("Loading...");
-            lblInfo.setForeground(Color.WHITE);
-            lblInfo.setBounds(22, _BASE_HEIGHT_ - 60, 356, 20);//40
-            super.add(lblInfo);
+			lblInfo = new JLabel("Loading...");
+			lblInfo.setForeground(Color.WHITE);
+			lblInfo.setBounds(22, _BASE_HEIGHT_ - 60, 356, 20);//40
+			super.add(lblInfo);
 
-            lblClose = new JLabel(_CLOSE_EXITED_);
-            lblClose.setBounds(_BASE_WIDTH_ - 36, 14, 20, 20);
-            lblClose.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    switch(_CloseAction) {
-                        case DISPOSE_ON_CLOSE:
-                            _WINDOW.dispose();
-                            break;
+			lblClose = new JLabel(_CLOSE_EXITED_);
+			lblClose.setBounds(_BASE_WIDTH_ - 36, 14, 20, 20);
+			lblClose.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					switch(_CloseAction) {
+						case DISPOSE_ON_CLOSE:
+							_WINDOW.dispose();
+							break;
 
-                        case HIDE_ON_CLOSE:
-                            _WINDOW.setVisible(false);
-                            break;
+						case HIDE_ON_CLOSE:
+							_WINDOW.setVisible(false);
+							break;
 
-                        case EXIT_ON_CLOSE:
-                            System.exit(0);
-                            break;
+						case EXIT_ON_CLOSE:
+							System.exit(0);
+							break;
 
-                        case DO_NOTHING_ON_CLOSE:
-                        default:
-                            break;
-                    }
-                }
-                @Override
-                public void mousePressed(MouseEvent e) {}
-                @Override
-                public void mouseReleased(MouseEvent e) {}
+						case DO_NOTHING_ON_CLOSE:
+						default:
+							break;
+					}
+				}
 
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    lblClose.setIcon(_CLOSE_ENTERED_);
-                }
+				@Override
+				public void mousePressed(MouseEvent e) {}
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    lblClose.setIcon(_CLOSE_EXITED_);
-                }
-            });
-            super.add(lblClose);
-        }
+				@Override
+				public void mouseReleased(MouseEvent e) {}
 
-        @Override
-        public void paint(Graphics g) {
-            if(_Background_Image != null) {
-                g.drawImage(_Background_Image, 0, 0, this);
-            }
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					lblClose.setIcon(_CLOSE_ENTERED_);
+				}
 
-            if(_Image != null) {
-                g.drawImage(_Image, 0, 0, this);
-            }
+				@Override
+				public void mouseExited(MouseEvent e) {
+					lblClose.setIcon(_CLOSE_EXITED_);
+				}
+			});
+			super.add(lblClose);
+		}
 
-            super.paintChildren(g);
-        }
+		@Override
+		public void paint(Graphics g) {
+			if(_Background_Image != null) {
+				g.drawImage(_Background_Image, 0, 0, this);
+			}
 
-        public void setTextColor(Color color) {
-            lblInfo.setForeground(color);
-            lblPercent.setForeground(color);
-        }
+			if(_Image != null) {
+				g.drawImage(_Image, 0, 0, this);
+			}
 
-        public Progress getTotal() {
-            return _TOTAL;
-        }
+			super.paintChildren(g);
+		}
 
-        public Progress getCurrent() {
-            return _CURRENT;
-        }
+		public void setTextColor(Color color) {
+			lblInfo.setForeground(color);
+			lblPercent.setForeground(color);
+		}
 
-        private void updatePercent() {
-            lblPercent.setText((long)(((double)progressTotal.getValue() / progressTotal.getMaximum()) * 100) + "%");
-        }
+		public Progress getTotal() {
+			return _TOTAL;
+		}
 
-        private JProgressBar progressCurrent;
-        private JProgressBar progressTotal;
+		public Progress getCurrent() {
+			return _CURRENT;
+		}
 
-        private JLabel lblClose;
-        private JLabel lblInfo;
-        private JLabel lblPercent;
+		private void updatePercent() {
+			lblPercent.setText((long)(((double)progressTotal.getValue() / progressTotal.getMaximum()) * 100) + "%");
+		}
 
-        //CLASSES
-        public class TotalProgress extends Progress {
-            public TotalProgress(JProgressBar progressbar) {
-                super(progressbar);
-            }
+		private JProgressBar progressCurrent;
+		private JProgressBar progressTotal;
 
-            @Override
-            public void increment(int value) {
-                _PROGRESS_BAR.setValue(_PROGRESS_BAR.getValue() + value);
+		private JLabel lblClose;
+		private JLabel lblInfo;
+		private JLabel lblPercent;
 
-                updatePercent();
-            }
+		//CLASSES
+		public class TotalProgress extends Progress {
+			public TotalProgress(JProgressBar progressbar) {
+				super(progressbar);
+			}
 
-            @Override
-            public void setValue(int value) {
-                _PROGRESS_BAR.setValue(value);
+			@Override
+			public void increment(int value) {
+				_PROGRESS_BAR.setValue(_PROGRESS_BAR.getValue() + value);
 
-                updatePercent();
-            }
+				updatePercent();
+			}
 
-            @Override
-            public void setMinimum(int value) {
-                _PROGRESS_BAR.setMinimum(value);
+			@Override
+			public void setValue(int value) {
+				_PROGRESS_BAR.setValue(value);
 
-                updatePercent();
-            }
+				updatePercent();
+			}
 
-            @Override
-            public void setMaximum(int value) {
-                _PROGRESS_BAR.setMaximum(value);
+			@Override
+			public void setMinimum(int value) {
+				_PROGRESS_BAR.setMinimum(value);
 
-                updatePercent();
-            }
-        }
+				updatePercent();
+			}
 
-        public class CurrentProgress extends Progress {
-            public CurrentProgress(JProgressBar progressbar) {
-                super(progressbar);
-            }
+			@Override
+			public void setMaximum(int value) {
+				_PROGRESS_BAR.setMaximum(value);
 
-            @Override
-            public void increment(int value) {
-                _PROGRESS_BAR.setValue(_PROGRESS_BAR.getValue() + value);
-            }
+				updatePercent();
+			}
+		}
 
-            @Override
-            public void setValue(int value) {
-                _PROGRESS_BAR.setValue(value);
-            }
+		public class CurrentProgress extends Progress {
+			public CurrentProgress(JProgressBar progressbar) {
+				super(progressbar);
+			}
 
-            @Override
-            public void setMinimum(int value) {
-                _PROGRESS_BAR.setMinimum(value);
-            }
+			@Override
+			public void increment(int value) {
+				_PROGRESS_BAR.setValue(_PROGRESS_BAR.getValue() + value);
+			}
 
-            @Override
-            public void setMaximum(int value) {
-                _PROGRESS_BAR.setMaximum(value);
-            }
-        }
+			@Override
+			public void setValue(int value) {
+				_PROGRESS_BAR.setValue(value);
+			}
 
-        public abstract class Progress implements IProgress {
-            protected final JProgressBar _PROGRESS_BAR;
+			@Override
+			public void setMinimum(int value) {
+				_PROGRESS_BAR.setMinimum(value);
+			}
 
-            public Progress(JProgressBar progressbar) {
-                if(progressbar == null) {
-                    throw new RuntimeException("Variable[progressbar] - Is Null");
-                }
+			@Override
+			public void setMaximum(int value) {
+				_PROGRESS_BAR.setMaximum(value);
+			}
+		}
 
-                _PROGRESS_BAR = progressbar;
-            }
+		public abstract class Progress implements IProgress {
+			protected final JProgressBar _PROGRESS_BAR;
 
-            @Override
-            public void increment() {
-                increment(1);
-            }            
+			public Progress(JProgressBar progressbar) {
+				if(progressbar == null) {
+					throw new RuntimeException("Variable[progressbar] - Is Null");
+				}
 
-            @Override
-            public int getValue() {
-                return _PROGRESS_BAR.getValue();
-            }
+				_PROGRESS_BAR = progressbar;
+			}
 
-            @Override
-            public int getMaximum() {
-                return _PROGRESS_BAR.getMaximum();
-            }
+			@Override
+			public void increment() {
+				increment(1);
+			}
 
-            @Override
-            public int getMinimum() {
-                return _PROGRESS_BAR.getMinimum();
-            }
+			@Override
+			public int getValue() {
+				return _PROGRESS_BAR.getValue();
+			}
 
-            @Override
-            public void setText(String text) {
-                lblInfo.setText(text);
-            }
+			@Override
+			public int getMaximum() {
+				return _PROGRESS_BAR.getMaximum();
+			}
 
-            @Override
-            public String getText() {
-                return lblInfo.getText();
-            }
+			@Override
+			public int getMinimum() {
+				return _PROGRESS_BAR.getMinimum();
+			}
 
-            public void setBarBackgroundColor(Color color) {
-                _PROGRESS_BAR.setOpaque(true);
-                _PROGRESS_BAR.setBackground(color);
-            }
+			@Override
+			public void setText(String text) {
+				lblInfo.setText(text);
+			}
 
-            public void setBarColor(Color color) {
-                _PROGRESS_BAR.setForeground(color);
-            }
-        }
-    }
+			@Override
+			public String getText() {
+				return lblInfo.getText();
+			}
+
+			public void setBarBackgroundColor(Color color) {
+				_PROGRESS_BAR.setOpaque(true);
+				_PROGRESS_BAR.setBackground(color);
+			}
+
+			public void setBarColor(Color color) {
+				_PROGRESS_BAR.setForeground(color);
+			}
+		}
+	}
 /*
 	public static void main(String[] args) {
         final int Max1 = 10;

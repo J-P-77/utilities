@@ -11,7 +11,8 @@ import utillib.utilities.Status;
 import java.io.File;
 import java.io.FileFilter;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.2.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -21,7 +22,7 @@ import java.io.FileFilter;
  *     -Added
  *         -Variable _Update(IUpdate) When File Size Is Increased Will Call Method
  *             updateFileSize() and updateTotalSize()
- *
+ * 
  * February 01, 2009 (Version 1.0.2)
  *     -Added
  *         -You Can Have Multiple FileFilters, Checks Whether File or Directory Is
@@ -30,7 +31,7 @@ import java.io.FileFilter;
  * April 27, 2010 (Version 1.1.0)
  *     -Updated
  *         -Separated File and Directories FileFilters
- *
+ * 
  * January 10, 2011 (Version 1.2.0)
  *     -Fixed Bug
  *     	   -Method isAcceptableDirectory(File) Was Using The Wrong ResizingArray Length
@@ -40,270 +41,298 @@ import java.io.FileFilter;
  * </pre>
  */
 public class FileSize extends Thread {
-    private final IUpdateSize _UPDATER;
+	private final IUpdateSize _UPDATER;
 
-    private final ResizingArray<FileFilter> _ACCEPTABLE_FILES = new ResizingArray<FileFilter>(0, 1);
-    private final ResizingArray<FileFilter> _ACCEPTABLE_DIRECTORIES = new ResizingArray<FileFilter>(0, 1);
+	private final ResizingArray<FileFilter> _ACCEPTABLE_FILES = new ResizingArray<FileFilter>(0, 1);
+	private final ResizingArray<FileFilter> _ACCEPTABLE_DIRECTORIES = new ResizingArray<FileFilter>(0, 1);
 
-    private final File _CRAWL;
-    private final boolean _INCLUDE;
-    
-    private long _TotalSize = 0;
-    private int _Directory_Count = 0;
-    private int _File_Count = 0;
+	private final File _CRAWL;
+	private final boolean _INCLUDE;
 
-    private final Status _STATUS = new Status();
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (String) File or Directory to Crawl
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(String crawl)  {
-        this(new File(crawl), false, false, null);
-    }
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (String) File or Directory to Crawl
-     * @param include - (boolean) Includes Sub Directories
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(String crawl, boolean include)  {
-        this(new File(crawl), include, false, null);
-    } 
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (String) File or Directory to Crawl
-     * @param include - (boolean) Includes Sub Directories
-     * @param autorun - (boolean) Start Searching Immediately
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(String crawl, boolean include, boolean autorun)  {
-        this(new File(crawl), include, autorun, null);
-    }
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (String) File or Directory to Crawl
-     * @param include - (boolean) Includes Sub Directories
-     * @param autorun - (boolean) Start Searching Immediately
-     * @param update - (IUpdate) When File Size Is Increased Will Call Method updateFileSize() and updateTotalSize() When Total Size Is Increased
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(String crawl, boolean include, boolean autorun, IUpdateSize update) {
-        this(new File(crawl), include, autorun, update);
-    }
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (File) File or Directory to Crawl
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(File crawl)  {
-        this(crawl, false, false, null);
-    }
-    
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (File) File or Directory to Crawl
-     * @param include - (boolean) Includes Sub Directories
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(File crawl, boolean include)  {
-        this(crawl, include, false, null);
-    }
+	private long _TotalSize = 0;
+	private int _Directory_Count = 0;
+	private int _File_Count = 0;
 
-   /**
-     * Gets File or Directory Size
-     * 
-     * @param crawl - (File) File or Directory to Crawl
-     * @param include - (boolean) Includes Sub Directories
-     * @param autorun - (boolean) Start Searching Immediately
-     * @param update - (IUpdate) When File Size Is Increased Will Call Method updateFileSize() and updateTotalSize() When Total Size Is Increased
-     * 
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public FileSize(File crawl, boolean include, boolean autorun, IUpdateSize update) {
-        if(crawl == null) {
-            throw new NullPointerException("Variable[crawl] - Is Null");
-        }
+	private final Status _STATUS = new Status();
 
-        if(!crawl.exists()) {
-            throw new RuntimeException(" Variable[crawl] - Path: " + crawl.getPath() + " - Does Not Exists");
-        }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (String) File or Directory to Crawl
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(String crawl) {
+		this(new File(crawl), false, false, null);
+	}
 
-        _CRAWL = crawl;
-        _UPDATER = (update ==  null ? new Updater() : update);
-        _INCLUDE = (_CRAWL.isDirectory() ? include : false);
-        _STATUS.start();
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (String) File or Directory to Crawl
+	 * @param include
+	 *            - (boolean) Includes Sub Directories
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(String crawl, boolean include) {
+		this(new File(crawl), include, false, null);
+	}
 
-        if(autorun) {super.start();}
-    }
-    
-    @Override
-    public void run() {
-        if(_CRAWL.isFile()) {
-            crawlFile();
-        } else if(_CRAWL.isDirectory()) {
-            crawlDirectory();
-        }
-        
-        if(_STATUS.isCanceling()) {
-        	_STATUS.canceled();
-        } else {
-        	_STATUS.done();
-        }
-    }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (String) File or Directory to Crawl
+	 * @param include
+	 *            - (boolean) Includes Sub Directories
+	 * @param autorun
+	 *            - (boolean) Start Searching Immediately
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(String crawl, boolean include, boolean autorun) {
+		this(new File(crawl), include, autorun, null);
+	}
 
-    public ResizingArray<FileFilter> getAcceptablesFiles() {
-        return _ACCEPTABLE_FILES;
-    }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (String) File or Directory to Crawl
+	 * @param include
+	 *            - (boolean) Includes Sub Directories
+	 * @param autorun
+	 *            - (boolean) Start Searching Immediately
+	 * @param update
+	 *            - (IUpdate) When File Size Is Increased Will Call Method
+	 *            updateFileSize() and updateTotalSize() When Total Size Is
+	 *            Increased
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(String crawl, boolean include, boolean autorun, IUpdateSize update) {
+		this(new File(crawl), include, autorun, update);
+	}
 
-    public ResizingArray<FileFilter> getAcceptablesDirectories() {
-        return _ACCEPTABLE_DIRECTORIES;
-    }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (File) File or Directory to Crawl
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(File crawl) {
+		this(crawl, false, false, null);
+	}
 
-    public IStatus getStatus() {
-        return _STATUS;
-    }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (File) File or Directory to Crawl
+	 * @param include
+	 *            - (boolean) Includes Sub Directories
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(File crawl, boolean include) {
+		this(crawl, include, false, null);
+	}
 
-    public long getTotalSize() {
-        return _TotalSize;
-    }
-    
-    public int getFileCount() {
-        return _File_Count;
-    }
-    
-    public int getDirectoryCount() {
-        return _Directory_Count;
-    }
+	/**
+	 * Gets File or Directory Size
+	 * 
+	 * @param crawl
+	 *            - (File) File or Directory to Crawl
+	 * @param include
+	 *            - (boolean) Includes Sub Directories
+	 * @param autorun
+	 *            - (boolean) Start Searching Immediately
+	 * @param update
+	 *            - (IUpdate) When File Size Is Increased Will Call Method
+	 *            updateFileSize() and updateTotalSize() When Total Size Is
+	 *            Increased
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public FileSize(File crawl, boolean include, boolean autorun, IUpdateSize update) {
+		if(crawl == null) {
+			throw new NullPointerException("Variable[crawl] - Is Null");
+		}
 
-    public File getCrawlingFile() {
-        return _CRAWL;
-    }
+		if(!crawl.exists()) {
+			throw new RuntimeException(" Variable[crawl] - Path: " + crawl.getPath() + " - Does Not Exists");
+		}
 
-    private void crawlFile() {
-        if(_CRAWL.isFile()) {
-            final long FILESIZE = _CRAWL.length();
+		_CRAWL = crawl;
+		_UPDATER = (update == null ? new Updater() : update);
+		_INCLUDE = (_CRAWL.isDirectory() ? include : false);
+		_STATUS.start();
 
-            _UPDATER.fileSize(FILESIZE);
+		if(autorun) {
+			super.start();
+		}
+	}
 
-            _TotalSize += FILESIZE;
+	@Override
+	public void run() {
+		if(_CRAWL.isFile()) {
+			crawlFile();
+		} else if(_CRAWL.isDirectory()) {
+			crawlDirectory();
+		}
 
-            _UPDATER.newTotalSize(_TotalSize);
+		if(_STATUS.isCanceling()) {
+			_STATUS.canceled();
+		} else {
+			_STATUS.done();
+		}
+	}
 
-            _File_Count++;
-        } else {
-            throw new RuntimeException(_CRAWL.getPath() + " - Is Not A File");
-        }
-    }
+	public ResizingArray<FileFilter> getAcceptablesFiles() {
+		return _ACCEPTABLE_FILES;
+	}
 
-    private void crawlDirectory() {
-        if(_CRAWL.isDirectory()) {
-            final Queue<File> DIRECTORIES = new Queue<File>(_CRAWL);
+	public ResizingArray<FileFilter> getAcceptablesDirectories() {
+		return _ACCEPTABLE_DIRECTORIES;
+	}
 
-            while(!DIRECTORIES.isEmpty()) {
-                final File DIRECTORY = DIRECTORIES.pop();
-                _Directory_Count++;
+	public IStatus getStatus() {
+		return _STATUS;
+	}
 
-                final File[] FILES = DIRECTORY.listFiles();
-                for(int X = 0; X < FILES.length; X++) {
-                    if(FILES[X].isFile()) {
-                        if(isAcceptableFiles(FILES[X])) {
-                            final long FILESIZE = FILES[X].length();
+	public long getTotalSize() {
+		return _TotalSize;
+	}
 
-                            _UPDATER.fileSize(FILESIZE);
+	public int getFileCount() {
+		return _File_Count;
+	}
 
-                            _TotalSize += FILESIZE;
+	public int getDirectoryCount() {
+		return _Directory_Count;
+	}
 
-                            _UPDATER.newTotalSize(_TotalSize);
+	public File getCrawlingFile() {
+		return _CRAWL;
+	}
 
-                            _File_Count++;
-                        }
-                    } else {
-                        if(_INCLUDE) {
-                            if(isAcceptableDirectory(FILES[X])) {
-                                DIRECTORIES.push(FILES[X]);//Pushes Directory Into Folder Stack
-                            }
-                        }
-                    }
-                    if(pauseCancelCheck()) {return;}
-                }
-                if(pauseCancelCheck()) {return;}
-            }
-        } else {
-            throw new RuntimeException(_CRAWL.getPath() + " - Is Not A Directory");
-        }
-    }
+	private void crawlFile() {
+		if(_CRAWL.isFile()) {
+			final long FILESIZE = _CRAWL.length();
 
-    private boolean isAcceptableFiles(File file) {
-        if(_ACCEPTABLE_FILES.length() == 0) {
-            return true;
-        }
+			_UPDATER.fileSize(FILESIZE);
 
-        for(int X = 0; X < _ACCEPTABLE_FILES.length(); X++) {
-            if(_ACCEPTABLE_FILES.getAt(X).accept(file)) {
-                return true;
-            }
-        }
+			_TotalSize += FILESIZE;
 
-        return false;
-    }
+			_UPDATER.newTotalSize(_TotalSize);
 
-    private boolean isAcceptableDirectory(File directory) {
-        if(_ACCEPTABLE_DIRECTORIES.length() == 0) {
-            return true;
-        }
+			_File_Count++;
+		} else {
+			throw new RuntimeException(_CRAWL.getPath() + " - Is Not A File");
+		}
+	}
 
-        for(int X = 0; X < _ACCEPTABLE_DIRECTORIES.length(); X++) {
-            if(_ACCEPTABLE_DIRECTORIES.getAt(X).accept(directory)) {
-                return true;
-            }
-        }
+	private void crawlDirectory() {
+		if(_CRAWL.isDirectory()) {
+			final Queue<File> DIRECTORIES = new Queue<File>(_CRAWL);
 
-        return false;
-    }
+			while(!DIRECTORIES.isEmpty()) {
+				final File DIRECTORY = DIRECTORIES.pop();
+				_Directory_Count++;
 
-    private boolean pauseCancelCheck() {
-        while(_STATUS.isPaused()) {
-            try {
-                if(_STATUS.isCanceling()) {
-                    return true;
-                }
-                Thread.sleep(200);
-            } catch (Exception e) {}
-        }
-        
-        return _STATUS.isCanceling();
-    }
+				final File[] FILES = DIRECTORY.listFiles();
+				for(int X = 0; X < FILES.length; X++) {
+					if(FILES[X].isFile()) {
+						if(isAcceptableFiles(FILES[X])) {
+							final long FILESIZE = FILES[X].length();
 
-    //CLASSES
-    private class Updater implements IUpdateSize {//Default Updater
-        public void fileSize(long filesize) {}
-        public void newTotalSize(long newtotalsize) {}
-    }
+							_UPDATER.fileSize(FILESIZE);
+
+							_TotalSize += FILESIZE;
+
+							_UPDATER.newTotalSize(_TotalSize);
+
+							_File_Count++;
+						}
+					} else {
+						if(_INCLUDE) {
+							if(isAcceptableDirectory(FILES[X])) {
+								DIRECTORIES.push(FILES[X]);//Pushes Directory Into Folder Stack
+							}
+						}
+					}
+					if(pauseCancelCheck()) {
+						return;
+					}
+				}
+				if(pauseCancelCheck()) {
+					return;
+				}
+			}
+		} else {
+			throw new RuntimeException(_CRAWL.getPath() + " - Is Not A Directory");
+		}
+	}
+
+	private boolean isAcceptableFiles(File file) {
+		if(_ACCEPTABLE_FILES.length() == 0) {
+			return true;
+		}
+
+		for(int X = 0; X < _ACCEPTABLE_FILES.length(); X++) {
+			if(_ACCEPTABLE_FILES.getAt(X).accept(file)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean isAcceptableDirectory(File directory) {
+		if(_ACCEPTABLE_DIRECTORIES.length() == 0) {
+			return true;
+		}
+
+		for(int X = 0; X < _ACCEPTABLE_DIRECTORIES.length(); X++) {
+			if(_ACCEPTABLE_DIRECTORIES.getAt(X).accept(directory)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean pauseCancelCheck() {
+		while(_STATUS.isPaused()) {
+			try {
+				if(_STATUS.isCanceling()) {
+					return true;
+				}
+				Thread.sleep(200);
+			} catch(Exception e) {}
+		}
+
+		return _STATUS.isCanceling();
+	}
+
+	//CLASSES
+	private class Updater implements IUpdateSize {//Default Updater
+		public void fileSize(long filesize) {}
+
+		public void newTotalSize(long newtotalsize) {}
+	}
 /*
 	public static void main(String[] args) {
         final File[] TEMP = {

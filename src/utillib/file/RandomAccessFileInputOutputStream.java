@@ -14,16 +14,17 @@ import java.io.IOException;
 
 import java.io.RandomAccessFile;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * January 11, 2010 (version 1.0.0)
  *     -First Released
- *
+ * 
  * <b>default ordering</b>: Little Endian
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class RandomAccessFileInputOutputStream extends AMyInputOutputStream implements ISeekable {

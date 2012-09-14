@@ -5,7 +5,7 @@ import java.io.FileFilter;
 
 /**
  *
- * @author Dalton Dell
+ * @author Justin Palinkas
  */
 public interface IFileSizeAccetable extends FileFilter {
     public boolean accept(File file);

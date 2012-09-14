@@ -2,14 +2,15 @@ package utillib.arrays.buffer;
 
 import utillib.arrays.ArraysUtil;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * November 22, 2011 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class ResizingByteBuffer {
@@ -75,15 +76,15 @@ public class ResizingByteBuffer {
 
 	public byte[] get(int length) {
 //		synchronized(__LOCK__) {
-			if(length < 0) {
-				throw new RuntimeException("Variable[length] - Must Be Greater Than Zero");
-			}
+		if(length < 0) {
+			throw new RuntimeException("Variable[length] - Must Be Greater Than Zero");
+		}
 
-			final byte[] TEMP = new byte[length];
+		final byte[] TEMP = new byte[length];
 
-			get(TEMP, 0, TEMP.length);
+		get(TEMP, 0, TEMP.length);
 
-			return TEMP;
+		return TEMP;
 //		}
 	}
 
@@ -94,24 +95,24 @@ public class ResizingByteBuffer {
 	public int get(byte[] buffer, int offset, int length) {
 		synchronized(__LOCK__) {
 			ArraysUtil.checkBufferBounds(buffer.length, offset, length);
-			
+
 			final int TO_MOVE = (_Top < length ? _Top : length);
-			
+
 			int X = 0;
 			while(X < TO_MOVE) {
 				buffer[offset + X] = _Buffer[X];
 				X++;
 			}
-			for(int Y = 0; (TO_MOVE + Y) < _Top; Y++) { 
+			for(int Y = 0; (TO_MOVE + Y) < _Top; Y++) {
 				_Buffer[Y] = _Buffer[TO_MOVE + Y];
 			}
-			
+
 			_Top -= TO_MOVE;
-			
+
 			return TO_MOVE;
 		}
 	}
-	
+
 //    public int get(int index) {
 //        if(validIndex(index)) {
 //            return _Buffer[index];
@@ -145,7 +146,7 @@ public class ResizingByteBuffer {
 	public int available() {
 		return _Buffer.length - _Top;
 	}
-	
+
 	public void reset() {
 		synchronized(__LOCK__) {
 			_Top = 0;

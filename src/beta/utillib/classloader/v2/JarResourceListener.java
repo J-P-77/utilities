@@ -25,66 +25,67 @@ import java.util.jar.Manifest;
 
 import java.net.URL;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.0</b>
- *
+ * 
  * August 16, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * January 18, 2011 (Version 1.1.0)
  *     -Bug Fix
  *         -Would Say The JarClassloader Was Closed When No InputStreams Were Open 
  *             (Jar Is Closed When Not Being Actively Being Used)
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class JarResourceListener implements IClassloaderListener, ZipJarConstants {
 	private static final DebugLogger _LOG = LogManager.getInstance().getLogger(JarResourceListener.class);
 
-    private final File _JARPATH;
-    
-    private Jar _Jar = null;
+	private final File _JARPATH;
 
-    private Manifest _Manifest = null;
+	private Jar _Jar = null;
 
-    public JarResourceListener(String filepath) throws FileNotFoundException, InvalidFileTypeException, IOException {
-    	this(new File(filepath));
-    }
+	private Manifest _Manifest = null;
 
-    public JarResourceListener(File file) throws FileNotFoundException, InvalidFileTypeException, IOException {
-    	if(file == null) {
-            throw new RuntimeException("Variable[file] - Is Null");
-        }
-    	
-    	if(!file.exists()) {
-            throw new FileNotFoundException(file.getPath() + " Does Not Exists");
-        }
-        	
-    	if(!FileUtil.isFileType(file, _JAR_MAGIC_NUMBER_)) {
-            throw new InvalidFileTypeException(file.getPath() + " Is Not A Zip/Jar");
-        }
+	public JarResourceListener(String filepath) throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(new File(filepath));
+	}
 
-    	_JARPATH = file;
-        
-        JarFile JarFile = new JarFile(file);
+	public JarResourceListener(File file) throws FileNotFoundException, InvalidFileTypeException, IOException {
+		if(file == null) {
+			throw new RuntimeException("Variable[file] - Is Null");
+		}
 
-        final ResizingArray<JarEntry> JARENTRIES = new ResizingArray<JarEntry>(JarFile.size());
+		if(!file.exists()) {
+			throw new FileNotFoundException(file.getPath() + " Does Not Exists");
+		}
 
-        final Enumeration<JarEntry> ENTRIES = JarFile.entries();
-        while(ENTRIES.hasMoreElements()) {
-            final JarEntry ENTRY = ENTRIES.nextElement();
+		if(!FileUtil.isFileType(file, _JAR_MAGIC_NUMBER_)) {
+			throw new InvalidFileTypeException(file.getPath() + " Is Not A Zip/Jar");
+		}
 
-            JARENTRIES.put(ENTRY);
-        }
+		_JARPATH = file;
 
-        JarFile.close();
-        JarFile = null;
+		JarFile JarFile = new JarFile(file);
 
-        _Jar = new Jar(JARENTRIES.toArray(new JarEntry[JARENTRIES.length()]));
-    }
-    
+		final ResizingArray<JarEntry> JARENTRIES = new ResizingArray<JarEntry>(JarFile.size());
+
+		final Enumeration<JarEntry> ENTRIES = JarFile.entries();
+		while(ENTRIES.hasMoreElements()) {
+			final JarEntry ENTRY = ENTRIES.nextElement();
+
+			JARENTRIES.put(ENTRY);
+		}
+
+		JarFile.close();
+		JarFile = null;
+
+		_Jar = new Jar(JARENTRIES.toArray(new JarEntry[JARENTRIES.length()]));
+	}
+
 //    public JarClassLoaderListener(InputStream istream) throws FileNotFoundException, InvalidFileTypeException, IOException {
 //    	if(istream == null) {
 //            throw new RuntimeException("Variable[istream] - Is Null");
@@ -107,59 +108,59 @@ public class JarResourceListener implements IClassloaderListener, ZipJarConstant
 //        
 //        _Jar = new Jar(JARENTRIES.toArray(new JarEntry[JARENTRIES.length()]));
 //    }
-    
-    @Override
-    public String getName() {
-    	return _JARPATH.getAbsolutePath();
-    }
-    
-    public File getFile() {
-        return _JARPATH;
-    }
 
-    public JarEntry[] getJarEntries() {
-        return _Jar._ENTRIES;
-    }
+	@Override
+	public String getName() {
+		return _JARPATH.getAbsolutePath();
+	}
 
-    public JarEntry getJarEntry(String name) {
-        return _Jar.getJarEntry(name);
-    }
+	public File getFile() {
+		return _JARPATH;
+	}
 
-    @Override
-    public Manifest getManifest() {
-    	if(_Manifest == null) {
-    		_Manifest = loadManifest(_Jar);
-    	}
-    	
-        return _Manifest;
-    }
-    
-    @Override
-    public InputStream findClass(String name) {
-    	if(name == null || name.length() == 0) {
-    		throw new RuntimeException("Variable[name] - Is Null");
+	public JarEntry[] getJarEntries() {
+		return _Jar._ENTRIES;
+	}
+
+	public JarEntry getJarEntry(String name) {
+		return _Jar.getJarEntry(name);
+	}
+
+	@Override
+	public Manifest getManifest() {
+		if(_Manifest == null) {
+			_Manifest = loadManifest(_Jar);
 		}
-    	
-    	MyStringBuffer Buffer = new MyStringBuffer(name, 6);
-        Buffer.replace('.', '/');
-        Buffer.append(".class");
 
-        final String CLASS_NAME = Buffer.toString();
+		return _Manifest;
+	}
 
-        final JarEntry ENTRY = _Jar.getJarEntry(CLASS_NAME);
+	@Override
+	public InputStream findClass(String name) {
+		if(name == null || name.length() == 0) {
+			throw new RuntimeException("Variable[name] - Is Null");
+		}
 
-        if(ENTRY != null) {
-        	return _Jar.getInputStream(ENTRY);
-        }
-        
-        return null;
-    }
+		MyStringBuffer Buffer = new MyStringBuffer(name, 6);
+		Buffer.replace('.', '/');
+		Buffer.append(".class");
 
-    //jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
-    @Override
-    public URL findResource(String name) {
-    	if(name == null || name.length() == 0) {
-    		throw new RuntimeException("Variable[name] - Is Null");
+		final String CLASS_NAME = Buffer.toString();
+
+		final JarEntry ENTRY = _Jar.getJarEntry(CLASS_NAME);
+
+		if(ENTRY != null) {
+			return _Jar.getInputStream(ENTRY);
+		}
+
+		return null;
+	}
+
+	//jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
+	@Override
+	public URL findResource(String name) {
+		if(name == null || name.length() == 0) {
+			throw new RuntimeException("Variable[name] - Is Null");
 		}
 
 		final String NAME = name;
@@ -175,141 +176,140 @@ public class JarResourceListener implements IClassloaderListener, ZipJarConstant
 			}
 		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public InputStream getResourceAsStream(String name) {
-    	if(name == null || name.length() == 0) {
-    		throw new RuntimeException("Variable[name] - Is Null");
+	@Override
+	public InputStream getResourceAsStream(String name) {
+		if(name == null || name.length() == 0) {
+			throw new RuntimeException("Variable[name] - Is Null");
 		}
-    	
-    	final JarEntry ENTRY = getJarEntry(name);
 
-        if(ENTRY != null) {
-        	return _Jar.getInputStream(ENTRY);
-        }
+		final JarEntry ENTRY = getJarEntry(name);
 
-        return null;
-    }
+		if(ENTRY != null) {
+			return _Jar.getInputStream(ENTRY);
+		}
 
-    @Override
-    public boolean resourceExists(String name) {
-        return _Jar.getJarEntry(name) != null;
-    }
+		return null;
+	}
 
-    @Override
-    public boolean isClosed() {
-        return _Jar == null;
-    }
+	@Override
+	public boolean resourceExists(String name) {
+		return _Jar.getJarEntry(name) != null;
+	}
 
-    @Override
-    public void close() {
-    	if(_Jar != null) {
-	        try {
-	            _Jar.close(true);
-	        } catch (Exception e) {
-	        	_LOG.printError(e);
-	        }
-	        _Jar = null;
-    	}
-    	
-        _LOG.printInformation("Local: " + _JARPATH + " - Closed");
-    }
+	@Override
+	public boolean isClosed() {
+		return _Jar == null;
+	}
 
-    //STATIC
-    private static Manifest loadManifest(Jar jar) {
+	@Override
+	public void close() {
+		if(_Jar != null) {
+			try {
+				_Jar.close(true);
+			} catch(Exception e) {
+				_LOG.printError(e);
+			}
+			_Jar = null;
+		}
+
+		_LOG.printInformation("Local: " + _JARPATH + " - Closed");
+	}
+
+	//STATIC
+	private static Manifest loadManifest(Jar jar) {
 		final JarEntry ENTRY = jar.getJarEntry(JarFile.MANIFEST_NAME);
-		
+
 		if(ENTRY != null) {
 			InputStream IStream = jar.getInputStream(ENTRY);
 
 			if(IStream != null) {
 				try {
-					return new Manifest(IStream);    					
-				} catch (Exception e) {
-				} finally {
+					return new Manifest(IStream);
+				} catch(Exception e) {} finally {
 					try {
 						IStream.close();
-					} catch (Exception e2) {}
+					} catch(Exception e2) {}
 					IStream = null;
 				}
 			}
 		}
-		
+
 		return null;
-    }
-    
-    //CLASSES
-    //Just Used To Keep Track Of The Number Of Streams Open In A Given Jar
-    private class WrapperInputStream extends InputStream {
-        private InputStream _IStream;
+	}
 
-        public WrapperInputStream(InputStream istream) {
-            _IStream = istream;
+	//CLASSES
+	//Just Used To Keep Track Of The Number Of Streams Open In A Given Jar
+	private class WrapperInputStream extends InputStream {
+		private InputStream _IStream;
 
-            _Jar._OpenStreams++;
-        }
+		public WrapperInputStream(InputStream istream) {
+			_IStream = istream;
 
-        @Override
-        public int read() throws IOException {
-            return _IStream.read();
-        }
+			_Jar._OpenStreams++;
+		}
 
-        @Override
-        public int read(byte[] buffer) throws IOException {
-            return _IStream.read(buffer);
-        }
+		@Override
+		public int read() throws IOException {
+			return _IStream.read();
+		}
 
-        @Override
-        public int read(byte[] buffer, int offset, int length) throws IOException {
-            return _IStream.read(buffer, offset, length);
-        }
+		@Override
+		public int read(byte[] buffer) throws IOException {
+			return _IStream.read(buffer);
+		}
 
-        @Override
-        public int available() throws IOException {
-            return _IStream.available();
-        }
+		@Override
+		public int read(byte[] buffer, int offset, int length) throws IOException {
+			return _IStream.read(buffer, offset, length);
+		}
 
-        @Override
-        public void close() throws IOException {
-            if(_IStream != null) {
-                _IStream.close();
-                _IStream = null;
+		@Override
+		public int available() throws IOException {
+			return _IStream.available();
+		}
 
-                _Jar._OpenStreams--;
+		@Override
+		public void close() throws IOException {
+			if(_IStream != null) {
+				_IStream.close();
+				_IStream = null;
 
-                if(!_Jar.hasOpenStreams()) {
-                    _Jar.close(false);
-                }
-            }
-        }
-    }
+				_Jar._OpenStreams--;
 
-    private class Jar {
-        private final JarEntry[] _ENTRIES;
-        
-        private JarFile _JarFile;
-        private int _OpenStreams = 0;
+				if(!_Jar.hasOpenStreams()) {
+					_Jar.close(false);
+				}
+			}
+		}
+	}
 
-        private Jar(JarEntry[] entries) {
-            _ENTRIES = entries;
-        }
+	private class Jar {
+		private final JarEntry[] _ENTRIES;
 
-        private boolean open(){
-            if(_JarFile == null) {
-                try {
-                    _JarFile = new JarFile(_JARPATH);
-                } catch (Exception e) {
-                	_LOG.printError(e);
-                    _JarFile = null;
-                }
-            }
+		private JarFile _JarFile;
+		private int _OpenStreams = 0;
 
-            return !isClosed();
-        }
+		private Jar(JarEntry[] entries) {
+			_ENTRIES = entries;
+		}
 
-        private void close(boolean forceclose) {
+		private boolean open() {
+			if(_JarFile == null) {
+				try {
+					_JarFile = new JarFile(_JARPATH);
+				} catch(Exception e) {
+					_LOG.printError(e);
+					_JarFile = null;
+				}
+			}
+
+			return !isClosed();
+		}
+
+		private void close(boolean forceclose) {
 			if(!hasOpenStreams() || forceclose) {
 				if(_JarFile != null) {
 					try {
@@ -320,36 +320,36 @@ public class JarResourceListener implements IClassloaderListener, ZipJarConstant
 			}
 		}
 
-        public boolean hasOpenStreams() {
-            return _OpenStreams > 0;
-        }
+		public boolean hasOpenStreams() {
+			return _OpenStreams > 0;
+		}
 
-        private boolean isClosed() {
-            return _JarFile == null;
-        }
+		private boolean isClosed() {
+			return _JarFile == null;
+		}
 
-        private JarEntry getJarEntry(String name) {
-            for(int X = 0; X < _ENTRIES.length; X++) {
-                if(_ENTRIES[X].getName().equals(name)) {
-                    return _ENTRIES[X];
-                }
-            }
+		private JarEntry getJarEntry(String name) {
+			for(int X = 0; X < _ENTRIES.length; X++) {
+				if(_ENTRIES[X].getName().equals(name)) {
+					return _ENTRIES[X];
+				}
+			}
 
-            return null;
-        }
-        
-        private InputStream getInputStream(JarEntry jarentry) {
-        	if(open()) {
-        		try {
-        			return new WrapperInputStream(_JarFile.getInputStream(jarentry));
-        		} catch (Exception e) {
-        			_LOG.printError(e);
-        		}
-        	}
-        	
-        	return null;
-        }
-    }
+			return null;
+		}
+
+		private InputStream getInputStream(JarEntry jarentry) {
+			if(open()) {
+				try {
+					return new WrapperInputStream(_JarFile.getInputStream(jarentry));
+				} catch(Exception e) {
+					_LOG.printError(e);
+				}
+			}
+
+			return null;
+		}
+	}
 }
 
 /*

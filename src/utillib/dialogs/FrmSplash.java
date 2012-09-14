@@ -34,7 +34,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.1</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -50,181 +51,182 @@ import javax.imageio.ImageIO;
  */
 @Deprecated
 public class FrmSplash extends JWindow implements IProgress, IText, WindowConstants {
-    public static final String _DEFAULT_BACKGROUND_RESOURCE_ = "/resources/images/resources/blank.jpg";
+	public static final String _DEFAULT_BACKGROUND_RESOURCE_ = "/resources/images/resources/blank.jpg";
 	public static final int _BASE_HEIGHT_ = 236;
 	public static final int _BASE_WIDTH_ = 400;
-    	
+
 	private Image _Background_Image = null;
-    private Image _Image = null;
+	private Image _Image = null;
 
-    private static final ImageIcon _CLOSE_EXITED_ = new ImageIcon(ImageUtil.loadImageFromResource(FrmSplash.class, "/resources/images/resources/close exited.png"));
-    private static final ImageIcon _CLOSE_ENTERED_ = new ImageIcon(ImageUtil.loadImageFromResource(FrmSplash.class, "/resources/images/resources/close entered.png"));
+	private static final ImageIcon _CLOSE_EXITED_ = new ImageIcon(ImageUtil.loadImageFromResource(FrmSplash.class, "/resources/images/resources/close exited.png"));
+	private static final ImageIcon _CLOSE_ENTERED_ = new ImageIcon(ImageUtil.loadImageFromResource(FrmSplash.class, "/resources/images/resources/close entered.png"));
 
-    private ResizingArray<Runnable> _Runnables = new ResizingArray<Runnable>(1);
+	private ResizingArray<Runnable> _Runnables = new ResizingArray<Runnable>(1);
 
-    private SplashComponent _Painter = null;
-    private IProgress _Progress = null;
+	private SplashComponent _Painter = null;
+	private IProgress _Progress = null;
 
-    private int _CloseAction = DO_NOTHING_ON_CLOSE;
+	private int _CloseAction = DO_NOTHING_ON_CLOSE;
 
-    /**
+	/**
      *
      */
 	public FrmSplash() {
 		this(1, ImageUtil.loadImageFromResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_), null);
 	}
 
-    /**
-     *
-     * @param max
-     */
+	/**
+	 * 
+	 * @param max
+	 */
 	public FrmSplash(int max) {
 		this(max, ImageUtil.loadImageFromResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_), null);
 	}
 
-    /**
-     *
-     * @param max
-     */
+	/**
+	 * 
+	 * @param max
+	 */
 	public FrmSplash(Image background) {
 		this(1, background, null);
 	}
 
-    /**
-     *
-     * @param max
-     */
+	/**
+	 * 
+	 * @param max
+	 */
 	public FrmSplash(Image background, Image image) {
 		this(1, background, image);
 	}
 
-    /**
-     *
-     * @param max
-     * @param background
-     * @param image
-     */
+	/**
+	 * 
+	 * @param max
+	 * @param background
+	 * @param image
+	 */
 	public FrmSplash(int max, Image background, Image image) {
-        if(background == null) {
-            throw new RuntimeException("Variable[background] - Is Null");
-        }
-        
-        initComponents();
-        
+		if(background == null) {
+			throw new RuntimeException("Variable[background] - Is Null");
+		}
+
+		initComponents();
+
 		setMaximum(max);
-        setBackgroundImage(background);
+		setBackgroundImage(background);
 
 		if(image != null) {
-            setImage(image);
-        }
+			setImage(image);
+		}
 	}
-    
+
 	private void initComponents() {
-        _Painter = new SplashComponent(this);
-        _Progress = _Painter;
+		_Painter = new SplashComponent(this);
+		_Progress = _Painter;
 
-        super.setSize(_BASE_WIDTH_, _BASE_HEIGHT_);
-        super.getContentPane().add(_Painter);
+		super.setSize(_BASE_WIDTH_, _BASE_HEIGHT_);
+		super.getContentPane().add(_Painter);
 
-        PositionWindow.quickToCenter(this);
-    }
+		PositionWindow.quickToCenter(this);
+	}
 
-    public void runOnApplicationExit(Runnable runnable) {
-        _Runnables.put(runnable);
-    }
+	public void runOnApplicationExit(Runnable runnable) {
+		_Runnables.put(runnable);
+	}
 
-    public void setCloseAction(int closeaction) {
-        if(closeaction >= 0 && closeaction <= 3) {
-            _CloseAction = closeaction;
-        } else {
-            throw new RuntimeException("Variable[closeaction] - Choose: DO_NOTHING_ON_CLOSE, HIDE_ON_CLOSE, DISPOSE_ON_CLOSE, or EXIT_ON_CLOSE");
-        }
-    }
+	public void setCloseAction(int closeaction) {
+		if(closeaction >= 0 && closeaction <= 3) {
+			_CloseAction = closeaction;
+		} else {
+			throw new RuntimeException("Variable[closeaction] - Choose: DO_NOTHING_ON_CLOSE, HIDE_ON_CLOSE, DISPOSE_ON_CLOSE, or EXIT_ON_CLOSE");
+		}
+	}
 
 // - 100.0%
-    @Override
+	@Override
 	public void setText(String value) {
-        _Painter.setText(value);
+		_Painter.setText(value);
 	}
 
-    @Override
-    public String getText() {
-        return _Painter.getText();
-    }
+	@Override
+	public String getText() {
+		return _Painter.getText();
+	}
 
 	public void setBackgroundImage(String path) {
 		setBackGroundImage(new File(path));
 	}
 
-    public void setBackgroundImage(Image image) {
-        _Background_Image = image;
-        super.repaint();
-    }
+	public void setBackgroundImage(Image image) {
+		_Background_Image = image;
+		super.repaint();
+	}
 
-    public void setBackGroundImage(File path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[filepath] - Is Null");
-        } else if(!path.exists()) {
-             throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
+	public void setBackGroundImage(File path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[filepath] - Is Null");
+		} else if(!path.exists()) {
+			throw new RuntimeException("Variable[filepath] - File: " + path.getPath() + " - Does Not Exists");
 		}
 
 		try {
 			BufferedImage Temp = ImageIO.read(path);
 			_Image = Temp.getScaledInstance(_BASE_WIDTH_, _BASE_HEIGHT_, Image.SCALE_DEFAULT);
 			Temp = null;
-		} catch (IOException e) {
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
-	
-    public void setBackGroundImage(URL path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	}
+
+	public void setBackGroundImage(URL path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
 		try {
 			BufferedImage TempImage = ImageIO.read(path);
 			_Image = TempImage.getScaledInstance(_BASE_WIDTH_, _BASE_HEIGHT_, Image.SCALE_DEFAULT);
-            TempImage = null;
-		} catch (IOException e) {
+			TempImage = null;
+		} catch(IOException e) {
 			setBackgroundColor("white");
 		}
-    }
-	
-    public void setImage(Image image) {
-        if(image == null) {
-            throw new RuntimeException("Variable[image] - Is Null");
-        }
-		
+	}
+
+	public void setImage(Image image) {
+		if(image == null) {
+			throw new RuntimeException("Variable[image] - Is Null");
+		}
+
 		_Image = image.getScaledInstance(_BASE_WIDTH_, _BASE_HEIGHT_, Image.SCALE_DEFAULT);
-    }
-	
+	}
+
 	public void setBackgroundColor(String color) {
 		Color C = ColorUtil.convertStrToColor(color);
-		
+
 		if(C != null) {
 			super.getContentPane().setBackground(C);
 		}
 	}
 
-    @Override
-    public void setValue(int value) {
-        if(value < 0) {//ERROR
-            throw new RuntimeException("Variable[value] - Invalid Value Number: " + value);
-        }
-        
-        _Progress.setValue(value);
-    }
+	@Override
+	public void setValue(int value) {
+		if(value < 0) {//ERROR
+			throw new RuntimeException("Variable[value] - Invalid Value Number: " + value);
+		}
 
-    @Override
+		_Progress.setValue(value);
+	}
+
+	@Override
 	public void increment() {
-        _Progress.increment();
+		_Progress.increment();
 	}
 
-    @Override
+	@Override
 	public void increment(int value) {
-        _Progress.increment(value);
+		_Progress.increment(value);
 	}
+
 /*
 	public void decrement() {
 		decrement(1);
@@ -238,366 +240,369 @@ public class FrmSplash extends JWindow implements IProgress, IText, WindowConsta
 */
 	public void stepAuto(int delaymillis) {
 		increment(1);
-		
+
 		pause(delaymillis);
 	}
 
-    @Override
-    public int getValue() {
+	@Override
+	public int getValue() {
 		return _Progress.getValue();
 	}
-    
+
 	public void stepAuto(int delaymillis, int value) {
 		increment(value);
-		
+
 		pause(delaymillis);
 	}
-	
+
 	private void pause(int millis) {
 		if(millis > 0) {
 			ThreadUtil.sleep(millis);
-        }
+		}
 	}
 
-    @Override
-    public void setMinimum(int value) {
-        _Progress.setMinimum(value);
-    }
+	@Override
+	public void setMinimum(int value) {
+		_Progress.setMinimum(value);
+	}
 
-    @Override
+	@Override
 	public int getMinimum() {
-        return _Progress.getMinimum();
+		return _Progress.getMinimum();
 	}
 
-    @Override
+	@Override
 	public void setMaximum(int value) {
-        _Progress.setMaximum(value);
+		_Progress.setMaximum(value);
 	}
 
-    @Override
+	@Override
 	public int getMaximum() {
-        return _Progress.getMaximum();
+		return _Progress.getMaximum();
 	}
 
-    public static URL getClassResource(Class aclass, String resource) {
-        URL Url = aclass.getResource(resource);
+	public static URL getClassResource(Class aclass, String resource) {
+		URL Url = aclass.getResource(resource);
 
-        if(Url == null) {
-            throw new NullPointerException("Resource: " + resource + " Does Not Exist");
-        } else {
-            return Url;
-        }
-    }
-    
-    public void reset() {
-        PositionWindow PosFrm = new PositionWindow(this);
+		if(Url == null) {
+			throw new NullPointerException("Resource: " + resource + " Does Not Exist");
+		} else {
+			return Url;
+		}
+	}
+
+	public void reset() {
+		PositionWindow PosFrm = new PositionWindow(this);
 		PosFrm.toCenter();
-        
-        _Image = null;
-    }
 
-    public SplashComponent getSplashComponent() {
-        return _Painter;
-    }
+		_Image = null;
+	}
 
-    //CLASSES
-    public class SplashComponent extends JComponent implements IProgress, IText {
-        private final Window _WINDOW;
+	public SplashComponent getSplashComponent() {
+		return _Painter;
+	}
 
-        public SplashComponent(Window window) {
-            initComponents();
+	//CLASSES
+	public class SplashComponent extends JComponent implements IProgress, IText {
+		private final Window _WINDOW;
 
-            _WINDOW = window;
-        }
+		public SplashComponent(Window window) {
+			initComponents();
 
-        private void initComponents() {
-            super.setLayout(null);
+			_WINDOW = window;
+		}
 
-            progressBar = new JProgressBar();
-            progressBar.setBorderPainted(false);
-            progressBar.setBackground(Color.WHITE);
-            progressBar.setForeground(Color.BLUE);
-            progressBar.setFont(new Font("", Font.PLAIN, 14));
-            progressBar.setBorderPainted(false);
-            progressBar.setBounds(22, _BASE_HEIGHT_ - 40, 356 - 40, 20);//40
-            super.add(progressBar);
+		private void initComponents() {
+			super.setLayout(null);
 
-            lblPercent = new JLabel("0%");
-            lblPercent.setForeground(Color.WHITE);
-            //lblPercent.setBackground(Color.BLACK);
-            //lblPercent.setOpaque(true);
-            lblPercent.setHorizontalAlignment(JLabel.CENTER);
-            lblPercent.setVerticalAlignment(JLabel.CENTER);
-            lblPercent.setBounds(356 - 20 + 2, _BASE_HEIGHT_ - 40, 40, 20);//40
-            super.add(lblPercent);
+			progressBar = new JProgressBar();
+			progressBar.setBorderPainted(false);
+			progressBar.setBackground(Color.WHITE);
+			progressBar.setForeground(Color.BLUE);
+			progressBar.setFont(new Font("", Font.PLAIN, 14));
+			progressBar.setBorderPainted(false);
+			progressBar.setBounds(22, _BASE_HEIGHT_ - 40, 356 - 40, 20);//40
+			super.add(progressBar);
 
-            lblInfo = new JLabel("Loading...");
-            lblInfo.setForeground(Color.WHITE);
-            //lblInfo.setBackground(Color.BLACK);
-            //lblInfo.setOpaque(true);
-            lblInfo.setBounds(22, _BASE_HEIGHT_ - 60, 356, 20);//40
-            super.add(lblInfo);
+			lblPercent = new JLabel("0%");
+			lblPercent.setForeground(Color.WHITE);
+			//lblPercent.setBackground(Color.BLACK);
+			//lblPercent.setOpaque(true);
+			lblPercent.setHorizontalAlignment(JLabel.CENTER);
+			lblPercent.setVerticalAlignment(JLabel.CENTER);
+			lblPercent.setBounds(356 - 20 + 2, _BASE_HEIGHT_ - 40, 40, 20);//40
+			super.add(lblPercent);
 
-            lblClose = new JLabel(_CLOSE_EXITED_);
-            lblClose.setBounds(_BASE_WIDTH_ - 36, 14, 20, 20);
-            lblClose.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    switch(_CloseAction) {
-                        case DISPOSE_ON_CLOSE:
-                            _WINDOW.dispose();
-                            break;
+			lblInfo = new JLabel("Loading...");
+			lblInfo.setForeground(Color.WHITE);
+			//lblInfo.setBackground(Color.BLACK);
+			//lblInfo.setOpaque(true);
+			lblInfo.setBounds(22, _BASE_HEIGHT_ - 60, 356, 20);//40
+			super.add(lblInfo);
 
-                        case HIDE_ON_CLOSE:
-                            _WINDOW.setVisible(false);
-                            break;
+			lblClose = new JLabel(_CLOSE_EXITED_);
+			lblClose.setBounds(_BASE_WIDTH_ - 36, 14, 20, 20);
+			lblClose.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					switch(_CloseAction) {
+						case DISPOSE_ON_CLOSE:
+							_WINDOW.dispose();
+							break;
 
-                        case EXIT_ON_CLOSE:
-                            System.exit(0);
-                            break;
+						case HIDE_ON_CLOSE:
+							_WINDOW.setVisible(false);
+							break;
 
-                        case DO_NOTHING_ON_CLOSE:
-                        default:
-                            break;
-                    }
-                }
-                @Override
-                public void mousePressed(MouseEvent e) {}
-                @Override
-                public void mouseReleased(MouseEvent e) {}
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    lblClose.setIcon(_CLOSE_ENTERED_);
-                }
+						case EXIT_ON_CLOSE:
+							System.exit(0);
+							break;
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    lblClose.setIcon(_CLOSE_EXITED_);
-                }
-            });
-            super.add(lblClose);
-        }
+						case DO_NOTHING_ON_CLOSE:
+						default:
+							break;
+					}
+				}
 
-        @Override
-        public void increment() {
-            increment(1);
-        }
+				@Override
+				public void mousePressed(MouseEvent e) {}
 
-        @Override
-        public void increment(int value) {
-            progressBar.setValue(progressBar.getValue() + value);
+				@Override
+				public void mouseReleased(MouseEvent e) {}
 
-            updatePercent();
-        }
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					lblClose.setIcon(_CLOSE_ENTERED_);
+				}
 
-        @Override
-        public void setValue(int value) {
-            progressBar.setValue(value);
+				@Override
+				public void mouseExited(MouseEvent e) {
+					lblClose.setIcon(_CLOSE_EXITED_);
+				}
+			});
+			super.add(lblClose);
+		}
 
-            updatePercent();
-        }
+		@Override
+		public void increment() {
+			increment(1);
+		}
 
-        @Override
-        public int getValue() {
-            return progressBar.getValue();
-        }
+		@Override
+		public void increment(int value) {
+			progressBar.setValue(progressBar.getValue() + value);
 
-        @Override
-        public void setMaximum(int value) {
-            progressBar.setMaximum(value);
+			updatePercent();
+		}
 
-            updatePercent();
-        }
+		@Override
+		public void setValue(int value) {
+			progressBar.setValue(value);
 
-        @Override
-        public int getMaximum() {
-            return progressBar.getMaximum();
-        }
+			updatePercent();
+		}
 
-        @Override
-        public void setMinimum(int value) {
-            progressBar.setMinimum(value);
+		@Override
+		public int getValue() {
+			return progressBar.getValue();
+		}
 
-            updatePercent();
-        }
+		@Override
+		public void setMaximum(int value) {
+			progressBar.setMaximum(value);
 
-        @Override
-        public int getMinimum() {
-            return progressBar.getMinimum();
-        }
+			updatePercent();
+		}
 
-        public void setTextColor(Color color) {
-            lblInfo.setForeground(color);
-            lblPercent.setForeground(color);
-        }
+		@Override
+		public int getMaximum() {
+			return progressBar.getMaximum();
+		}
 
-        @Override
-        public void setText(String text) {
-            lblInfo.setText(text);
-        }
+		@Override
+		public void setMinimum(int value) {
+			progressBar.setMinimum(value);
 
-        @Override
-        public String getText() {
-            return progressBar.getString();
-        }
+			updatePercent();
+		}
 
-        public void setBarBackgroundColor(Color color) {
-            progressBar.setBackground(color);
-        }
-        
-        public void setBarColor(Color color) {
-            progressBar.setForeground(color);
-        }
+		@Override
+		public int getMinimum() {
+			return progressBar.getMinimum();
+		}
 
-        @Override
-        public void paint(Graphics g) {
-            g.drawImage(_Background_Image, 0, 0, this);
+		public void setTextColor(Color color) {
+			lblInfo.setForeground(color);
+			lblPercent.setForeground(color);
+		}
 
-            if(_Image != null) {
-                g.drawImage(_Image, 0, 0, this);
-            }
+		@Override
+		public void setText(String text) {
+			lblInfo.setText(text);
+		}
 
-            super.paintChildren(g);
-        }
+		@Override
+		public String getText() {
+			return progressBar.getString();
+		}
 
-        private void updatePercent() {
-            lblPercent.setText((long)(((double)progressBar.getValue() / progressBar.getMaximum()) * 100) + "%");
-        }
+		public void setBarBackgroundColor(Color color) {
+			progressBar.setBackground(color);
+		}
 
-        private JProgressBar progressBar;
-        private JLabel lblClose;
-        private JLabel lblInfo;
-        private JLabel lblPercent;
-    }
+		public void setBarColor(Color color) {
+			progressBar.setForeground(color);
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			g.drawImage(_Background_Image, 0, 0, this);
+
+			if(_Image != null) {
+				g.drawImage(_Image, 0, 0, this);
+			}
+
+			super.paintChildren(g);
+		}
+
+		private void updatePercent() {
+			lblPercent.setText((long)(((double)progressBar.getValue() / progressBar.getMaximum()) * 100) + "%");
+		}
+
+		private JProgressBar progressBar;
+		private JLabel lblClose;
+		private JLabel lblInfo;
+		private JLabel lblPercent;
+	}
 
 	//STATIC
 	private static FrmSplash _Instance = null;
-		
-	public static FrmSplash getInstance() {        
+
+	public static FrmSplash getInstance() {
 		if(_Instance == null) {
 			_Instance = new FrmSplash();
-        } else if(!_Instance.isDisplayable()) {
-            _Instance.dispose();
-            _Instance = null;
-            _Instance = new FrmSplash();
-        }
-        
+		} else if(!_Instance.isDisplayable()) {
+			_Instance.dispose();
+			_Instance = null;
+			_Instance = new FrmSplash();
+		}
+
 		return _Instance;
 	}
-	
-    public static void showInstance() {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, getClassResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_));
-    }
-    
-    public static void showInstance(int max) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, getClassResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_));
-    }
-    
-    public static void showInstance(int max, String imagefilepath) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagefilepath);
-    }
-    
-	public static void showInstance(int width, int height, int max, String imagefilepath) {
-        showInstance(width, height, max, new File(imagefilepath));
-    }
-	
-    public static void showInstance(int max, File imagefile) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagefile);
-    }
-    
-	public static void showInstance(int width, int height, int max, File imagefile) {
-        FrmSplash Instance = getInstance();
-        
-        Instance.reset();
-        Instance.setSize(width, height);
-        Instance.setMaximum(max);
-        Instance.setBackGroundImage(imagefile);
-        Instance.setVisible(true);
-    }
-    
-    public static void showInstance(int max, URL imagepath) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagepath);
-    }
-    
-	public static void showInstance(int width, int height, int max, URL imagepath) {
-        FrmSplash Instance = getInstance();
-        
-        Instance.reset();
-        Instance.setSize(width, height);
-        
-        if(max > 0) {
-            Instance.setMaximum(max);
-        } else {
-            Instance.setMaximum(1);
-        }
-        
-        Instance.setBackGroundImage(imagepath);
-        Instance.setVisible(true);
-    }
 
-    public static void showInstance(int max, Image image) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, image);
-    }
-    
+	public static void showInstance() {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, getClassResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_));
+	}
+
+	public static void showInstance(int max) {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, getClassResource(FrmSplash.class, _DEFAULT_BACKGROUND_RESOURCE_));
+	}
+
+	public static void showInstance(int max, String imagefilepath) {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagefilepath);
+	}
+
+	public static void showInstance(int width, int height, int max, String imagefilepath) {
+		showInstance(width, height, max, new File(imagefilepath));
+	}
+
+	public static void showInstance(int max, File imagefile) {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagefile);
+	}
+
+	public static void showInstance(int width, int height, int max, File imagefile) {
+		FrmSplash Instance = getInstance();
+
+		Instance.reset();
+		Instance.setSize(width, height);
+		Instance.setMaximum(max);
+		Instance.setBackGroundImage(imagefile);
+		Instance.setVisible(true);
+	}
+
+	public static void showInstance(int max, URL imagepath) {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, max, imagepath);
+	}
+
+	public static void showInstance(int width, int height, int max, URL imagepath) {
+		FrmSplash Instance = getInstance();
+
+		Instance.reset();
+		Instance.setSize(width, height);
+
+		if(max > 0) {
+			Instance.setMaximum(max);
+		} else {
+			Instance.setMaximum(1);
+		}
+
+		Instance.setBackGroundImage(imagepath);
+		Instance.setVisible(true);
+	}
+
+	public static void showInstance(int max, Image image) {
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, image);
+	}
+
 	public static void showInstance(Image image) {
-        showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, image);
-    }
-    
+		showInstance(_BASE_WIDTH_, _BASE_HEIGHT_, 1, image);
+	}
+
 	public static void showInstance(int width, int height, int max, Image image) {
-        FrmSplash Instance = getInstance();
-        
-        Instance.reset();
-        Instance.setSize(width, height);
-        
-        if(max > 0) {
-            Instance.setMaximum(max);
-        } else {
-            Instance.setMaximum(1);
-        }
-        
-        Instance.setImage(image);
-        Instance.setVisible(true);
-    }
-    
-    public static void hideInstance() {
-        if(_Instance.isDisplayable() && _Instance.isVisible() ) {
-            _Instance.setVisible(false);
-        }        
-    }
-    
+		FrmSplash Instance = getInstance();
+
+		Instance.reset();
+		Instance.setSize(width, height);
+
+		if(max > 0) {
+			Instance.setMaximum(max);
+		} else {
+			Instance.setMaximum(1);
+		}
+
+		Instance.setImage(image);
+		Instance.setVisible(true);
+	}
+
+	public static void hideInstance() {
+		if(_Instance.isDisplayable() && _Instance.isVisible()) {
+			_Instance.setVisible(false);
+		}
+	}
+
 	public static void showText(String str) {
-        FrmSplash Instance = getInstance();
-        
-        Instance.setText(str);
-    }
-    
+		FrmSplash Instance = getInstance();
+
+		Instance.setText(str);
+	}
+
 	public static void stepProgress() {
-        FrmSplash Instance = getInstance();
-        
-        Instance.increment();
-        
-        if(Instance.getValue() > Instance.getMaximum()) {
-            Instance.setVisible(false);
-        }
-    }
-    
+		FrmSplash Instance = getInstance();
+
+		Instance.increment();
+
+		if(Instance.getValue() > Instance.getMaximum()) {
+			Instance.setVisible(false);
+		}
+	}
+
 	public static void stepProgress(int value) {
-        FrmSplash Instance = getInstance();
-        
-        Instance.increment(value);
-        
-        if(Instance.getValue() > Instance.getMaximum()) {
-            Instance.setVisible(false);
-        }
-    }
-        
-    public static void destroyInstance() {
-        if(_Instance != null) {
-            _Instance.setVisible(false);
-            _Instance.dispose();
-            _Instance = null;
-        }
-    }
+		FrmSplash Instance = getInstance();
+
+		Instance.increment(value);
+
+		if(Instance.getValue() > Instance.getMaximum()) {
+			Instance.setVisible(false);
+		}
+	}
+
+	public static void destroyInstance() {
+		if(_Instance != null) {
+			_Instance.setVisible(false);
+			_Instance.dispose();
+			_Instance = null;
+		}
+	}
 /*
 	public static void main(String[] args) {
         final int Max = 100;

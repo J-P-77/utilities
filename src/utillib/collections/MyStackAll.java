@@ -1,6 +1,7 @@
 package utillib.collections;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.6</b>
  * 
  * Version 1.0.0
@@ -10,7 +11,7 @@ package utillib.collections;
  *     -Fixed
  *         -Method Flip (Would Not Flip Properly)
  *         -Method Push (Non-Growing Stack Only) (Pushing Object When Stack Is Full Index Out Of Bounds Error Would Occur)
- *
+ * 
  * November 02, 2008 (version 1.0.2)
  *     -Added
  *         -Method insertAt(T i, int index)
@@ -33,13 +34,13 @@ package utillib.collections;
  *     -Added
  *         -Constructor (T[] initialobjects, int initialcapacity) Pushes Array of Ts
  *         -Constructor (T[] initialobjects) Pushes Array of Ts
- *
+ * 
  * June 17, 2010 (version 1.0.6)
  *     -Updated
  *         -removeItemAt(int) Now Returns Removed Object
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 @SuppressWarnings("unchecked")
@@ -51,28 +52,30 @@ public class MyStackAll<T> implements Cloneable {
 	private boolean _Grow = true;
 
 	/**
-	  * Simple Stack\Collection
-	  */
+	 * Simple Stack\Collection
+	 */
 	public MyStackAll() {
 		this(1);
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStackAll(T initialobject) {
 		this(initialobject, 1);
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * 
+	 */
 	public MyStackAll(int initialcapacity) {
 		_Capacity = (initialcapacity <= 0 ? 1 : initialcapacity);
 
@@ -80,12 +83,14 @@ public class MyStackAll<T> implements Cloneable {
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStackAll(T initialobject, int initialcapacity) {
 		this(initialcapacity);
 		push(initialobject);
@@ -101,12 +106,15 @@ public class MyStackAll<T> implements Cloneable {
 	}
 
 	/**
-	  * Simple Stack\Collection (Used for Non-Growing Stack)
-	  * 
-	  * @param maxcapacity - (int) Sets Max Capacity for Stack
-	  * @param grow - (boolean) Sets Whether The Stack Can Grow (Used false for non-growing stack)
-	  *
-	  */
+	 * Simple Stack\Collection (Used for Non-Growing Stack)
+	 * 
+	 * @param maxcapacity
+	 *            - (int) Sets Max Capacity for Stack
+	 * @param grow
+	 *            - (boolean) Sets Whether The Stack Can Grow (Used false for
+	 *            non-growing stack)
+	 * 
+	 */
 	public MyStackAll(int maxcapacity, boolean grow) {
 		this(maxcapacity);
 		_Grow = grow;

@@ -1,123 +1,125 @@
 package utillib.table;
 
-//import utillib.strings.StringUtil;
-//import utillib.collections.MyStackAll;
-//import utillib.utilities.RandomUtil;
+// import utillib.strings.StringUtil;
+// import utillib.collections.MyStackAll;
+// import utillib.utilities.RandomUtil;
 //
-//import java.awt.BorderLayout;
-//import java.awt.GridLayout;
-//import java.awt.Insets;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
+// import java.awt.BorderLayout;
+// import java.awt.GridLayout;
+// import java.awt.Insets;
+// import java.awt.event.ActionEvent;
+// import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-//import javax.swing.JButton;
-//import javax.swing.JFrame;
-//import javax.swing.JOptionPane;
-//import javax.swing.JPanel;
-//import javax.swing.JScrollPane;
+// import javax.swing.JButton;
+// import javax.swing.JFrame;
+// import javax.swing.JOptionPane;
+// import javax.swing.JPanel;
+// import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
 
 /**
  * November 27, 2008 (Version 1.0.0)<br>
- *     -First Released<br>
+ * -First Released<br>
  * <br>
+ * 
  * @author Justin Palinkas<br>
  * <br>
- * Current Version 1.0.0
+ *         Current Version 1.0.0
  */
 
 //!!!!!!!!!!!!!!!IN TESTING PHASE!!!!!!!!!!!!!!!
 public class Table extends JTable implements MouseListener {
-    private Button _Button = new Button();
-    private boolean _SyncTable = false;
-    
-    public Table(AbstractTableModel tablemodel) {
-        super(tablemodel);
-    }
+	private Button _Button = new Button();
+	private boolean _SyncTable = false;
 
-    public void createHeader() {
-        createHeader(0);
-    }
-    
-    public void setSyncTable(boolean value) {
-        _SyncTable = value;
-    }
-    
-    public boolean getSyncTable() {
-        return _SyncTable;
-    }
-    
-    public void createHeader(int offset) {
-        TableColumnModel Temp = this.getColumnModel();
+	public Table(AbstractTableModel tablemodel) {
+		super(tablemodel);
+	}
 
-        for(int X = offset; X < this.getColumnCount(); X++) {
-            Temp.getColumn(X).setHeaderRenderer(_Button);
-        }
+	public void createHeader() {
+		createHeader(0);
+	}
 
-        this.getTableHeader().addMouseListener(this);
-    }
-    
-    public void setHeaderColumnName(int column, String name) {
-        AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
-        
-        if(ModelTemp instanceof BlankModel) {
-            ((BlankModel)ModelTemp).setColumnName(column,name);
-        }
-        
-        this.getTableHeader().getColumnModel().getColumn(column).setHeaderValue(name);
-        this.getTableHeader().repaint();
-    }
-    
-    public void addRow(int numofrows) {
-        AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
-        
-        if(ModelTemp instanceof BlankModel) {
-            BlankModel BlankTemp = (BlankModel)ModelTemp;
-            BlankTemp.addRow(numofrows);
-        } else {
-            throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
-        }
-    }
-    
-    public void addRow() {
-        AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
-        
-        if(ModelTemp instanceof BlankModel) {
-            BlankModel BlankTemp = (BlankModel)ModelTemp;
-            BlankTemp.addRow();
-        } else {
-            throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
-        }
-    }
-    
-    public void addColumn() {
-        addColumn(new Column("",Column.TYPE_STR));
-    }
-    
-    public void addColumn(Column column) {
-        AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
-        
-        if(ModelTemp instanceof BlankModel) {
-            BlankModel BlankTemp = (BlankModel)ModelTemp;
-            BlankTemp.addColumn(column);
-        } else {
-            throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
-        }
-        
-        createHeader();
-    }
-    
-    public void addColumns(Column[] column) {
-        for(int X = 0; X < column.length; X++) {
-            addColumn(column[X]);
-        }
-    }
-    
-    public void mouseClicked(MouseEvent e) {}
+	public void setSyncTable(boolean value) {
+		_SyncTable = value;
+	}
+
+	public boolean getSyncTable() {
+		return _SyncTable;
+	}
+
+	public void createHeader(int offset) {
+		TableColumnModel Temp = this.getColumnModel();
+
+		for(int X = offset; X < this.getColumnCount(); X++) {
+			Temp.getColumn(X).setHeaderRenderer(_Button);
+		}
+
+		this.getTableHeader().addMouseListener(this);
+	}
+
+	public void setHeaderColumnName(int column, String name) {
+		AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
+
+		if(ModelTemp instanceof BlankModel) {
+			((BlankModel)ModelTemp).setColumnName(column, name);
+		}
+
+		this.getTableHeader().getColumnModel().getColumn(column).setHeaderValue(name);
+		this.getTableHeader().repaint();
+	}
+
+	public void addRow(int numofrows) {
+		AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
+
+		if(ModelTemp instanceof BlankModel) {
+			BlankModel BlankTemp = (BlankModel)ModelTemp;
+			BlankTemp.addRow(numofrows);
+		} else {
+			throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
+		}
+	}
+
+	public void addRow() {
+		AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
+
+		if(ModelTemp instanceof BlankModel) {
+			BlankModel BlankTemp = (BlankModel)ModelTemp;
+			BlankTemp.addRow();
+		} else {
+			throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
+		}
+	}
+
+	public void addColumn() {
+		addColumn(new Column("", Column.TYPE_STR));
+	}
+
+	public void addColumn(Column column) {
+		AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
+
+		if(ModelTemp instanceof BlankModel) {
+			BlankModel BlankTemp = (BlankModel)ModelTemp;
+			BlankTemp.addColumn(column);
+		} else {
+			throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
+		}
+
+		createHeader();
+	}
+
+	public void addColumns(Column[] column) {
+		for(int X = 0; X < column.length; X++) {
+			addColumn(column[X]);
+		}
+	}
+
+	public void mouseClicked(MouseEvent e) {}
+
 /* Column 1
 Column: 0 - mousePressed
 Column: 1 - buttoncClicked: false
@@ -133,77 +135,75 @@ Column: 0 - buttoncClicked: false
 Column: 1 - buttoncClicked: true
 
 */
-    public void mousePressed(MouseEvent e) {
-        boolean Bad = false;
-        
-        int Column = this.getTableHeader().columnAtPoint(e.getPoint());
-        AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
-        
-        _Button.setCurrent(Column, Button.STATE_DOWN);        
-        //System.out.println("Column: " + Column + " - mousePressed");
-        
-        if(ModelTemp instanceof BlankModel) {
-            BlankModel BlankTemp = (BlankModel)ModelTemp;
-            BlankTemp.sortColumn(Column, true,_SyncTable);
-            
-            //TEST ONLY
-            switch(Column) {
-                case 0:
-                    for(int X = 0; X < _NumbersLength; X++) {
-                        int IntTemp = (Integer)BlankTemp.getValueAt(X, 0);
+	public void mousePressed(MouseEvent e) {
+		boolean Bad = false;
 
-                        if(IntTemp != X) {
-                            Bad = true;
-                            break ;
-                        }
-                    }
-                    break;
-                case 1:
-                    for(int X = 0; X < _NumbersLength; X++) {
-                        String StringTemp = (String)BlankTemp.getValueAt(X, 1);
+		int Column = this.getTableHeader().columnAtPoint(e.getPoint());
+		AbstractTableModel ModelTemp = (AbstractTableModel)this.getModel();
 
-                        if(StringTemp.length() > 0) {
-                            if(StringTemp.charAt(0) != LOWER_CASE[X]) {
-                                Bad = true;
-                                break ;
-                            }
-                        }
-                    }
-                    break;
-            }
-        } else {
-            throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
-        }
-        
-        if(Bad) {
-            System.out.println("Column: " + Column + " - :( BAD ):");
-        } else {
-            System.out.println("Column: " + Column + " - :) GOOD (:");
-        }
-        
-        this.getTableHeader().repaint();
-        //System.out.println("mousePressed - repaint");
-    }
+		_Button.setCurrent(Column, Button.STATE_DOWN);
+		//System.out.println("Column: " + Column + " - mousePressed");
 
-    public void mouseReleased(MouseEvent e) {
-        int Column = this.getTableHeader().columnAtPoint(e.getPoint());
+		if(ModelTemp instanceof BlankModel) {
+			BlankModel BlankTemp = (BlankModel)ModelTemp;
+			BlankTemp.sortColumn(Column, true, _SyncTable);
 
-        _Button.setCurrent(Column, Button.STATE_UP);
-        //System.out.println("Column: " + Column + " - mouseReleased");
+			//TEST ONLY
+			switch(Column) {
+				case 0:
+					for(int X = 0; X < _NumbersLength; X++) {
+						int IntTemp = (Integer)BlankTemp.getValueAt(X, 0);
 
-        this.getTableHeader().repaint();
-        //System.out.println("mouseReleased - repaint");
-    }
+						if(IntTemp != X) {
+							Bad = true;
+							break;
+						}
+					}
+					break;
+				case 1:
+					for(int X = 0; X < _NumbersLength; X++) {
+						String StringTemp = (String)BlankTemp.getValueAt(X, 1);
 
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+						if(StringTemp.length() > 0) {
+							if(StringTemp.charAt(0) != LOWER_CASE[X]) {
+								Bad = true;
+								break;
+							}
+						}
+					}
+					break;
+			}
+		} else {
+			throw new RuntimeException("Incorrect Table Model Required[BlankModel_Beta]");
+		}
 
+		if(Bad) {
+			System.out.println("Column: " + Column + " - :( BAD ):");
+		} else {
+			System.out.println("Column: " + Column + " - :) GOOD (:");
+		}
 
-	private static final char[] LOWER_CASE = {'a','b','c','d','e','f','g','h','i','j','k',
-		'l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+		this.getTableHeader().repaint();
+		//System.out.println("mousePressed - repaint");
+	}
 
+	public void mouseReleased(MouseEvent e) {
+		int Column = this.getTableHeader().columnAtPoint(e.getPoint());
 
-    private static int _NumbersLength = 0;
+		_Button.setCurrent(Column, Button.STATE_UP);
+		//System.out.println("Column: " + Column + " - mouseReleased");
+
+		this.getTableHeader().repaint();
+		//System.out.println("mouseReleased - repaint");
+	}
+
+	public void mouseEntered(MouseEvent e) {}
+
+	public void mouseExited(MouseEvent e) {}
+
+	private static final char[] LOWER_CASE = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+
+	private static int _NumbersLength = 0;
 /*
     public static void main(String[] args) {
         final JFrame Frm = new JFrame();

@@ -17,11 +17,12 @@ import utillib.lang.unsigned.UnsignedShort;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.3.0</b>
- *
+ * 
  * October 14, 2009 (version 1.0.0)
- *	   -First Released
+ *    -First Released
  * 
  * November 17, 2010 (version 1.1.0)
  * 	   -Fixed Bug
@@ -36,9 +37,9 @@ import java.io.OutputStream;
  *         -Buffer Offset And Length Handling In Some Methods
  * 
  * <b>default ordering:</b> Little Endian
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public abstract class AMyOutputStream extends OutputStream implements IMyOutputStream {

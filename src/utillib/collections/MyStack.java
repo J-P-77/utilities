@@ -1,6 +1,7 @@
 package utillib.collections;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.3</b>
  * 
  * Version 1.0.0
@@ -32,28 +33,30 @@ public class MyStack<T> {
 	protected boolean _Grow = true;
 
 	/**
-	  * Simple Stack
-	  */
+	 * Simple Stack
+	 */
 	public MyStack() {
 		this(1);
 	}
 
 	/**
-	  * Simple Stack
-	  * 
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack
+	 * 
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStack(T initialobject) {
 		this(initialobject, 1);
 	}
 
 	/**
-	  * Simple Stack
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  *
-	  */
+	 * Simple Stack
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * 
+	 */
 	public MyStack(int initialcapacity) {
 		if(initialcapacity <= 0) {
 			_Capacity = 1;
@@ -69,24 +72,29 @@ public class MyStack<T> {
 	}
 
 	/**
-	  * Simple Stack
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStack(T initialobject, int initialcapacity) {
 		this(initialcapacity);
 		push(initialobject);
 	}
 
 	/**
-	  * Simple Stack (Used for Non-Growing Stack)
-	  * 
-	  * @param maxcapacity - (int) Sets Max Capacity for Stack
-	  * @param grow - (boolean) Sets Whether The Stack Will Grow (Used false for non-growing stack)
-	  *
-	  */
+	 * Simple Stack (Used for Non-Growing Stack)
+	 * 
+	 * @param maxcapacity
+	 *            - (int) Sets Max Capacity for Stack
+	 * @param grow
+	 *            - (boolean) Sets Whether The Stack Will Grow (Used false for
+	 *            non-growing stack)
+	 * 
+	 */
 	public MyStack(int maxcapacity, boolean grow) {
 		this(maxcapacity);
 		_Grow = grow;

@@ -8,155 +8,155 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class ArgumentOutputStream extends OutputStream {
-    public static final String _DEFAULT_COMMENT_START_ = "//";
+	public static final String _DEFAULT_COMMENT_START_ = "//";
 
-    private final String _COMMENT_START;
-    private final Line_Ending _LINE_ENDING;
-    
-    private OutputStream _OStream;   
+	private final String _COMMENT_START;
+	private final Line_Ending _LINE_ENDING;
 
-    private Title _Current_Title = null;
+	private OutputStream _OStream;
 
-    public ArgumentOutputStream(OutputStream ostream,  String commentstart) {
-        this(ostream, commentstart, Line_Ending.WINDOWS);
-    }
+	private Title _Current_Title = null;
 
-    public ArgumentOutputStream(OutputStream ostream, Line_Ending lineending) {
-        this(ostream, _DEFAULT_COMMENT_START_, lineending);
-    }
+	public ArgumentOutputStream(OutputStream ostream, String commentstart) {
+		this(ostream, commentstart, Line_Ending.WINDOWS);
+	}
 
-    public ArgumentOutputStream(OutputStream ostream, String commentstart, Line_Ending lineending) {
-        if(ostream == null) {
-            throw new RuntimeException("Variable[ostream] - Is Null");
-        }
+	public ArgumentOutputStream(OutputStream ostream, Line_Ending lineending) {
+		this(ostream, _DEFAULT_COMMENT_START_, lineending);
+	}
 
-        if(lineending == null) {
-            throw new RuntimeException("Variable[lineending] - Is Null");
-        }
+	public ArgumentOutputStream(OutputStream ostream, String commentstart, Line_Ending lineending) {
+		if(ostream == null) {
+			throw new RuntimeException("Variable[ostream] - Is Null");
+		}
 
-        _OStream = ostream;
-        _COMMENT_START = (commentstart == null ? _DEFAULT_COMMENT_START_ : commentstart);
-        _LINE_ENDING = lineending;
-    }
+		if(lineending == null) {
+			throw new RuntimeException("Variable[lineending] - Is Null");
+		}
 
-    @Override
-    public void write(int b) throws IOException {
-        _OStream.write(b);
-    }
+		_OStream = ostream;
+		_COMMENT_START = (commentstart == null ? _DEFAULT_COMMENT_START_ : commentstart);
+		_LINE_ENDING = lineending;
+	}
 
-    @Override
-    public void flush() throws IOException {
-        _OStream.flush();
-    }
+	@Override
+	public void write(int b) throws IOException {
+		_OStream.write(b);
+	}
 
-    @Override
-    public void close() throws IOException {
-        if(_OStream != null) {
-            _OStream.close();
-        }
-        _OStream = null;
-    }   
+	@Override
+	public void flush() throws IOException {
+		_OStream.flush();
+	}
 
-    public Line_Ending getLineEnding() {
+	@Override
+	public void close() throws IOException {
+		if(_OStream != null) {
+			_OStream.close();
+		}
+		_OStream = null;
+	}
+
+	public Line_Ending getLineEnding() {
 		return _LINE_ENDING;
 	}
 
-    public String getCommentLineStart() {
-        return _COMMENT_START;
-    }
+	public String getCommentLineStart() {
+		return _COMMENT_START;
+	}
 
-    public void writeTitle(Title title) throws IOException {
-        writeTitle(title, true, false);
-    }
+	public void writeTitle(Title title) throws IOException {
+		writeTitle(title, true, false);
+	}
 
-    public void writeTitle(Title title, boolean writearguments) throws IOException {
-        writeTitle(title, writearguments, false);
-    }
+	public void writeTitle(Title title, boolean writearguments) throws IOException {
+		writeTitle(title, writearguments, false);
+	}
 
-    public void writeTitle(Title title, boolean writearguments, boolean autocase) throws IOException {
-        //Write's Title (Don't Write Comment Title's)
-        if(!title.isComment()) {
-            _Current_Title = title;
+	public void writeTitle(Title title, boolean writearguments, boolean autocase) throws IOException {
+		//Write's Title (Don't Write Comment Title's)
+		if(!title.isComment()) {
+			_Current_Title = title;
 
-            write('[');
-            if(autocase) {
-                final String NAME = title.getName();
+			write('[');
+			if(autocase) {
+				final String NAME = title.getName();
 
-                if(NAME.length() > 1) {
-                    this.write(Character.toUpperCase(NAME.charAt(0)));
-                    this.write(NAME.substring(1, NAME.length() - 1));
-                } else {
-                    this.write(NAME);
-                }
-            } else {
-                this.write(title.getName());
-            }
-            write(']');
+				if(NAME.length() > 1) {
+					this.write(Character.toUpperCase(NAME.charAt(0)));
+					this.write(NAME.substring(1, NAME.length() - 1));
+				} else {
+					this.write(NAME);
+				}
+			} else {
+				this.write(title.getName());
+			}
+			write(']');
 
-            newline();
+			newline();
 
-            if(writearguments) {
-                //Write's Arguments
-                for(int Y = 0; Y < title.length(); Y++) {
-                	writeArgument(title.getArgument(Y));
-                }
-            }
-        }
-    }
+			if(writearguments) {
+				//Write's Arguments
+				for(int Y = 0; Y < title.length(); Y++) {
+					writeArgument(title.getArgument(Y));
+				}
+			}
+		}
+	}
 
-    public Title writeTitleName(String name) throws IOException {
-    	final Title TITLE = new Title(name);
-    	
-    	writeTitle(TITLE, false, false);
-    	
-    	return (_Current_Title = TITLE);
-    }
-    
-    public void writeArgument(Argument argument) throws IOException {
-        if(_Current_Title == null) {
-            throw new RuntimeException("Variable[argument] - You Must Write A Title First");
-        } else {
-            _Current_Title.addArgument(argument);
+	public Title writeTitleName(String name) throws IOException {
+		final Title TITLE = new Title(name);
 
-            //Write's Name
-            if(argument.isComment()) {
-                this.write(_COMMENT_START);
-            } else {
-                this.write(argument.getName());
+		writeTitle(TITLE, false, false);
 
-                //Write's Separator
-                write('=');
-            }
+		return (_Current_Title = TITLE);
+	}
 
-            //Write's Variable
-            this.write(argument.getVariable());
+	public void writeArgument(Argument argument) throws IOException {
+		if(_Current_Title == null) {
+			throw new RuntimeException("Variable[argument] - You Must Write A Title First");
+		} else {
+			_Current_Title.addArgument(argument);
 
-            newline();
-        }
-    }
+			//Write's Name
+			if(argument.isComment()) {
+				this.write(_COMMENT_START);
+			} else {
+				this.write(argument.getName());
 
-    public void writeArgument(String name, String variable) throws IOException {
-        writeArgument(new Argument(name, variable));
-    }
-    
-    public void writeComment(String comment) throws IOException {
-        if(_Current_Title == null) {
-            throw new RuntimeException("Variable[comment] - You Must Write A Title First");
-        } else {
-            _Current_Title.addComment(comment);
-            //Write's Name
-            this.write(_COMMENT_START);
-            //Write's Variable
-            this.write(comment);
+				//Write's Separator
+				write('=');
+			}
 
-            newline();
-        }
-    }
-    
+			//Write's Variable
+			this.write(argument.getVariable());
+
+			newline();
+		}
+	}
+
+	public void writeArgument(String name, String variable) throws IOException {
+		writeArgument(new Argument(name, variable));
+	}
+
+	public void writeComment(String comment) throws IOException {
+		if(_Current_Title == null) {
+			throw new RuntimeException("Variable[comment] - You Must Write A Title First");
+		} else {
+			_Current_Title.addComment(comment);
+			//Write's Name
+			this.write(_COMMENT_START);
+			//Write's Variable
+			this.write(comment);
+
+			newline();
+		}
+	}
+
 //    private void write(char[] chars) throws IOException {
 //        write(chars, 0, chars.length);
 //    }
@@ -167,42 +167,42 @@ public class ArgumentOutputStream extends OutputStream {
 //        }
 //    }
 
-    private void write(String str) throws IOException {
-        write(str, 0, str.length());
-    }
+	private void write(String str) throws IOException {
+		write(str, 0, str.length());
+	}
 
-    private void write(String str, int offset, int length) throws IOException {
-        for(int X = offset; X < length; X++) {
-            write((int)str.charAt(X));
-        }
-    }
+	private void write(String str, int offset, int length) throws IOException {
+		for(int X = offset; X < length; X++) {
+			write((int)str.charAt(X));
+		}
+	}
 
-    public void newline() throws IOException {
-        write(_LINE_ENDING.getValue());
-    }
-    
-    public static boolean saveStream(ResizingArray<Title> titles, OutputStream ostream, String commentstart) {
-    	ArgumentOutputStream OStream = null;
-    	
-    	try {
-    		OStream = new ArgumentOutputStream(OStream, commentstart);
-    		
-    		for(int X = 0; X < titles.length(); X++) {
-    			OStream.writeTitle(titles.getAt(X), true, false);
-    		}
-    		
-    		return true;
-		} catch (Exception e) {
+	public void newline() throws IOException {
+		write(_LINE_ENDING.getValue());
+	}
+
+	public static boolean saveStream(ResizingArray<Title> titles, OutputStream ostream, String commentstart) {
+		ArgumentOutputStream OStream = null;
+
+		try {
+			OStream = new ArgumentOutputStream(OStream, commentstart);
+
+			for(int X = 0; X < titles.length(); X++) {
+				OStream.writeTitle(titles.getAt(X), true, false);
+			}
+
+			return true;
+		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			if(OStream != null) {
 				try {
 					OStream.close();
-				} catch (Exception e2) {}
+				} catch(Exception e2) {}
 				OStream = null;
 			}
 		}
-		
+
 		return false;
-    }
+	}
 }

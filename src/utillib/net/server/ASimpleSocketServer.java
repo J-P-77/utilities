@@ -86,7 +86,8 @@ public abstract class ASimpleSocketServer extends ASimpleServer {
 	/**
 	 * 
 	 * 
-	 * @param socket reserved for future use
+	 * @param socket
+	 *            reserved for future use
 	 */
 	public void releaseClient(ISocket socket) {
 		_Max_Connections--;
@@ -278,7 +279,7 @@ public abstract class ASimpleSocketServer extends ASimpleServer {
 		_LOG_.printInformation("Started: " + Thread.currentThread().getName());
 
 		final String SERVER_ADDRESS_PORT = NetUtil.toString(getLocalAddress(), getLocalPort());
-		
+
 		_LOG_.printInformation("Listening On: " + SERVER_ADDRESS_PORT);
 
 		while(_State != State.STOP/* || !isClosed() */) {
@@ -335,7 +336,7 @@ public abstract class ASimpleSocketServer extends ASimpleServer {
 		_LOG_.printInformation("Stopped: " + Thread.currentThread().getName());
 		_State = State.STOPPED;
 	}
-	
+
 	@Override
 	public boolean isClosed() {
 		return _ServerSocket == null;
@@ -362,5 +363,6 @@ public abstract class ASimpleSocketServer extends ASimpleServer {
 	}
 
 	public abstract boolean acceptConnection(MySocket socket);
+
 	public abstract void handleConnection(MySocket socket);
 }

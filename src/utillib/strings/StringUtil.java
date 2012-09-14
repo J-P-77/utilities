@@ -16,11 +16,11 @@ import utillib.utilities.BitOperations.Byte_Ordering;
  * 
  * @author Justin Palinkas
  * 
- * <pre>
+ * </pre>
  */
 public class StringUtil {
-	public static final String[] _TRUE_ = { "true", "t", "yes", "1" };
-	public static final String[] _FALSE_ = { "false", "f", "no", "0" };
+	public static final String[] _TRUE_ = {"true", "t", "yes", "1"};
+	public static final String[] _FALSE_ = {"false", "f", "no", "0"};
 
 	public static void skipWord(String str, IntByRef offset) {
 		while(Character.isLetter(str.charAt(offset.value))) {

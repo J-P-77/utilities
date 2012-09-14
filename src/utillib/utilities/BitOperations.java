@@ -1,6 +1,7 @@
 package utillib.utilities;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * April 07, 2010 (Version 1.0.0)
@@ -11,384 +12,380 @@ package utillib.utilities;
  * </pre>
  */
 public class BitOperations {
-    public enum Byte_Ordering {
-        LITTLE_ENDIAN,
-        BIG_ENDIAN;
-    };
+	public enum Byte_Ordering {
+		LITTLE_ENDIAN,
+		BIG_ENDIAN;
+	};
 
-    public static byte[] shortToBytes(short value) {
-        return shortToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
-    }
+	public static byte[] shortToBytes(short value) {
+		return shortToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
+	}
 
 	public static byte[] shortToBytes(short value, Byte_Ordering byteordering) {
-        checkNull(byteordering);
+		checkNull(byteordering);
 
 		final byte[] BYTES = new byte[2];
-        
-        shortToBytes(value, BYTES, /*0, 2,*/ byteordering);
+
+		shortToBytes(value, BYTES, /*0, 2,*/byteordering);
 
 		return BYTES;
-    }
-	
-    public static void shortToBytes(short value, byte[] bytes) {
-        shortToBytes(value, bytes, 0, /*length,/*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-    public static void shortToBytes(short value, byte[] bytes, Byte_Ordering bitordering) {
-        shortToBytes(value, bytes, 0, /*2,*/ bitordering);
-    }
+	}
 
-    public static void shortToBytes(short value, byte[] bytes, int offset/*, int length*/) {
-        shortToBytes(value, bytes, offset, /*length,/*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-	public static void shortToBytes(short value, byte[] bytes, int offset, /*int length,*/ Byte_Ordering byteordering) {
+	public static void shortToBytes(short value, byte[] bytes) {
+		shortToBytes(value, bytes, 0, /*length,/*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static void shortToBytes(short value, byte[] bytes, Byte_Ordering bitordering) {
+		shortToBytes(value, bytes, 0, /*2,*/bitordering);
+	}
+
+	public static void shortToBytes(short value, byte[] bytes, int offset/*, int length*/) {
+		shortToBytes(value, bytes, offset, /*length,/*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static void shortToBytes(short value, byte[] bytes, int offset, /*int length,*/Byte_Ordering byteordering) {
 		checkNull(bytes);
 		checkNull(byteordering);
-    	checkBufferBounds(bytes.length, offset, 2);
+		checkBufferBounds(bytes.length, offset, 2);
 //    	checkLength(length, 2);
-    	
-        int Shift = 8;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {
-            for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/2; X++, Y++) {
-                bytes[offset + X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 1, Y = 0; Shift >= 0 && Y < /*length*/2; X--, Y++) {
-                bytes[offset + X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        }
+
+		int Shift = 8;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/2; X++, Y++) {
+				bytes[offset + X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 1, Y = 0; Shift >= 0 && Y < /*length*/2; X--, Y++) {
+				bytes[offset + X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		}
 	}
-	
-    public static short[] shortToUBytes(short value) {
-        return shortToUBytes(value, Byte_Ordering.LITTLE_ENDIAN);
-    }
-	
-    public static short[] shortToUBytes(short value, Byte_Ordering byteordering) {
-        checkNull(byteordering);
-        
-        final short[] BYTES = new short[2];
 
-        shortToUBytes(value, BYTES, 0, 2, byteordering);
+	public static short[] shortToUBytes(short value) {
+		return shortToUBytes(value, Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-        return BYTES;
-    }
-	
-    public static void shortToUBytes(short value, short[] bytes, Byte_Ordering bitordering) {
-    	shortToUBytes(value, bytes, 0, 2, bitordering);
-    }
+	public static short[] shortToUBytes(short value, Byte_Ordering byteordering) {
+		checkNull(byteordering);
 
-    public static void shortTouBytes(short value, short[] bytes, int offset, int length) {
-    	shortToUBytes(value, bytes, offset, length, Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
+		final short[] BYTES = new short[2];
+
+		shortToUBytes(value, BYTES, 0, 2, byteordering);
+
+		return BYTES;
+	}
+
+	public static void shortToUBytes(short value, short[] bytes, Byte_Ordering bitordering) {
+		shortToUBytes(value, bytes, 0, 2, bitordering);
+	}
+
+	public static void shortTouBytes(short value, short[] bytes, int offset, int length) {
+		shortToUBytes(value, bytes, offset, length, Byte_Ordering.LITTLE_ENDIAN);
+	}
+
 	public static void shortToUBytes(short value, short[] bytes, int offset, int length, Byte_Ordering byteordering) {
 		checkNull(bytes);
 		checkNull(byteordering);
-    	checkBufferBounds(bytes.length, offset, length);
-    	checkLength(length, 2);
-    	
-        int Shift = 8;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {
-            for(byte X = 0, Y = 0; Shift >= 0 && Y < length; X++, Y++) {
-                bytes[offset + X] = (short)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 1, Y = 0; Shift >= 0 && Y < length; X--, Y++) {
-                bytes[offset + X] = (short)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        }
+		checkBufferBounds(bytes.length, offset, length);
+		checkLength(length, 2);
+
+		int Shift = 8;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < length; X++, Y++) {
+				bytes[offset + X] = (short)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 1, Y = 0; Shift >= 0 && Y < length; X--, Y++) {
+				bytes[offset + X] = (short)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		}
 	}
 
-    public static short bytesToShort(byte[] bytes) {
-        return bytesToShort(bytes, 0, /*2,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
+	public static short bytesToShort(byte[] bytes) {
+		return bytesToShort(bytes, 0, /*2,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-    public static short bytesToShort(byte[] bytes, Byte_Ordering byteordering) {
-        return bytesToShort(bytes, 0, /*2,*/ byteordering);
-    }
+	public static short bytesToShort(byte[] bytes, Byte_Ordering byteordering) {
+		return bytesToShort(bytes, 0, /*2,*/byteordering);
+	}
 
-    public static short bytesToShort(byte[] bytes, int offset/*, int length*/) {
-        return bytesToShort(bytes, offset, /*length,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
+	public static short bytesToShort(byte[] bytes, int offset/*, int length*/) {
+		return bytesToShort(bytes, offset, /*length,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-	public static short bytesToShort(byte[] bytes, int offset, /*int length,*/ Byte_Ordering bitbyteorderingordering) {
+	public static short bytesToShort(byte[] bytes, int offset, /*int length,*/Byte_Ordering bitbyteorderingordering) {
 		checkNull(bytes);
 		checkNull(bitbyteorderingordering);
-    	checkBufferBounds(bytes.length, offset, 2);
+		checkBufferBounds(bytes.length, offset, 2);
 //    	checkLength(length, 2);
-       	
+
 		int Shift = 8;
-        short Result = 0;
-        if(bitbyteorderingordering == Byte_Ordering.BIG_ENDIAN) {
+		short Result = 0;
+		if(bitbyteorderingordering == Byte_Ordering.BIG_ENDIAN) {
 //            for(byte X = 0; X < 2; X++) {
-            for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/2; X++, Y++) {
-                Result |= (short)(bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        } else {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/2; X++, Y++) {
+				Result |= (short)(bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		} else {
 //            for(byte X = 1; X >= 0; X--) {
-            for(byte X = 1, Y = 0; Shift >= 0 && Y < /*length*/2; X--, Y++) {
-                Result |= (short)(bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        }
-        
-        return Result;
-    }
+			for(byte X = 1, Y = 0; Shift >= 0 && Y < /*length*/2; X--, Y++) {
+				Result |= (short)(bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		}
 
-    public static byte[] intToBytes(int value) {
-        return intToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
-    }
+		return Result;
+	}
 
-    public static byte[] intToBytes(int value, Byte_Ordering byteordering) {
-        checkNull(byteordering);
-        
-        final byte[] BYTES = new byte[4];
+	public static byte[] intToBytes(int value) {
+		return intToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-        intToBytes(value, BYTES, 0, /*4,*/ byteordering);
+	public static byte[] intToBytes(int value, Byte_Ordering byteordering) {
+		checkNull(byteordering);
 
-        return BYTES;
-    }
+		final byte[] BYTES = new byte[4];
 
-    public static short[] intToUBytes(int value) {
-        return intToUBytes(value, Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-    public static short[] intToUBytes(int value, Byte_Ordering byteordering) {
-        checkNull(byteordering);
-        
-        final short[] BYTES = new short[4];
-        
-        intToUBytes(value, BYTES, 0, 4, byteordering);
-        
-        return BYTES;
-    } 
-    
-    public static void intToUBytes(int value, short[] bytes, Byte_Ordering byteordering) {
-    	intToUBytes(value, bytes, 0, 4, byteordering);
-    }
+		intToBytes(value, BYTES, 0, /*4,*/byteordering);
 
-    public static void intToUBytes(int value, short[] bytes, int offset, int length) {
-    	intToUBytes(value, bytes, offset, length, Byte_Ordering.LITTLE_ENDIAN);
-    }
+		return BYTES;
+	}
 
-    public static void intToUBytes(int value, short[] bytes, int offset, int length, Byte_Ordering byteordering) {
+	public static short[] intToUBytes(int value) {
+		return intToUBytes(value, Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static short[] intToUBytes(int value, Byte_Ordering byteordering) {
+		checkNull(byteordering);
+
+		final short[] BYTES = new short[4];
+
+		intToUBytes(value, BYTES, 0, 4, byteordering);
+
+		return BYTES;
+	}
+
+	public static void intToUBytes(int value, short[] bytes, Byte_Ordering byteordering) {
+		intToUBytes(value, bytes, 0, 4, byteordering);
+	}
+
+	public static void intToUBytes(int value, short[] bytes, int offset, int length) {
+		intToUBytes(value, bytes, offset, length, Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static void intToUBytes(int value, short[] bytes, int offset, int length, Byte_Ordering byteordering) {
 		checkNull(bytes);
-    	checkNull(byteordering);
-    	checkBufferBounds(bytes.length, offset, length);
-    	checkLength(length, 4);
-       	
-    	int Shift = 24;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {//low to high
-        	for(byte X = 0, Y = 0; Shift >= 0 && Y < length; X++, Y++) {
-        		bytes[offset + X] = (short)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 3, Y = 0; Shift >= 0 && Y < length; X--, Y++) {//high to low
-                bytes[offset + X] = (short)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        }
-    }
-    
-    public static void intToBytes(int value, byte[] bytes/*, Byte_Ordering byteordering*/) {
-        intToBytes(value, bytes, 0/*, 4, byteordering*/);
-    }
+		checkNull(byteordering);
+		checkBufferBounds(bytes.length, offset, length);
+		checkLength(length, 4);
 
-    public static void intToBytes(int value, byte[] bytes, int offset/*, int length*/) {
-        intToBytes(value, bytes, offset, /*length,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
+		int Shift = 24;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {//low to high
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < length; X++, Y++) {
+				bytes[offset + X] = (short)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 3, Y = 0; Shift >= 0 && Y < length; X--, Y++) {//high to low
+				bytes[offset + X] = (short)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		}
+	}
 
-    public static void intToBytes(int value, byte[] bytes, Byte_Ordering byteordering) {
-    	intToBytes(value, bytes, 0, /*length,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-    public static void intToBytes(int value, byte[] bytes, int offset, /*int length,*/ Byte_Ordering byteordering) {
+	public static void intToBytes(int value, byte[] bytes/*, Byte_Ordering byteordering*/) {
+		intToBytes(value, bytes, 0/*, 4, byteordering*/);
+	}
+
+	public static void intToBytes(int value, byte[] bytes, int offset/*, int length*/) {
+		intToBytes(value, bytes, offset, /*length,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static void intToBytes(int value, byte[] bytes, Byte_Ordering byteordering) {
+		intToBytes(value, bytes, 0, /*length,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static void intToBytes(int value, byte[] bytes, int offset, /*int length,*/Byte_Ordering byteordering) {
 		checkNull(bytes);
-    	checkNull(byteordering);
-    	checkBufferBounds(bytes.length, offset, 4);
+		checkNull(byteordering);
+		checkBufferBounds(bytes.length, offset, 4);
 //    	checkLength(length, 4);
-       	
-    	int Shift = 24;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {//low to high
-        	for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/4; X++, Y++) {
-        		bytes[offset + X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 3, Y = 0; Shift >= 0 && Y < /*length*/4; X--, Y++) {//high to low
-                bytes[offset + X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        }
-    }
 
-    public static int bytesToInt(byte[] bytes) {
-        return bytesToInt(bytes, 0, /*4,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
+		int Shift = 24;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {//low to high
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/4; X++, Y++) {
+				bytes[offset + X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 3, Y = 0; Shift >= 0 && Y < /*length*/4; X--, Y++) {//high to low
+				bytes[offset + X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		}
+	}
 
-    public static int bytesToInt(byte[] bytes, Byte_Ordering byteordering) {
-        return bytesToInt(bytes, 0, /*4,*/ byteordering);
-    }
+	public static int bytesToInt(byte[] bytes) {
+		return bytesToInt(bytes, 0, /*4,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-    public static int bytesToInt(byte[] bytes, int offset) {
-        return bytesToInt(bytes, offset, /*4,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-	public static int bytesToInt(byte[] bytes, int offset, /*int length,*/ Byte_Ordering byteordering) {
+	public static int bytesToInt(byte[] bytes, Byte_Ordering byteordering) {
+		return bytesToInt(bytes, 0, /*4,*/byteordering);
+	}
+
+	public static int bytesToInt(byte[] bytes, int offset) {
+		return bytesToInt(bytes, offset, /*4,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static int bytesToInt(byte[] bytes, int offset, /*int length,*/Byte_Ordering byteordering) {
 		checkNull(bytes);
 		checkNull(byteordering);
 		checkBufferBounds(bytes.length, offset, 4);
 //		checkLength(length, 2);
-       	
-        int Shift = 24;
-        int Result = 0;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {
-        	for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/4; X++, Y++) {
-                Result |= (bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 3, Y = 0; Shift >= 0 && Y < /*length*/4; X--, Y++) {
-                Result |= (bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        }
 
-        return Result;
-    }
+		int Shift = 24;
+		int Result = 0;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/4; X++, Y++) {
+				Result |= (bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 3, Y = 0; Shift >= 0 && Y < /*length*/4; X--, Y++) {
+				Result |= (bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		}
 
-    public static byte[] longToBytes(long value) {
-        return longToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
-    }
+		return Result;
+	}
+
+	public static byte[] longToBytes(long value) {
+		return longToBytes(value, Byte_Ordering.LITTLE_ENDIAN);
+	}
 
 	public static byte[] longToBytes(long value, Byte_Ordering byteordering) {
-        checkNull(byteordering);
-        
+		checkNull(byteordering);
+
 		final byte[] BYTES = new byte[8];
 
-        longToBytes(value, BYTES, 0, /*8,*/ byteordering);
+		longToBytes(value, BYTES, 0, /*8,*/byteordering);
 
 		return BYTES;
-    }
+	}
 
+	public static void longToBytes(long value, byte[] bytes/*, Byte_Ordering byteordering*/) {
+		longToBytes(value, bytes, 0/*, 8, byteordering*/);
+	}
 
-    public static void longToBytes(long value, byte[] bytes/*, Byte_Ordering byteordering*/) {
-        longToBytes(value, bytes, 0/*, 8, byteordering*/);
-    }
+	public static void longToBytes(long value, byte[] bytes, int offset/*, int length*/) {
+		longToBytes(value, bytes, offset, /*length,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-    public static void longToBytes(long value, byte[] bytes, int offset/*, int length*/) {
-        longToBytes(value, bytes, offset, /*length,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-    
-    public static void longToBytes(long value, byte[] bytes, Byte_Ordering byteordering) {
-    	longToBytes(value, bytes, 0, /*length,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
+	public static void longToBytes(long value, byte[] bytes, Byte_Ordering byteordering) {
+		longToBytes(value, bytes, 0, /*length,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
 
-	public static void longToBytes(long value, byte[] bytes, int offset, /*int length,*/ Byte_Ordering byteordering) {
+	public static void longToBytes(long value, byte[] bytes, int offset, /*int length,*/Byte_Ordering byteordering) {
 		checkNull(bytes);
 		checkNull(byteordering);
 		checkBufferBounds(bytes.length, offset, 8);
 //		checkLength(length, 8);
-       	
+
 		int Shift = 56;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {
-        	for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/8; X++, Y++) {
-                bytes[X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 7, Y = 0; Shift >= 0 && Y < /*length*/8; X--, Y++) {
-                bytes[X] = (byte)((value >> Shift) & 0xff);
-                Shift -= 8;
-            }
-        }
-    }
-
-
-    public static long bytesToLong(byte[] bytes) {
-        return bytesToLong(bytes, 0, /*8,*/ Byte_Ordering.LITTLE_ENDIAN);
-    }
-
-    public static long bytesToLong(byte[] bytes, Byte_Ordering byteordering) {
-        return bytesToLong(bytes, 0, /*8,*/ byteordering);
-    }
-
-    public static long bytesToLong(byte[] bytes, int offset, /*int length,*/ Byte_Ordering byteordering) {
-    	checkNull(bytes);
-    	checkNull(byteordering);
-    	checkBufferBounds(bytes.length, offset, 8);
-//    	checkLength(length, 8);
-       	
-        int Shift = 56;
-        long Result = 0;
-        if(byteordering == Byte_Ordering.BIG_ENDIAN) {
-        	for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/8; X++, Y++) {
-                Result |= (long)(bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        } else {
-            for(byte X = 7, Y = 0; Shift >= 0 && Y < /*length*/8; X--, Y++) {
-                Result |= (long)(bytes[offset + X] & 0xff) << Shift;
-                Shift -= 8;
-            }
-        }
-
-        return Result;
-    }
-
-    public static short getUnsignedByte(byte value) {
-        return (short)(value < 0 ? (((value & 0x7F)) | 0x80) : value);
-    }
-
-    public static void checkNull(byte[] bytes) {
-        if(bytes == null) {
-            throw new RuntimeException("Variable[bytes] - Is Null");
-        }
-    }
-    
-    public static void checkNull(short[] bytes) {
-        if(bytes == null) {
-            throw new RuntimeException("Variable[bytes] - Is Null");
-        }
-    }
-    
-    public static void checkNull(Byte_Ordering byteordering) {
-        if(byteordering == null) {
-            throw new RuntimeException("Variable[byteordering] - Is Null");
-        }
-    }
-    
-	public static void checkLength(int value, int length) {
-    	if(value > length) {
-    		throw new RuntimeException("Variable[length] - Max Length Can Only Be " + length);
-    	}
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/8; X++, Y++) {
+				bytes[X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 7, Y = 0; Shift >= 0 && Y < /*length*/8; X--, Y++) {
+				bytes[X] = (byte)((value >> Shift) & 0xff);
+				Shift -= 8;
+			}
+		}
 	}
-    
-    public static void checkBufferBounds(int bufferlength, int offset, int length) {    	
-    	if(offset < 0 || offset >= bufferlength ||
-    			length < 0 || length > bufferlength ||
-    			(offset + length) > bufferlength) {
 
-    		throw new IndexOutOfBoundsException("bufferlength: " + bufferlength + " offset: " + offset + " length: " + length);
-    	}
-    }
-    /*
-    public static void main(String[] args) {
-    	final byte[] BUFFER = new byte[4];
-    	
-    	BitOperations.intToBytes(1025, BUFFER, BitOperations.Byte_Ordering.BIG_ENDIAN);
-    	
-    	for(int X = 0; X < BUFFER.length; X++) {
-    		System.out.println(X + " " +Integer.toBinaryString(BUFFER[X]));
-    	}
-    	
+	public static long bytesToLong(byte[] bytes) {
+		return bytesToLong(bytes, 0, /*8,*/Byte_Ordering.LITTLE_ENDIAN);
+	}
+
+	public static long bytesToLong(byte[] bytes, Byte_Ordering byteordering) {
+		return bytesToLong(bytes, 0, /*8,*/byteordering);
+	}
+
+	public static long bytesToLong(byte[] bytes, int offset, /*int length,*/Byte_Ordering byteordering) {
+		checkNull(bytes);
+		checkNull(byteordering);
+		checkBufferBounds(bytes.length, offset, 8);
+//    	checkLength(length, 8);
+
+		int Shift = 56;
+		long Result = 0;
+		if(byteordering == Byte_Ordering.BIG_ENDIAN) {
+			for(byte X = 0, Y = 0; Shift >= 0 && Y < /*length*/8; X++, Y++) {
+				Result |= (long)(bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		} else {
+			for(byte X = 7, Y = 0; Shift >= 0 && Y < /*length*/8; X--, Y++) {
+				Result |= (long)(bytes[offset + X] & 0xff) << Shift;
+				Shift -= 8;
+			}
+		}
+
+		return Result;
+	}
+
+	public static short getUnsignedByte(byte value) {
+		return (short)(value < 0 ? (((value & 0x7F)) | 0x80) : value);
+	}
+
+	public static void checkNull(byte[] bytes) {
+		if(bytes == null) {
+			throw new RuntimeException("Variable[bytes] - Is Null");
+		}
+	}
+
+	public static void checkNull(short[] bytes) {
+		if(bytes == null) {
+			throw new RuntimeException("Variable[bytes] - Is Null");
+		}
+	}
+
+	public static void checkNull(Byte_Ordering byteordering) {
+		if(byteordering == null) {
+			throw new RuntimeException("Variable[byteordering] - Is Null");
+		}
+	}
+
+	public static void checkLength(int value, int length) {
+		if(value > length) {
+			throw new RuntimeException("Variable[length] - Max Length Can Only Be " + length);
+		}
+	}
+
+	public static void checkBufferBounds(int bufferlength, int offset, int length) {
+		if(offset < 0 || offset >= bufferlength || length < 0 || length > bufferlength || (offset + length) > bufferlength) {
+
+			throw new IndexOutOfBoundsException("bufferlength: " + bufferlength + " offset: " + offset + " length: " + length);
+		}
+	}
+	/*
+	public static void main(String[] args) {
+		final byte[] BUFFER = new byte[4];
+		
+		BitOperations.intToBytes(1025, BUFFER, BitOperations.Byte_Ordering.BIG_ENDIAN);
+		
+		for(int X = 0; X < BUFFER.length; X++) {
+			System.out.println(X + " " +Integer.toBinaryString(BUFFER[X]));
+		}
+		
 	}*/
 /*
     public static void main(String[] args) {

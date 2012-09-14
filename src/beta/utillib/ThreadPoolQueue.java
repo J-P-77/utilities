@@ -13,66 +13,65 @@ import utillib.utilities.TimeOutTimer;
  */
 public class ThreadPoolQueue {
 	private static int _Id_ = 0;
-	
-    private final Object __QUEUE_LOCK__ = new Object();
-    private final Object __IDLE_LOCK__ = new Object();
-    
-    private final LinkedListExtended<QueueTask> _QUEUE = new LinkedListExtended<QueueTask>();
-    private int _Queue_Length = 0;
-    
-    private int _Min_Thread_Count = 1;
-    private int _Max_Thread_Count = 1;
-    private final LinkedListExtended<Thread> _THREADS = new LinkedListExtended<Thread>();
-    
-    private int _Current_Thread_Count = 0;
-    private int _Idle_Thread_Count = 0;
-    
-    private boolean _ShutDown = false;
-    private boolean _Started = false;
-    
-    private final Worker _WORKER = new Worker();
-    
-    private int _Idle_Time = 5 * 1000;
 
-    private int _Threshold = 5;    
+	private final Object __QUEUE_LOCK__ = new Object();
+	private final Object __IDLE_LOCK__ = new Object();
 
-    public interface QueueTask extends Runnable {
-    	public void run();
-    }
-    
-    public ThreadPoolQueue(int min, int max, int threshold) {
-    	_Min_Thread_Count = min;
-    	_Max_Thread_Count = max;
-    	_Threshold = threshold;
-    }
+	private final LinkedListExtended<QueueTask> _QUEUE = new LinkedListExtended<QueueTask>();
+	private int _Queue_Length = 0;
+
+	private int _Min_Thread_Count = 1;
+	private int _Max_Thread_Count = 1;
+	private final LinkedListExtended<Thread> _THREADS = new LinkedListExtended<Thread>();
+
+	private int _Current_Thread_Count = 0;
+	private int _Idle_Thread_Count = 0;
+
+	private boolean _ShutDown = false;
+	private boolean _Started = false;
+
+	private final Worker _WORKER = new Worker();
+
+	private int _Idle_Time = 5 * 1000;
+
+	private int _Threshold = 5;
+
+	public interface QueueTask extends Runnable {
+		public void run();
+	}
+
+	public ThreadPoolQueue(int min, int max, int threshold) {
+		_Min_Thread_Count = min;
+		_Max_Thread_Count = max;
+		_Threshold = threshold;
+	}
 
 //    public void setMin(int value) {}
-  
-    public int getMin() {
-    	return _Min_Thread_Count;
-    }
+
+	public int getMin() {
+		return _Min_Thread_Count;
+	}
 
 //    public void setMax(int value) {}
 
-    public int getMax() {
-    	return _Max_Thread_Count;
-    }
+	public int getMax() {
+		return _Max_Thread_Count;
+	}
 
 //    public void setThreshold(int value) {}
 
-    public int getThreshold() {
-    	return _Threshold;
-    }
-    
-    public int getQueueLength() {
-    	return _Queue_Length;
-    }
-    
-    
-    public void start() {
+	public int getThreshold() {
+		return _Threshold;
+	}
+
+	public int getQueueLength() {
+		return _Queue_Length;
+	}
+
+	public void start() {
 		if(!_Started) {
 			_Started = true;
-			
+
 			for(int X = 0; X < _Min_Thread_Count; X++) {
 				startThread();
 			}
@@ -91,47 +90,47 @@ public class ThreadPoolQueue {
 		}
 	}
 
-    public void addTask(QueueTask task) {
-    	if(task == null) {
+	public void addTask(QueueTask task) {
+		if(task == null) {
 			throw new RuntimeException("Variable[task] - Is Null");
 		}
-    	
-    	if(!_Started) {
-    		throw new RuntimeException("Variable[_Started] - Not Started");
-    	}
-    	
-        synchronized(__QUEUE_LOCK__) {
-        	_QUEUE.push(task);
-        	_Queue_Length++;
-        }
-    }
-    
+
+		if(!_Started) {
+			throw new RuntimeException("Variable[_Started] - Not Started");
+		}
+
+		synchronized(__QUEUE_LOCK__) {
+			_QUEUE.push(task);
+			_Queue_Length++;
+		}
+	}
+
 //    private boolean threasholdReached() {
 //    	return (_QueueLength / _Current_Thread) > _Threshold;
 //    }
-    
-    public void removeTask(QueueTask task) {
-        synchronized(__QUEUE_LOCK__) {
-        	_QUEUE.remove(task);
-        	_Queue_Length--;
-        }
-    }
 
-    public int taskCount() {
-        return _Queue_Length;
-    }
+	public void removeTask(QueueTask task) {
+		synchronized(__QUEUE_LOCK__) {
+			_QUEUE.remove(task);
+			_Queue_Length--;
+		}
+	}
 
-    public boolean isRunning() {
-        return _Started;
-    }
+	public int taskCount() {
+		return _Queue_Length;
+	}
 
-    @Override
-    protected void finalize() throws Throwable {
-        stop();
+	public boolean isRunning() {
+		return _Started;
+	}
 
-        super.finalize();
-    }
-    
+	@Override
+	protected void finalize() throws Throwable {
+		stop();
+
+		super.finalize();
+	}
+
 	private void startThread() {
 		final Thread T = new Thread(_WORKER);
 
@@ -146,24 +145,24 @@ public class ThreadPoolQueue {
 
 		_Current_Thread_Count++;
 	}
-	
-    //CLASSES
-    private class Worker implements Runnable {
-    	
-    	@Override
-        public void run() {    		
-    		boolean Shutdown = false;
-            while(!_ShutDown && !Shutdown) {
-            	System.out.println(Thread.currentThread().getName() + " Running State");
-            	
-            	//Loop Thru Jobs
-            	while(!_QUEUE.isEmpty() && !_ShutDown && !Shutdown) {
+
+	//CLASSES
+	private class Worker implements Runnable {
+
+		@Override
+		public void run() {
+			boolean Shutdown = false;
+			while(!_ShutDown && !Shutdown) {
+				System.out.println(Thread.currentThread().getName() + " Running State");
+
+				//Loop Thru Jobs
+				while(!_QUEUE.isEmpty() && !_ShutDown && !Shutdown) {
 					synchronized(__IDLE_LOCK__) {
 						if((_Queue_Length / _Current_Thread_Count) > _Threshold) {
 							//Create More Thread If Necessary
 							if(_Current_Thread_Count < _Max_Thread_Count && _Idle_Thread_Count == 0) {
 								System.out.println("Tasks Per Thread: " + (_Queue_Length / _Current_Thread_Count));
-								
+
 								startThread();
 							}
 						} else {
@@ -172,35 +171,35 @@ public class ThreadPoolQueue {
 								break;
 							}
 						}
-            		}
-            		
-            		final QueueTask WORKING_ON;
-	                synchronized(__QUEUE_LOCK__) {
-	                    WORKING_ON = _QUEUE.pop();
-	                    _Queue_Length--;
-	                }
-	                
-                	WORKING_ON.run();
-            	}
-            	
-            	boolean Idle = false;
-            	boolean Timeout = false;
-            	synchronized(__IDLE_LOCK__) {
-            		System.out.println("Threads: " + _Current_Thread_Count + " Idle: " + _Idle_Thread_Count);
-            		
-	        		if(_Current_Thread_Count <= _Max_Thread_Count && (_Current_Thread_Count - _Idle_Thread_Count) > _Min_Thread_Count) {
-	        			_Idle_Thread_Count++;
-	        			Timeout = true;
-	        		} else {
-	        			_Idle_Thread_Count++;
-	        			Idle = true;
-	        		}
-            	}
-            	
+					}
+
+					final QueueTask WORKING_ON;
+					synchronized(__QUEUE_LOCK__) {
+						WORKING_ON = _QUEUE.pop();
+						_Queue_Length--;
+					}
+
+					WORKING_ON.run();
+				}
+
+				boolean Idle = false;
+				boolean Timeout = false;
+				synchronized(__IDLE_LOCK__) {
+					System.out.println("Threads: " + _Current_Thread_Count + " Idle: " + _Idle_Thread_Count);
+
+					if(_Current_Thread_Count <= _Max_Thread_Count && (_Current_Thread_Count - _Idle_Thread_Count) > _Min_Thread_Count) {
+						_Idle_Thread_Count++;
+						Timeout = true;
+					} else {
+						_Idle_Thread_Count++;
+						Idle = true;
+					}
+				}
+
 				if(Timeout) {
 					System.out.println(Thread.currentThread().getName() + " Timeout State");
 					final TimeOutTimer TIMEOUT = new TimeOutTimer(_Idle_Time);
-					
+
 					while(true) {
 						if(TIMEOUT.hasTimedOut()) {
 							System.out.println(Thread.currentThread().getName() + " Timed Out");
@@ -213,8 +212,10 @@ public class ThreadPoolQueue {
 								break;
 							}
 						}
-						
-						if(_ShutDown) {break;}
+
+						if(_ShutDown) {
+							break;
+						}
 
 						ThreadUtil.sleep(50);
 					}
@@ -228,27 +229,29 @@ public class ThreadPoolQueue {
 								break;
 							}
 						}
-						
-						if(_ShutDown) {break;}
-						
-						ThreadUtil.sleep(50);						
+
+						if(_ShutDown) {
+							break;
+						}
+
+						ThreadUtil.sleep(50);
 					}
 				}
-				
-				if(/*!Shutdown &&*/ (Timeout || Idle)) {
+
+				if(/*!Shutdown &&*/(Timeout || Idle)) {
 					synchronized(__IDLE_LOCK__) {
 						_Idle_Thread_Count--;
 					}
 				}
-            }
-            
+			}
+
 			synchronized(__IDLE_LOCK__) {
 				_Current_Thread_Count--;
 			}
-        }
-    }
+		}
+	}
 }
-    
+
 /*
 					synchronized(__IDLE_LOCK__) {
 						if((_Queue_Length / _Current_Thread) > _Threshold) {
@@ -299,7 +302,7 @@ public class ThreadPoolQueue {
 						System.out.println(Thread.currentThread().getName() + " Running State");
 					}
  */
-    
+
 /*
 public class IntSync {
 private final Object __LOCK__ = new Object();

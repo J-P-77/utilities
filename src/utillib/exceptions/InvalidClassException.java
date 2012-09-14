@@ -1,16 +1,16 @@
 package utillib.exceptions;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class InvalidClassException extends Exception {
 
-    public InvalidClassException() {
-        super();
-    }
+	public InvalidClassException() {
+		super();
+	}
 
-    public InvalidClassException(String msg) {
-        super(msg);
-    }
+	public InvalidClassException(String msg) {
+		super(msg);
+	}
 }

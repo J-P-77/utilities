@@ -5,8 +5,8 @@ import utillib.arrays.ResizingArray;
 import utillib.interfaces.IProperty;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class Node {
 	private final boolean _MATCH_CASE;

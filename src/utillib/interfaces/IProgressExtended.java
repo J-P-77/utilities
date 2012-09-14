@@ -1,8 +1,8 @@
 package utillib.interfaces;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public interface IProgressExtended extends IProgress {
 /*
@@ -10,34 +10,40 @@ public interface IProgressExtended extends IProgress {
 	public void decrement(int value);
 */
 //
-    @Deprecated
-    public void setVisible(boolean value);
-    @Deprecated
-    public boolean isVisible();
+	@Deprecated
+	public void setVisible(boolean value);
+
+	@Deprecated
+	public boolean isVisible();
+
 //
-    /**
-     * Destory's This Instance Of This Oject
-     */
-    @Deprecated
-    public void destroy();
+	/**
+	 * Destory's This Instance Of This Oject
+	 */
+	@Deprecated
+	public void destroy();
 
-    /**
-     * Tells Operation to Cancel
-     */
-    public void cancel();
-    /**
-     * Operation Is Attempting to Cancel Current Progress
-     * @return
-     */
-    public boolean isCanceling();
+	/**
+	 * Tells Operation to Cancel
+	 */
+	public void cancel();
 
-    /**
-     * Flag To Tell The Operation That It Has Canceled Current Progress
-     */
-    public void canceled();
-    /**
-     * Operation Has Canceled Current Progress
-     * @return
-     */
-    public boolean isCanceled();
+	/**
+	 * Operation Is Attempting to Cancel Current Progress
+	 * 
+	 * @return
+	 */
+	public boolean isCanceling();
+
+	/**
+	 * Flag To Tell The Operation That It Has Canceled Current Progress
+	 */
+	public void canceled();
+
+	/**
+	 * Operation Has Canceled Current Progress
+	 * 
+	 * @return
+	 */
+	public boolean isCanceled();
 }

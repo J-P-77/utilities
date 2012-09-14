@@ -4,7 +4,8 @@ import java.io.File;
 
 import java.net.URI;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -16,99 +17,99 @@ import java.net.URI;
  */
 public class FileExtended extends File {
 
-    public FileExtended(String file) {
-        super(file);
-    }
-    
-    public FileExtended(URI file) {
-        super(file);
-    }
-    
-    public FileExtended(String parent, String child) {
-        super(parent, child);
-    }
-    
-    public String getNameWithOutExtension() {//getNameWithOutExtension()
-        return getNameWithOutExtension(super.getName());
-    }
-    
-    public String getExtension() {//getExtension()
-        return getExtension(super.getName());
-    }
-    
-    public String getExtensionWithPeriod() {//getExtensionWithPeriod()
-        return getExtensionWithPeriod(super.getName());
-    }
-    
-    public String getDrive() {
-        return getDrive(super.getPath());
-    }    
+	public FileExtended(String file) {
+		super(file);
+	}
 
-    //STATIC
-    public static String getDrive(String path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public FileExtended(URI file) {
+		super(file);
+	}
 
-        final File DRIVE = getDriveFile(path);
+	public FileExtended(String parent, String child) {
+		super(parent, child);
+	}
 
-        return (DRIVE == null ? null : DRIVE.getPath());
-    }
+	public String getNameWithOutExtension() {//getNameWithOutExtension()
+		return getNameWithOutExtension(super.getName());
+	}
 
-    public static File getDriveFile(String path) {
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public String getExtension() {//getExtension()
+		return getExtension(super.getName());
+	}
 
-        if(path.length() > 0) {
-            final File[] DRIVES = File.listRoots();
-            for(int X = 0; X < DRIVES.length; X++) {
-                if(path.startsWith(DRIVES[X].getPath())) {
-                    return DRIVES[X];
-                }
-            }
-        }
+	public String getExtensionWithPeriod() {//getExtensionWithPeriod()
+		return getExtensionWithPeriod(super.getName());
+	}
 
-        return null;
-    }
+	public String getDrive() {
+		return getDrive(super.getPath());
+	}
 
-    public static String getName(String path) {//getNameWithOutExtension()
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	//STATIC
+	public static String getDrive(String path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
-        final int INDEX = path.lastIndexOf('/');
+		final File DRIVE = getDriveFile(path);
 
-        return (INDEX != -1 ? path.substring(INDEX + 1, path.length()) : path);
-    }
+		return (DRIVE == null ? null : DRIVE.getPath());
+	}
 
-    public static String getNameWithOutExtension(String path) {//getNameWithOutExtension()
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public static File getDriveFile(String path) {
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
-        final int INDEX = path.lastIndexOf('.');
+		if(path.length() > 0) {
+			final File[] DRIVES = File.listRoots();
+			for(int X = 0; X < DRIVES.length; X++) {
+				if(path.startsWith(DRIVES[X].getPath())) {
+					return DRIVES[X];
+				}
+			}
+		}
 
-        return (INDEX != -1 ? path.substring(0, INDEX) : path);
-    }
+		return null;
+	}
 
-    public static String getExtension(String path) {//getExtension()
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public static String getName(String path) {//getNameWithOutExtension()
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
-        final int INDEX = path.lastIndexOf('.');
+		final int INDEX = path.lastIndexOf('/');
 
-        return (INDEX == -1 ? "" : path.substring(INDEX + 1, path.length()));
-    }
+		return (INDEX != -1 ? path.substring(INDEX + 1, path.length()) : path);
+	}
 
-    public static String getExtensionWithPeriod(String path) {//getExtensionWithPeriod()
-        if(path == null) {
-            throw new RuntimeException("Variable[path] - Is Null");
-        }
+	public static String getNameWithOutExtension(String path) {//getNameWithOutExtension()
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
 
-        return '.' + getExtension(path);
-    }
+		final int INDEX = path.lastIndexOf('.');
+
+		return (INDEX != -1 ? path.substring(0, INDEX) : path);
+	}
+
+	public static String getExtension(String path) {//getExtension()
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
+
+		final int INDEX = path.lastIndexOf('.');
+
+		return (INDEX == -1 ? "" : path.substring(INDEX + 1, path.length()));
+	}
+
+	public static String getExtensionWithPeriod(String path) {//getExtensionWithPeriod()
+		if(path == null) {
+			throw new RuntimeException("Variable[path] - Is Null");
+		}
+
+		return '.' + getExtension(path);
+	}
 /*
     public static void main(String[] args) {
         FileExtended Fex = new FileExtended("C:\\Documents and Settings\\Dalton Dell\\Desktop\\jvftp.session");

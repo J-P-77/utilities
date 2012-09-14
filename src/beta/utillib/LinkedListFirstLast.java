@@ -5,61 +5,61 @@ public class LinkedListFirstLast<T> {//Don't Use
 	private Node _Last = null;//_Top
 	private int _Length = 0;
 
-    public void pushFirst(T i) {
-        final Node TEMP = new Node();
-        TEMP._Value = i;
+	public void pushFirst(T i) {
+		final Node TEMP = new Node();
+		TEMP._Value = i;
 
-        if(isEmpty()) {
-            _First = TEMP;
-            _Last = TEMP;
-        } else {
-            _First._Previous = TEMP;
-            TEMP._Next = _First;
-            _First = TEMP;
-        }
-        _Length++;
-    }
+		if(isEmpty()) {
+			_First = TEMP;
+			_Last = TEMP;
+		} else {
+			_First._Previous = TEMP;
+			TEMP._Next = _First;
+			_First = TEMP;
+		}
+		_Length++;
+	}
 
-    public void pushLast(T i) {
-        final Node TEMP = new Node();
-        TEMP._Value = i;
+	public void pushLast(T i) {
+		final Node TEMP = new Node();
+		TEMP._Value = i;
 
-        if(isEmpty()) {
-            _First = TEMP;
-            _Last = TEMP;
-        } else {
-            _Last._Next = TEMP;
-            TEMP._Previous = _Last;
-            _Last = TEMP;
-        }
-        _Length++;
-    }
+		if(isEmpty()) {
+			_First = TEMP;
+			_Last = TEMP;
+		} else {
+			_Last._Next = TEMP;
+			TEMP._Previous = _Last;
+			_Last = TEMP;
+		}
+		_Length++;
+	}
 
-    public T popFirst() {
-        final T TEMP = _First._Value;
+	public T popFirst() {
+		final T TEMP = _First._Value;
 
-        _First = _First._Next;
-        _Length--;
+		_First = _First._Next;
+		_Length--;
 
-        if(_First == null) {
-        	_Last = null;
-        }
-        
-        return TEMP;
-    }
+		if(_First == null) {
+			_Last = null;
+		}
 
-    public T popLast() {
-        final T TEMP = _Last._Value;
+		return TEMP;
+	}
 
-        _Last = _Last._Previous;
-        _Length--;
+	public T popLast() {
+		final T TEMP = _Last._Value;
 
-        if(_Last == null) {
-        	_First = null;
-        }
-        
-        return TEMP;
-    }
+		_Last = _Last._Previous;
+		_Length--;
+
+		if(_Last == null) {
+			_First = null;
+		}
+
+		return TEMP;
+	}
 
 //	public void push(T i) {
 //		final Node TEMP = new Node();
@@ -80,15 +80,14 @@ public class LinkedListFirstLast<T> {//Don't Use
 //		return TEMP;
 //	}
 
-    public boolean isEmpty() {
-        return _Last == null && _First == null;
-    }
+	public boolean isEmpty() {
+		return _Last == null && _First == null;
+	}
 
 	private class Node {
 		public T _Value = null;
 		public Node _Next = null;
-        public Node _Previous = null;
+		public Node _Previous = null;
 	}
-
 
 }

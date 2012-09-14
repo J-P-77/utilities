@@ -21,129 +21,123 @@ import java.util.Enumeration;
 
 import java.net.URL;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * March 16, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
-public class JarClassLoader extends MyLocalClassloader implements ZipJarConstants, ClassConstants {    
-    private final File _FILE;
+public class JarClassLoader extends MyLocalClassloader implements ZipJarConstants, ClassConstants {
+	private final File _FILE;
 
-    private JarFile _JarFile = null;
-    
-    public JarClassLoader(String file)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
-        
-        this(new File(file), null, null);
-    }
-    public JarClassLoader(File file) throws FileNotFoundException, 
-            InvalidFileTypeException, IOException {
+	private JarFile _JarFile = null;
 
-        this(file, null, null);
-    }
+	public JarClassLoader(String file) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(String file, ClassLoader parent)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(new File(file), null, null);
+	}
 
-        this(new File(file), parent, null);
-    }
+	public JarClassLoader(File file) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(String file, ClassLoader parent, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(file, null, null);
+	}
 
-        this(new File(file), parent, manager);
-    }
+	public JarClassLoader(String file, ClassLoader parent) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(String file, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(new File(file), parent, null);
+	}
 
-        this(new File(file), null, manager);
-    }
+	public JarClassLoader(String file, ClassLoader parent, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(File file, LoadedJarsManager manager) 
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(new File(file), parent, manager);
+	}
 
-        this(file, null, manager);
-    }
+	public JarClassLoader(String file, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(File file, ClassLoader parent)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(new File(file), null, manager);
+	}
 
-        this(file, parent, null);
-    }
+	public JarClassLoader(File file, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public JarClassLoader(File file, ClassLoader parent, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+		this(file, null, manager);
+	}
 
-        super(parent);
+	public JarClassLoader(File file, ClassLoader parent) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        if(file == null) {
-            throw new RuntimeException("Variable[file] - Is Null");
-        }
-        	
-    	if(!file.exists()) {
-            throw new FileNotFoundException(file.getPath() + " Does Not Exists");
-        }
-        	
-    	if(!FileUtil.isFileType(file, _JAR_MAGIC_NUMBER_)) {
-            throw new InvalidFileTypeException(file.getPath());
-        }
-        
-        _FILE = file;
-        _JarFile = new JarFile(file);
+		this(file, parent, null);
+	}
 
-        super.setManifest(_JarFile.getManifest());
-        
-        if(manager != null) {///////////
-            super.setLoadedJarsManager(manager);
-            manager.add(_FILE.getName(), this);
-        }///////////
+	public JarClassLoader(File file, ClassLoader parent, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        if(super.getManifest() == null) {
-            _LOG.printInformation("Manifest In: " + (getName() == null ? "Unknown Name" : getName()) +  " Not Found");
-        } else {
-            _LOG.printInformation("Manifest Found In: " + (getName() == null ? "Unknown Name" : getName()));
-            loadDepends(_FILE.getParentFile(), super.getManifest());
-        }
-    }
-    
-    public File getFile() {
-        return _FILE;
-    }
+		super(parent);
 
-    public Enumeration<JarEntry> getJarEntries() {
-        return _JarFile.entries();
-    }
+		if(file == null) {
+			throw new RuntimeException("Variable[file] - Is Null");
+		}
 
-    public JarEntry getJarEntry(String name) {
-        return (isClosed() ? null : _JarFile.getJarEntry(name));
-    }
+		if(!file.exists()) {
+			throw new FileNotFoundException(file.getPath() + " Does Not Exists");
+		}
 
-    @Override
-    public String getName() {
-        return _FILE.getName();
-    }
+		if(!FileUtil.isFileType(file, _JAR_MAGIC_NUMBER_)) {
+			throw new InvalidFileTypeException(file.getPath());
+		}
 
-    @Override
-    protected Class<?> findLocalClass(String name) {
-    	if(!isClosed()) {
-            MyStringBuffer Buffer = new MyStringBuffer(name, 6);
-            Buffer.replace('.', '/');
-            Buffer.append(".class");
+		_FILE = file;
+		_JarFile = new JarFile(file);
 
-            final String CLASS_NAME = Buffer.toString();
+		super.setManifest(_JarFile.getManifest());
 
-            final JarEntry ENTRY = _JarFile.getJarEntry(CLASS_NAME);
+		if(manager != null) {///////////
+			super.setLoadedJarsManager(manager);
+			manager.add(_FILE.getName(), this);
+		}///////////
 
-            if(ENTRY != null) {
-                InputStream IStream = null;
-                try {
-                    IStream = _JarFile.getInputStream(ENTRY);
+		if(super.getManifest() == null) {
+			_LOG.printInformation("Manifest In: " + (getName() == null ? "Unknown Name" : getName()) + " Not Found");
+		} else {
+			_LOG.printInformation("Manifest Found In: " + (getName() == null ? "Unknown Name" : getName()));
+			loadDepends(_FILE.getParentFile(), super.getManifest());
+		}
+	}
+
+	public File getFile() {
+		return _FILE;
+	}
+
+	public Enumeration<JarEntry> getJarEntries() {
+		return _JarFile.entries();
+	}
+
+	public JarEntry getJarEntry(String name) {
+		return (isClosed() ? null : _JarFile.getJarEntry(name));
+	}
+
+	@Override
+	public String getName() {
+		return _FILE.getName();
+	}
+
+	@Override
+	protected Class<?> findLocalClass(String name) {
+		if(!isClosed()) {
+			MyStringBuffer Buffer = new MyStringBuffer(name, 6);
+			Buffer.replace('.', '/');
+			Buffer.append(".class");
+
+			final String CLASS_NAME = Buffer.toString();
+
+			final JarEntry ENTRY = _JarFile.getJarEntry(CLASS_NAME);
+
+			if(ENTRY != null) {
+				InputStream IStream = null;
+				try {
+					IStream = _JarFile.getInputStream(ENTRY);
 
 //                    final byte[] CLASS_BYTES = readClassBytes(name, IStream);
 //                    final Class CLASS = super.defineClass(name, CLASS_BYTES, 0, CLASS_BYTES.length);
@@ -153,82 +147,82 @@ public class JarClassLoader extends MyLocalClassloader implements ZipJarConstant
 //                        return CLASS;
 //                    }
 
-                    return readClass(name, IStream);
+					return readClass(name, IStream);
 //                } catch (utillib.exceptions.InvalidClassException e) {
 //                    _DEBUGHANDLER.printError(e.getMessage());
-                } catch (Exception e) {
-                    _LOG.printError(e);
-                } finally {
+				} catch(Exception e) {
+					_LOG.printError(e);
+				} finally {
 					if(IStream != null) {
 						try {
 							IStream.close();
 							IStream = null;
 						} catch(Exception e) {}
 					}
-                }
-            }
-        }
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    //jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
-    @Override
-    protected URL findLocalResource(String name) {
-        if(name != null && name.length() > 0) {
-        	if(!isClosed()) {
-                final String NAME = name;
+	//jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
+	@Override
+	protected URL findLocalResource(String name) {
+		if(name != null && name.length() > 0) {
+			if(!isClosed()) {
+				final String NAME = name;
 //                final String NAME = (name.charAt(0) == '/' ? name.substring(1) : name);
 
-                final JarEntry ENTRY = _JarFile.getJarEntry(NAME);
+				final JarEntry ENTRY = _JarFile.getJarEntry(NAME);
 
-                if(ENTRY != null) {
-                    try {
-                        return new URL("jar:file:/" + _FILE.toURI().toURL() + "!/" + NAME);
-                    } catch (Exception e) {}//e.printStackTrace();
-                }
-            }
-        }
+				if(ENTRY != null) {
+					try {
+						return new URL("jar:file:/" + _FILE.toURI().toURL() + "!/" + NAME);
+					} catch(Exception e) {}//e.printStackTrace();
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    protected InputStream getLocalResourceAsStream(String name) {
-    	if(!isClosed()) {
-            final JarEntry ENTRY = getJarEntry(name);
+	@Override
+	protected InputStream getLocalResourceAsStream(String name) {
+		if(!isClosed()) {
+			final JarEntry ENTRY = getJarEntry(name);
 
-            if(ENTRY != null) {
-                try {
-                    return _JarFile.getInputStream(ENTRY);
-                } catch (Exception e) {}
-            }
-        }
+			if(ENTRY != null) {
+				try {
+					return _JarFile.getInputStream(ENTRY);
+				} catch(Exception e) {}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    protected boolean localResourceExists(String name) {
-        return getJarEntry(name) != null;
-    }
+	@Override
+	protected boolean localResourceExists(String name) {
+		return getJarEntry(name) != null;
+	}
 
-    @Override
-    public boolean isLocalClosed() {
-        return _JarFile == null;
-    }
+	@Override
+	public boolean isLocalClosed() {
+		return _JarFile == null;
+	}
 
-    @Override
-    public void localClose() {
-        if(_JarFile != null) {
-            try {
-                _JarFile.close();
-            } catch (Exception e) {}
-            _JarFile = null;
-            
-            _LOG.printInformation("Local: " + _FILE.getName() + " - Closed");
-        }
-    }
+	@Override
+	public void localClose() {
+		if(_JarFile != null) {
+			try {
+				_JarFile.close();
+			} catch(Exception e) {}
+			_JarFile = null;
+
+			_LOG.printInformation("Local: " + _FILE.getName() + " - Closed");
+		}
+	}
 /*
     public static File downloadJar(URL url, String jarname, String to, IProgress progress) throws IOException, InvalidFileTypeException {
         final File FILE;

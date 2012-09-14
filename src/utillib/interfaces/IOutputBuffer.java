@@ -1,5 +1,5 @@
 package utillib.interfaces;
 
 public interface IOutputBuffer {
-	public void empty(byte[] buffer, int offset, int length) ;
+	public void empty(byte[] buffer, int offset, int length);
 }

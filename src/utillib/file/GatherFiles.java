@@ -5,91 +5,106 @@ import java.io.File;
 import beta.utillib.Queue;
 
 /**
- * November 02, 2008 (Version 1.0.0)<br>
- *     -First Released<br>
- * <br>
- * November 02, 2009 (Version 1.1.0)<br>
- *     -Updated<br>
- *         -Everything<br>
- * <br>
- * @author Justin Palinkas<br>
- * <br>
- * Current Version 1.1.0
+ * <pre>
+ * <b>Current Version 1.1.0</b>
+ * 
+ * November 02, 2008 (Version 1.0.0)
+ *     -First Released
+ * 
+ * November 02, 2009 (Version 1.1.0)
+ *     -Updated
+ *         -Everything
+ * 
+ * @author Justin Palinkas
+ * 
+ * </pre>
  */
 public class GatherFiles extends Gather {
-    
-   /**
-     * Gets Files
-     * 
-     * @param crawldirectory (File) File or Directory to Crawl
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public GatherFiles(File crawldirectory)  {
-    	super(crawldirectory, false, false);
-    }
-    
-   /**
-     * Gets Files
-     * 
-     * @param crawl (File) File or Directory to Crawl
-     * @param include (boolean) Includes Sub Directories
-     *
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public GatherFiles(File crawldirectory, boolean include)  {
-        super(crawldirectory, include, false);
-    }
 
-   /**
-     * Gets Files
-     * 
-     * @param crawldirectory (File) File or Directory to Crawl
-     * @param include (boolean) Includes Sub Directories
-     * @param autorun (boolean) Start Searching Immediately
-     * @param update (IUpdate) When File Size Is Increased Will Call Method updateFileSize() and updateTotalSize() When Total Size Is Increased
-     * 
-     * @exception IllegalArgumentException
-     * @exception NullPointerException
-     */
-    public GatherFiles(File crawldirectory, boolean include, boolean autorun) {
-        super(crawldirectory, include, autorun);
-    }
-    
-    @Override
-    public void gather() {        
-    	final Queue<File> DIRECTORIES = new Queue<File>(_CRAWL_DIRECTORY);
+	/**
+	 * Gets Files
+	 * 
+	 * @param crawldirectory
+	 *            (File) File or Directory to Crawl
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public GatherFiles(File crawldirectory) {
+		super(crawldirectory, false, false);
+	}
 
-        while(!DIRECTORIES.isEmpty()) {
-            final File DIRECTORY = DIRECTORIES.pop();
-            _Directory_Count++;
+	/**
+	 * Gets Files
+	 * 
+	 * @param crawl
+	 *            (File) File or Directory to Crawl
+	 * @param include
+	 *            (boolean) Includes Sub Directories
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public GatherFiles(File crawldirectory, boolean include) {
+		super(crawldirectory, include, false);
+	}
 
-            final File[] FILES = DIRECTORY.listFiles();
-            for(int X = 0; X < FILES.length; X++) {
-                if(FILES[X].isFile()) {
-                    if(isAcceptableFiles(FILES[X])) {
-                        final long FILESIZE = FILES[X].length();
+	/**
+	 * Gets Files
+	 * 
+	 * @param crawldirectory
+	 *            (File) File or Directory to Crawl
+	 * @param include
+	 *            (boolean) Includes Sub Directories
+	 * @param autorun
+	 *            (boolean) Start Searching Immediately
+	 * @param update
+	 *            (IUpdate) When File Size Is Increased Will Call Method
+	 *            updateFileSize() and updateTotalSize() When Total Size Is
+	 *            Increased
+	 * 
+	 * @exception IllegalArgumentException
+	 * @exception NullPointerException
+	 */
+	public GatherFiles(File crawldirectory, boolean include, boolean autorun) {
+		super(crawldirectory, include, autorun);
+	}
 
-                        _TotalSize += FILESIZE;
+	@Override
+	public void gather() {
+		final Queue<File> DIRECTORIES = new Queue<File>(_CRAWL_DIRECTORY);
 
-                        _File_Count++;
-                    }
-                } else {
-                    if(_INCLUDE) {
-                        if(isAcceptableDirectory(FILES[X])) {
-                            DIRECTORIES.push(FILES[X]);//Pushes Directory Into Folder Stack
-                            _QUEUE.put(FILES[X]);
-                        }
-                    }
-                }
-                if(pauseCancelCheck()) {return;}
-            }
-            if(pauseCancelCheck()) {return;}
-        }
-    }
+		while(!DIRECTORIES.isEmpty()) {
+			final File DIRECTORY = DIRECTORIES.pop();
+			_Directory_Count++;
 
+			final File[] FILES = DIRECTORY.listFiles();
+			for(int X = 0; X < FILES.length; X++) {
+				if(FILES[X].isFile()) {
+					if(isAcceptableFiles(FILES[X])) {
+						final long FILESIZE = FILES[X].length();
+
+						_TotalSize += FILESIZE;
+
+						_File_Count++;
+					}
+				} else {
+					if(_INCLUDE) {
+						if(isAcceptableDirectory(FILES[X])) {
+							DIRECTORIES.push(FILES[X]);//Pushes Directory Into Folder Stack
+							_QUEUE.put(FILES[X]);
+						}
+					}
+				}
+				if(pauseCancelCheck()) {
+					return;
+				}
+			}
+			if(pauseCancelCheck()) {
+				return;
+			}
+		}
+	}
 
 /*
 	public static void main(String[] args) {

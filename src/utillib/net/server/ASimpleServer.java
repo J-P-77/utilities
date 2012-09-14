@@ -143,23 +143,29 @@ public abstract class ASimpleServer implements Runnable {
 
 	/**
 	 * Binds Address And Port
+	 * 
 	 * @param address
 	 * @param port
 	 * @throws IOException
 	 */
 	public abstract void bind(InetAddress address, int port) throws IOException;
+
 	public abstract boolean isBound();
 
 	/**
 	 * Unbinds Address And Port
+	 * 
 	 * @throws IOException
 	 */
 	public abstract void close() throws IOException;
+
 	public abstract boolean isClosed();
 
 	public abstract InetAddress getLocalAddress();
+
 	public abstract int getLocalPort();
 
 	public abstract void setOption(int option, Object value);
+
 	public abstract Object getOption(int option);
 }

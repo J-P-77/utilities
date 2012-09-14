@@ -42,13 +42,13 @@ public class HttpCodes {
 	public static final int _SERVICE_UNAVAILABLE_ = 503;
 	public static final int _GATEWAY_TIMEOUT_ = 504;
 	public static final int _HTTP_VERSION_NOT_SUPPORTED_ = 505;
-	
+
 //	public static final int _TYPE_INFORMATION_ = 0;
 //	public static final int _TYPE_SUCCESS_ = 1;
 //	public static final int _TYPE_REDIRECTION_ = 2;
 //	public static final int _TYPE_CLIENT_ERROR_ = 3;
 //	public static final int _TYPE_SERVER_ERROR_ = 4;
-	
+
 	public static enum Type {
 		INFORMATION,
 		SUCCESS,
@@ -56,7 +56,7 @@ public class HttpCodes {
 		CLIENT_ERROR,
 		SERVER_ERROR;
 	};
-	
+
 	public static boolean validStatusCode(int value) {
 		switch(value) {
 			case _CONTINUE_:
@@ -101,44 +101,44 @@ public class HttpCodes {
 			case _GATEWAY_TIMEOUT_:
 			case _HTTP_VERSION_NOT_SUPPORTED_:
 				return true;
-				
+
 			default:
 				return false;
 		}
 	}
-	
+
 	public static boolean statusInformation(HttpEntry entry) {
 		return status(entry, Type.INFORMATION);
 	}
-	
+
 	public static boolean statusSuccess(HttpEntry entry) {
 		return status(entry, Type.SUCCESS);
 	}
-	
+
 	public static boolean statusRedirection(HttpEntry entry) {
 		return status(entry, Type.REDIRECTION);
 	}
-	
+
 	public static boolean statusClientError(HttpEntry entry) {
 		return status(entry, Type.CLIENT_ERROR);
 	}
-	
-	public static boolean statusServerError(HttpEntry entry) {		
+
+	public static boolean statusServerError(HttpEntry entry) {
 		return status(entry, Type.SERVER_ERROR);
 	}
-	
+
 	public static boolean status(HttpEntry entry, Type type) {
 		if(entry == null) {
 			throw new RuntimeException("Variable[entry] - Is Null");
 		}
-		
+
 		if(type == null) {
 			throw new RuntimeException("Variable[type] - Is Null");
 		}
-		
+
 		return (statusCodeType(entry.getStatusCode()) == type);
 	}
-	
+
 	public static Type statusCodeType(int value) {
 		if(value >= 100 && value < 200) {
 			return Type.INFORMATION;

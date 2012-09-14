@@ -1,6 +1,5 @@
 package utillib.commandline.parsers;
 
-
 import utillib.strings.MyStringBuffer;
 import utillib.strings.StringUtil;
 
@@ -8,76 +7,74 @@ import utillib.commandline.ACmdLineHandler;
 import utillib.lang.byref.IntByRef;
 
 /**
- * Examples.
- * -openserver server1:local:1234
- * -openserver:server1:local:1234
- * -file "text 1.txt" /include
+ * Examples. -openserver server1:local:1234 -openserver:server1:local:1234 -file
+ * "text 1.txt" /include
  * 
  * @author Dalton Dell
- *
+ * 
  */
 public class LinuxParser extends ACmdLineHandler {
-    public static final String _DEFAULT_SWITCH_START_ = "-";
-    
-    private final String _SWITCH_START;
-    private final char _VARIABLE_SEP;
-    
-    public LinuxParser() {
-    	this(_DEFAULT_SWITCH_START_, ':');
-    }
-    
-    public LinuxParser(String swistart) {
-    	this(swistart, ':');
-    }
-    
-    public LinuxParser(String swistart, char variablesep) {
-    	super();
-    	
-        if(swistart == null) {
-            throw new NullPointerException("Variable[swistart] - Is Null");
-        }
+	public static final String _DEFAULT_SWITCH_START_ = "-";
+
+	private final String _SWITCH_START;
+	private final char _VARIABLE_SEP;
+
+	public LinuxParser() {
+		this(_DEFAULT_SWITCH_START_, ':');
+	}
+
+	public LinuxParser(String swistart) {
+		this(swistart, ':');
+	}
+
+	public LinuxParser(String swistart, char variablesep) {
+		super();
+
+		if(swistart == null) {
+			throw new NullPointerException("Variable[swistart] - Is Null");
+		}
 
 		_SWITCH_START = swistart;
 		_VARIABLE_SEP = variablesep;
 	}
-    
-    public boolean parse(String args) {
-        if(args == null) {
-            throw new NullPointerException("Variable[args] - Is Null");
-        }
-        
-        final MyStringBuffer BUFFER = new MyStringBuffer(args.length());
 
-        for(IntByRef X = new IntByRef(0); X.value < args.length();) {
-            StringUtil.skipsWhiteSpaces(args, X);
+	public boolean parse(String args) {
+		if(args == null) {
+			throw new NullPointerException("Variable[args] - Is Null");
+		}
 
-            readCmdName(BUFFER, args, X);
-            
-            final String NAME = BUFFER.toString(true);
-            
-            final ACmdLineHandler.Cmd CMD = super.findCommand(NAME);
-            
-            if(CMD == null) {
-            	super.addCommand(NAME);
-            }
-        }
-        
-        return true;
+		final MyStringBuffer BUFFER = new MyStringBuffer(args.length());
+
+		for(IntByRef X = new IntByRef(0); X.value < args.length();) {
+			StringUtil.skipsWhiteSpaces(args, X);
+
+			readCmdName(BUFFER, args, X);
+
+			final String NAME = BUFFER.toString(true);
+
+			final ACmdLineHandler.Cmd CMD = super.findCommand(NAME);
+
+			if(CMD == null) {
+				super.addCommand(NAME);
+			}
+		}
+
+		return true;
 	}
-	
+
 	public boolean parse(String[] args) {
 		return parse(combine(args));
 	}
 
-   /**
-    * 
-    * @return swistart String Start Of SwitchArgument (ex. /)
-    */
+	/**
+	 * 
+	 * @return swistart String Start Of SwitchArgument (ex. /)
+	 */
 	public String getSwitchStart() {
 		return _SWITCH_START;
 	}
-	
-    private void readCmdName(MyStringBuffer cmdinfo, String args, IntByRef offset) {
+
+	private void readCmdName(MyStringBuffer cmdinfo, String args, IntByRef offset) {
 		boolean InQuotes = false;
 		for(; offset.value < args.length(); offset.value++) {
 			if(args.charAt(offset.value) == '"') {
@@ -93,50 +90,48 @@ public class LinuxParser extends ACmdLineHandler {
 					continue;
 				}
 			}
-			
+
 			cmdinfo.append(args.charAt(offset.value));
 		}
-    }
-    
-    public static String combine(String[] args) {
-        final MyStringBuffer BUFFER = new MyStringBuffer(8 * args.length);
-        
-        for(int X = 0; X < args.length; X++) {
-            BUFFER.append(args[X]);
-            BUFFER.append(' ');
-        }
-        
-        return BUFFER.toString();
-    }
-    
-    public static void main(String[] args) {
-        final String[][] TESTS = {
-            //Arg Start, Swt Start, Args
+	}
+
+	public static String combine(String[] args) {
+		final MyStringBuffer BUFFER = new MyStringBuffer(8 * args.length);
+
+		for(int X = 0; X < args.length; X++) {
+			BUFFER.append(args[X]);
+			BUFFER.append(' ');
+		}
+
+		return BUFFER.toString();
+	}
+
+	public static void main(String[] args) {
+		final String[][] TESTS = {
+				//Arg Start, Swt Start, Args
 //            new String[] {_DEFAULT_SWITCH_START_, "-open-server server1:localhost:1234"},
 //            new String[] {_DEFAULT_SWITCH_START_, "-open-server:server2:localhost:7777"},
-            new String[] {_DEFAULT_SWITCH_START_, "/cmd -file C:\\text 1.txt /gui -file \"C:\\text 2.txt\""},
-            new String[] {_DEFAULT_SWITCH_START_, "-overwrite \"C:\\text 1.txt\" \"C:\\text 2.txt\""}
-        };
+		new String[] {_DEFAULT_SWITCH_START_, "/cmd -file C:\\text 1.txt /gui -file \"C:\\text 2.txt\""}, new String[] {_DEFAULT_SWITCH_START_, "-overwrite \"C:\\text 1.txt\" \"C:\\text 2.txt\""}};
 
-        for(int X = 0; X < TESTS.length; X++) {
-            System.out.println("TEST " + X + " CommandLine[" + TESTS[X][1] + "]");
-            final ACmdLineHandler CMDLINE = new LinuxParser(TESTS[X][0]);
-            
-            CMDLINE.parse(TESTS[X][1]);
-            
-            for(int Y = 0; Y < CMDLINE.length(); Y++) {
-                final ACmdLineHandler.Cmd CMD = CMDLINE.getCommandAt(Y);
-                
-                System.out.println("    " + "Name: " + CMD.getName());
-                for(int Z = 0; Z < CMD.variableCount(); Z++) {
-                    System.out.println("        Var " + Z + ": " + CMD.getVariableAt(Z));
-                }
+		for(int X = 0; X < TESTS.length; X++) {
+			System.out.println("TEST " + X + " CommandLine[" + TESTS[X][1] + "]");
+			final ACmdLineHandler CMDLINE = new LinuxParser(TESTS[X][0]);
 
-                if(Y < (CMDLINE.length() - 1)) {
-                    System.out.println();
-                }
-            }
-            System.out.println();
-        }
+			CMDLINE.parse(TESTS[X][1]);
+
+			for(int Y = 0; Y < CMDLINE.length(); Y++) {
+				final ACmdLineHandler.Cmd CMD = CMDLINE.getCommandAt(Y);
+
+				System.out.println("    " + "Name: " + CMD.getName());
+				for(int Z = 0; Z < CMD.variableCount(); Z++) {
+					System.out.println("        Var " + Z + ": " + CMD.getVariableAt(Z));
+				}
+
+				if(Y < (CMDLINE.length() - 1)) {
+					System.out.println();
+				}
+			}
+			System.out.println();
+		}
 	}
 }

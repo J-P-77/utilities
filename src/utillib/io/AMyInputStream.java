@@ -17,22 +17,23 @@ import utillib.lang.unsigned.UnsignedShort;
 
 import java.io.IOException;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.0</b>
- *
+ * 
  * October 14, 2009 (version 1.0.0)
  *     -First Released
- *
+ * 
  * January 10, 2010 (version 1.0.1)
  *     -Added
  *         -Bit Ordering
- *
+ * 
  * January 2, 2011 (version 1.1.0)
  *     -Fixed Bug
  *         -Buffer Offset And Length Handling In Some Methods
- *
+ * 
  * <b>default ordering:</b> Little Endian
- *
+ * 
  * @author Justin Palinkas
  * 
  * </pre>
@@ -120,7 +121,7 @@ public abstract class AMyInputStream extends AInputStream implements IMyInputStr
 	}
 
 	/**
-	 *
+	 * 
 	 * @param line
 	 * @return true if a line has been read, false if not
 	 * @throws IOException
@@ -160,9 +161,7 @@ public abstract class AMyInputStream extends AInputStream implements IMyInputStr
 	}
 
 	/**
-	 * 0 = More Data
-	 * 1 = End Of Line
-	 * 2 = Error
+	 * 0 = More Data 1 = End Of Line 2 = Error
 	 * 
 	 * @param buffer
 	 * @param offset

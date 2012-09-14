@@ -10,19 +10,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 // 3780
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * Maps Classes To A Interface
- *
+ * 
  * You Might Be Able To Use This, Cause This Class Does Not Have Access To Classes Interclasses
  * Must Dollar Sign For InterClasses ex. beta.utillib.classloader.betav1.ClassWrapperBetav1$TestClass
- *
+ * 
  * August 17, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class InterfaceWrapper {
@@ -349,6 +350,7 @@ public class InterfaceWrapper {
 
 	/**
 	 * Gets Method Arguments Class Names
+	 * 
 	 * @param index
 	 * @return
 	 */
@@ -364,6 +366,7 @@ public class InterfaceWrapper {
 
 	/**
 	 * Gets Method Arguments Class Names
+	 * 
 	 * @param methodname
 	 * @param args
 	 * @return

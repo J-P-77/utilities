@@ -3,7 +3,7 @@ package utillib.collections;
 import utillib.interfaces.IProperty;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class DefaultProperty implements IProperty {

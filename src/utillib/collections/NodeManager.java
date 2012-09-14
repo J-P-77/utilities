@@ -11,7 +11,8 @@ public class NodeManager extends Node {
 
 	/**
 	 * 
-	 * @param key ex. root.sub1.sub1.propertyname
+	 * @param key
+	 *            ex. root.sub1.sub1.propertyname
 	 * @param defaultvalue
 	 * @return
 	 */

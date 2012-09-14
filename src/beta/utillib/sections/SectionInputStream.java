@@ -9,14 +9,15 @@ import java.io.InputStream;
 
 import java.util.regex.Matcher;
 
-/**<pre>
+/**
+ * <pre>
  * File Structure:
  * 
  * [NAME1]
  * Key1=Value
  * Key2=Value
  * Key3=Value
- *
+ * 
  * [NAME2]
  * Key1=Value
  * Key2=Value
@@ -24,18 +25,18 @@ import java.util.regex.Matcher;
  * 
  * 
  *  Example Read:
- *
+ * 
  *  SectionInputStream IStream = null;
  *  try {
  *      IStream = new SectionInputStream(new FileInputStream(null));
- *
+ * 
  *      Section Section = null;
  *      while((Section = IStream.readSection()) != null) {
  *          SectionProperty Prop = null;
  *          while((Prop = IStream.readProperty()) != null) {
  *              Section.addProperty(Prop);
  *          }
- *
+ * 
  *          //Add Section To A List Or Something
  *      }
  *  } catch (Exception e) {
@@ -48,170 +49,173 @@ import java.util.regex.Matcher;
  *          IStream = null;
  *      }
  *  }
- *
+ * 
  * </pre>
+ * 
  * @author Justin Palinkas
  */
 public class SectionInputStream extends InputStream implements SectionConstants {
-    private final String _COMMENT_START;
+	private final String _COMMENT_START;
 
-    private InputStream _IStream = null;
+	private InputStream _IStream = null;
 
-    private MyStringBuffer _LineBuffer = new MyStringBuffer();
-    private boolean _PreviousCharCR = false;
+	private MyStringBuffer _LineBuffer = new MyStringBuffer();
+	private boolean _PreviousCharCR = false;
 
-    public SectionInputStream(InputStream istream) {
-        this(istream, _DEFAULT_COMMENT_START_);
-    }
+	public SectionInputStream(InputStream istream) {
+		this(istream, _DEFAULT_COMMENT_START_);
+	}
 
-    public SectionInputStream(InputStream istream, String commentstart) {
-        _IStream = istream;
-        _COMMENT_START = commentstart;
-    }
+	public SectionInputStream(InputStream istream, String commentstart) {
+		_IStream = istream;
+		_COMMENT_START = commentstart;
+	}
 
-    @Override
-    public int read() throws IOException {
-        return _IStream.read();
-    }
+	@Override
+	public int read() throws IOException {
+		return _IStream.read();
+	}
 
-    @Override
-    public int read(byte[] b) throws IOException {
-        return _IStream.read(b);
-    }
+	@Override
+	public int read(byte[] b) throws IOException {
+		return _IStream.read(b);
+	}
 
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        return _IStream.read(b, off, len);
-    }
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException {
+		return _IStream.read(b, off, len);
+	}
 
-    @Override
-    public void close() throws IOException {
-        _IStream.close();
-    }
+	@Override
+	public void close() throws IOException {
+		_IStream.close();
+	}
 
-    @Override
-    public int available() throws IOException {
-        return _IStream.available();
-    }
+	@Override
+	public int available() throws IOException {
+		return _IStream.available();
+	}
 
-    public String getCommentLineStart() {
-        return _COMMENT_START;
-    }
+	public String getCommentLineStart() {
+		return _COMMENT_START;
+	}
 
-    public Section readSection() throws IOException {
-        return readSection(false);
-    }
+	public Section readSection() throws IOException {
+		return readSection(false);
+	}
 
-    public Section readSection(boolean autocase) throws IOException {
-        if(_LineBuffer.length() == 0) {
-            while(readln(_LineBuffer, true)) {
-                if(isBlankLine(_LineBuffer)) {
-                    continue;
-                } else if(isCommentLine(_LineBuffer)) {
-                    continue;
-                } else {
-                   break;
-                }
-            }
-        }
+	public Section readSection(boolean autocase) throws IOException {
+		if(_LineBuffer.length() == 0) {
+			while(readln(_LineBuffer, true)) {
+				if(isBlankLine(_LineBuffer)) {
+					continue;
+				} else if(isCommentLine(_LineBuffer)) {
+					continue;
+				} else {
+					break;
+				}
+			}
+		}
 
-        if(isSection(_LineBuffer)) {
-            //TODO (AutoCase - Auto Capitailizes The First Letter)
-            if(autocase) {
-                final String NAME = _LineBuffer.getSubString(1, _LineBuffer.length() - 1);
+		if(isSection(_LineBuffer)) {
+			//TODO (AutoCase - Auto Capitailizes The First Letter)
+			if(autocase) {
+				final String NAME = _LineBuffer.getSubString(1, _LineBuffer.length() - 1);
 
-                if(NAME.length() > 0) {
-                    return new Section(Character.toUpperCase(NAME.charAt(0)) + NAME.substring(1, NAME.length() - 1));
-                } else {
-                    return new Section(NAME);
-                }
-            } else {
-                return new Section(_LineBuffer.getSubString(1, _LineBuffer.length() - 1));
-            }
-        }
+				if(NAME.length() > 0) {
+					return new Section(Character.toUpperCase(NAME.charAt(0)) + NAME.substring(1, NAME.length() - 1));
+				} else {
+					return new Section(NAME);
+				}
+			} else {
+				return new Section(_LineBuffer.getSubString(1, _LineBuffer.length() - 1));
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public void readProperties(Section section) throws IOException {
-        while(readln(_LineBuffer, true)) {
-            if(isBlankLine(_LineBuffer)) {
-                continue;
-            } else if(isCommentLine(_LineBuffer)) {
-                continue;
-            } else if(isProperty(_LineBuffer)) {
-                section.addProperty(_LineBuffer.toString());
-                _LineBuffer.reset();
-            } else {
-                break;
-            }
-        }
-    }
+	public void readProperties(Section section) throws IOException {
+		while(readln(_LineBuffer, true)) {
+			if(isBlankLine(_LineBuffer)) {
+				continue;
+			} else if(isCommentLine(_LineBuffer)) {
+				continue;
+			} else if(isProperty(_LineBuffer)) {
+				section.addProperty(_LineBuffer.toString());
+				_LineBuffer.reset();
+			} else {
+				break;
+			}
+		}
+	}
 
-    public SectionProperty readSectionProperty() throws IOException {
-        while(readln(_LineBuffer, true)) {
-            if(isBlankLine(_LineBuffer)) {
-                continue;
-            } else if(isCommentLine(_LineBuffer)) {
-                continue;
-            } else if(isProperty(_LineBuffer)) {
-                final String[] SPLIT = _LineBuffer.toString().split("=", 2);
+	public SectionProperty readSectionProperty() throws IOException {
+		while(readln(_LineBuffer, true)) {
+			if(isBlankLine(_LineBuffer)) {
+				continue;
+			} else if(isCommentLine(_LineBuffer)) {
+				continue;
+			} else if(isProperty(_LineBuffer)) {
+				final String[] SPLIT = _LineBuffer.toString().split("=", 2);
 
-                return new SectionProperty(SPLIT[0], SPLIT[1]);
-            } else {
-                break;
-            }
-        }
+				return new SectionProperty(SPLIT[0], SPLIT[1]);
+			} else {
+				break;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private boolean readln(MyStringBuffer line, boolean reset) throws IOException {
-        if(reset) {_LineBuffer.reset();}
+	private boolean readln(MyStringBuffer line, boolean reset) throws IOException {
+		if(reset) {
+			_LineBuffer.reset();
+		}
 
-        int CurrentChar = -1;
-        //r = 13, n = 10 =  [\r and \n] or [\r] or [\n]
-        while((CurrentChar = _IStream.read()) != -1) {
-            if(CurrentChar == FileUtil._LF_) {//Unix or Windows
-                if(!_PreviousCharCR) {//Unix
-                    return true;
-                } else {
-                    continue;//Windows (Skip Character[\n])
-                }
-            }
+		int CurrentChar = -1;
+		//r = 13, n = 10 =  [\r and \n] or [\r] or [\n]
+		while((CurrentChar = _IStream.read()) != -1) {
+			if(CurrentChar == FileUtil._LF_) {//Unix or Windows
+				if(!_PreviousCharCR) {//Unix
+					return true;
+				} else {
+					continue;//Windows (Skip Character[\n])
+				}
+			}
 
-            if(CurrentChar == FileUtil._CR_) {//Mac
-                _PreviousCharCR = true;
-                return true;
-            } else {
-                _PreviousCharCR = false;
-            }
+			if(CurrentChar == FileUtil._CR_) {//Mac
+				_PreviousCharCR = true;
+				return true;
+			} else {
+				_PreviousCharCR = false;
+			}
 
-            line.append((char)CurrentChar);//PreviousCharCR = false;
-        }
+			line.append((char)CurrentChar);//PreviousCharCR = false;
+		}
 
-        return (line.length() > 0 ? true : false);
-    }
+		return (line.length() > 0 ? true : false);
+	}
 
-    private boolean isCommentLine(MyStringBuffer str) {
-        return str.startsWith(_COMMENT_START);
-    }
+	private boolean isCommentLine(MyStringBuffer str) {
+		return str.startsWith(_COMMENT_START);
+	}
 
-    private static boolean isBlankLine(MyStringBuffer str) {
+	private static boolean isBlankLine(MyStringBuffer str) {
 		return str.length() == 0;
-    }
+	}
 
-    private static boolean isProperty(MyStringBuffer str) {
-        final Matcher MATCHER = _PROPERTY_PATTERN_.matcher(str.toString());
+	private static boolean isProperty(MyStringBuffer str) {
+		final Matcher MATCHER = _PROPERTY_PATTERN_.matcher(str.toString());
 
-        return MATCHER.matches();
+		return MATCHER.matches();
 //        return str.contains('=');
-    }
+	}
 
-    private static boolean isSection(MyStringBuffer str) {
-        final Matcher MATCHER = _SECTION_PATTERN_.matcher(str.toString());
+	private static boolean isSection(MyStringBuffer str) {
+		final Matcher MATCHER = _SECTION_PATTERN_.matcher(str.toString());
 
-        return MATCHER.matches();
+		return MATCHER.matches();
 //        return str.startsWith('[') && str.endsWith(']');
-    }
+	}
 }

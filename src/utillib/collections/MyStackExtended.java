@@ -1,6 +1,7 @@
 package utillib.collections;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.4</b>
  * 
  * Version 1.0.0
@@ -30,50 +31,57 @@ package utillib.collections;
 @SuppressWarnings("unchecked")
 public class MyStackExtended<T> extends MyStack<T> {
 	/**
-	  * Simple Stack\Collection
-	  */
+	 * Simple Stack\Collection
+	 */
 	public MyStackExtended() {
 		super(1);
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStackExtended(T initialobject) {
 		super(initialobject, 1);
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * 
+	 */
 	public MyStackExtended(int initialcapacity) {
 		super(initialcapacity);
 	}
 
 	/**
-	  * Simple Stack\Collection
-	  * 
-	  * @param initialcapacity - (int) Sets Initial Capacity for Stack
-	  * @param initialobject - (T) Pushes Initial Object Into Stack
-	  *
-	  */
+	 * Simple Stack\Collection
+	 * 
+	 * @param initialcapacity
+	 *            - (int) Sets Initial Capacity for Stack
+	 * @param initialobject
+	 *            - (T) Pushes Initial Object Into Stack
+	 * 
+	 */
 	public MyStackExtended(T initialobject, int initialcapacity) {
 		super(initialobject, initialcapacity);
 	}
 
 	/**
-	  * Simple Stack\Collection (Used for Non-Growing Stack)
-	  * 
-	  * @param maxcapacity - (int) Sets Max Capacity for Stack
-	  * @param grow - (boolean) Sets Whether The Stack Will Grow (Used false for non-growing stack)
-	  *
-	  */
+	 * Simple Stack\Collection (Used for Non-Growing Stack)
+	 * 
+	 * @param maxcapacity
+	 *            - (int) Sets Max Capacity for Stack
+	 * @param grow
+	 *            - (boolean) Sets Whether The Stack Will Grow (Used false for
+	 *            non-growing stack)
+	 * 
+	 */
 	public MyStackExtended(int maxcapacity, boolean grow) {
 		super(maxcapacity, grow);
 	}

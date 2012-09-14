@@ -3,21 +3,23 @@ package utillib.exceptions.runtime;
 import java.io.File;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class FileRuntimeException extends RuntimeException {
-    private final File _FILE;
+	private final File _FILE;
 
-    public FileRuntimeException(File file) {
-        this("", file);
-    }
+	public FileRuntimeException(File file) {
+		this("", file);
+	}
 
-    public FileRuntimeException(String message, File file) {
-        super(message);
+	public FileRuntimeException(String message, File file) {
+		super(message);
 
-        _FILE = file;
-    }
+		_FILE = file;
+	}
 
-    public File getFile() {return _FILE;}
+	public File getFile() {
+		return _FILE;
+	}
 }

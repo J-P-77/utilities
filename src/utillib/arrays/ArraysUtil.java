@@ -1,6 +1,7 @@
 package utillib.arrays;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -13,112 +14,110 @@ package utillib.arrays;
 public class ArraysUtil {
 	public static <U> U[] add(U[] arr1, U[] arr2) {
 		Object[] Obj = new Object[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return (U[])Obj;
 	}
-	
+
 	public static byte[] add(byte[] arr1, byte[] arr2) {
 		byte[] Obj = new byte[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
-	
+
 	public static short[] add(short[] arr1, short[] arr2) {
 		short[] Obj = new short[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
-	
+
 	public static int[] add(int[] arr1, int[] arr2) {
 		int[] Obj = new int[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
 
 	public static long[] add(long[] arr1, long[] arr2) {
 		long[] Obj = new long[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
-	
+
 	public static float[] add(float[] arr1, float[] arr2) {
 		float[] Obj = new float[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
-	
+
 	public static double[] add(double[] arr1, double[] arr2) {
 		double[] Obj = new double[arr1.length + arr2.length];
-		
+
 		System.arraycopy(arr1, 0, Obj, 0, arr1.length);
-		System.arraycopy(arr2, 0, Obj,  arr1.length, arr2.length);
-		
+		System.arraycopy(arr2, 0, Obj, arr1.length, arr2.length);
+
 		return Obj;
 	}
 
 	public static <U> void add(U[] arr1, U[] arr2, U[] dest) {
 		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
-	}
-	
-	public static void add(byte[] arr1, byte[] arr2, byte[] dest) {	
-		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
-	}
-	
-	public static void add(short[] arr1, short[] arr2, short[] dest) {		
-		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
-	}
-	
-	public static void add(int[] arr1, int[] arr2, int[] dest) {
-		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
 	}
 
-	public static void add(long[] arr1, long[] arr2, long[] dest) {	
+	public static void add(byte[] arr1, byte[] arr2, byte[] dest) {
 		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
 	}
-	
+
+	public static void add(short[] arr1, short[] arr2, short[] dest) {
+		System.arraycopy(arr1, 0, dest, 0, arr1.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
+	}
+
+	public static void add(int[] arr1, int[] arr2, int[] dest) {
+		System.arraycopy(arr1, 0, dest, 0, arr1.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
+	}
+
+	public static void add(long[] arr1, long[] arr2, long[] dest) {
+		System.arraycopy(arr1, 0, dest, 0, arr1.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
+	}
+
 	public static void add(float[] arr1, float[] arr2, float[] dest) {
 		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
 	}
-	
-	public static void add(double[] arr1, double[] arr2, double[] dest) {		
+
+	public static void add(double[] arr1, double[] arr2, double[] dest) {
 		System.arraycopy(arr1, 0, dest, 0, arr1.length);
-		System.arraycopy(arr2, 0, dest,  arr1.length, arr2.length);
+		System.arraycopy(arr2, 0, dest, arr1.length, arr2.length);
 	}
-	
-    public static void checkBufferBounds(int bufferlength, int offset, int length) {
-    	if(bufferlength > 0) {//This Is Add Because If Buffer Length Is 0 The IndexOutOfBoundsException Is Thrown
-	    	if(offset < 0 || offset >= bufferlength ||
-	    			length < 0 || length > bufferlength ||
-	    			(offset + length) > bufferlength) {
-	
-	    		throw new IndexOutOfBoundsException();
-	    	}
-    	}
-    }
+
+	public static void checkBufferBounds(int bufferlength, int offset, int length) {
+		if(bufferlength > 0) {//This Is Add Because If Buffer Length Is 0 The IndexOutOfBoundsException Is Thrown
+			if(offset < 0 || offset >= bufferlength || length < 0 || length > bufferlength || (offset + length) > bufferlength) {
+
+				throw new IndexOutOfBoundsException();
+			}
+		}
+	}
 /*
 	public static void main(String[] args) {
 		Object[] I1 = {1,2,3,4,5};

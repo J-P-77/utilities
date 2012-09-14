@@ -1,6 +1,7 @@
 package utillib.strings;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.2</b>
  * 
  * May 07, 2009 (Version 1.0.0)
@@ -10,11 +11,11 @@ package utillib.strings;
  *     -Added
  *         -Method reverse (Reverses Character Buffer)
  *         -Method getReverse (returns A Reverse String)
- *
+ * 
  * February 08, 2010 (Version 1.0.2)
  *     -Fixed Bug
  *         -Constructor (String, int) (Would Not Append Size)
- *
+ * 
  * @author Justin Palinkas
  * 
  * </pre>
@@ -163,7 +164,9 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  index (int) value index number
+	 * 
+	 * @param index
+	 *            (int) value index number
 	 * @return returns character at index
 	 */
 	public char charAt(int index) {
@@ -176,8 +179,11 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  index (int) value index number
-	 * @param  c (char) character to be set
+	 * 
+	 * @param index
+	 *            (int) value index number
+	 * @param c
+	 *            (char) character to be set
 	 */
 	public void setCharAt(int index, char c) {
 		if((index < 0) || (index >= _Top)) {
@@ -197,7 +203,9 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  beginIndex (int) start of the substring
+	 * 
+	 * @param beginIndex
+	 *            (int) start of the substring
 	 * @return returns String from beginIndex to end
 	 */
 	public String getSubString(int beginIndex) {
@@ -206,8 +214,11 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  beginIndex (int) start of the substring
-	 * @param  endIndex (int) end of the substring
+	 * 
+	 * @param beginIndex
+	 *            (int) start of the substring
+	 * @param endIndex
+	 *            (int) end of the substring
 	 * @return returns String from beginIndex to endIndex
 	 */
 	public String getSubString(int beginIndex, int endIndex) {
@@ -233,7 +244,9 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  beginIndex (int) start of the substring
+	 * 
+	 * @param beginIndex
+	 *            (int) start of the substring
 	 */
 	public void substring(int beginIndex) {
 		substring(beginIndex, _Top, false);
@@ -245,9 +258,14 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  beginIndex (int) start of the substring
-	 * @param  endIndex (int) end of the substring
-	 * @param  resizebuffer (boolean) if true will Resize Internal Buffer to New Length(endIndex - beginIndex)
+	 * 
+	 * @param beginIndex
+	 *            (int) start of the substring
+	 * @param endIndex
+	 *            (int) end of the substring
+	 * @param resizebuffer
+	 *            (boolean) if true will Resize Internal Buffer to New
+	 *            Length(endIndex - beginIndex)
 	 */
 	public void substring(int beginindex, int endindex, boolean resizebuffer) {
 		if(beginindex < 0) {
@@ -288,9 +306,14 @@ public class MyStringBuffer implements Cloneable {
 //
 	/**
 	 * Help Information
-	 * @param  beginIndex (int) start of the substring
-	 * @param  endIndex (int) end of the substring
-	 * @param  appendcapacity (boolean) will Resize Internal Buffer to New Length(endIndex - beginIndex) plus appendcapacity
+	 * 
+	 * @param beginIndex
+	 *            (int) start of the substring
+	 * @param endIndex
+	 *            (int) end of the substring
+	 * @param appendcapacity
+	 *            (boolean) will Resize Internal Buffer to New Length(endIndex -
+	 *            beginIndex) plus appendcapacity
 	 */
 	public void substring(int beginIndex, int endIndex, int appendcapacity) {
 		if(beginIndex < 0) {
@@ -325,7 +348,9 @@ public class MyStringBuffer implements Cloneable {
 //
 	/**
 	 * Help Information
-	 * @param  ch (int) start searches for char at
+	 * 
+	 * @param ch
+	 *            (int) start searches for char at
 	 * @return returns first occurence of char
 	 */
 	public int indexOf(int ch) {
@@ -334,8 +359,11 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Help Information
-	 * @param  ch (int) start searches for char at
-	 * @param  fromIndex (int) start searches for At fromIndex for char
+	 * 
+	 * @param ch
+	 *            (int) start searches for char at
+	 * @param fromIndex
+	 *            (int) start searches for At fromIndex for char
 	 * @return returns fromindex occurence of char
 	 */
 	public int indexOf(int c, int fromindex) {
@@ -1352,6 +1380,7 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Lower Convert To Upper (ONLY ASCII)
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -1365,6 +1394,7 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Upper Convert To Lower (ONLY ASCII)
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -1378,6 +1408,7 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Lower Convert To Upper (ONLY ASCII)
+	 * 
 	 * @param c
 	 * @return
 	 */
@@ -1387,6 +1418,7 @@ public class MyStringBuffer implements Cloneable {
 
 	/**
 	 * Upper Convert To Lower (ONLY ASCII)
+	 * 
 	 * @param c
 	 * @return
 	 */

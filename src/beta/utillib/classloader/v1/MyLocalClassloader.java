@@ -9,14 +9,15 @@ import java.io.File;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * March 16, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public abstract class MyLocalClassloader extends MyClassloader implements ClassConstants {

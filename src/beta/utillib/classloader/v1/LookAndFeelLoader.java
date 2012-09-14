@@ -16,129 +16,129 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class LookAndFeelLoader implements LookAndFeels, ZipJarConstants {
-    private final ClassLoader _LAF_CLASS_LOADER;
-    private final String _CLASSNAME;
+	private final ClassLoader _LAF_CLASS_LOADER;
+	private final String _CLASSNAME;
 
-    private LookAndFeel _LookAndFeelInstance = null;;
+	private LookAndFeel _LookAndFeelInstance = null;;
 
-    /**
-     *
-     * @param ford Can Be A Jar/Zip File or Directory
-     * @param lookandfeelclassname
-     * @throws FileNotFoundException
-     * @throws NotAJarException
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public LookAndFeelLoader(File ford, String lookandfeelclassname) throws FileNotFoundException, InvalidFileTypeException, IOException, ClassNotFoundException {
-        if(ford == null) {
-            throw new RuntimeException("Variable[ford] - Is Null");
-        }
+	/**
+	 * 
+	 * @param ford
+	 *            Can Be A Jar/Zip File or Directory
+	 * @param lookandfeelclassname
+	 * @throws FileNotFoundException
+	 * @throws NotAJarException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public LookAndFeelLoader(File ford, String lookandfeelclassname) throws FileNotFoundException, InvalidFileTypeException, IOException, ClassNotFoundException {
+		if(ford == null) {
+			throw new RuntimeException("Variable[ford] - Is Null");
+		}
 
-        if(lookandfeelclassname == null) {
-            throw new RuntimeException("Variable[lookandfeelclassname] - Is Null");
-        }
+		if(lookandfeelclassname == null) {
+			throw new RuntimeException("Variable[lookandfeelclassname] - Is Null");
+		}
 
-        if(ford.isFile()) {
-        	if(!FileUtil.isFileType(ford, _JAR_MAGIC_NUMBER_)) {
-                throw new InvalidFileTypeException(ford.getPath() + " Is Not A Zip/Jar");
-            }
+		if(ford.isFile()) {
+			if(!FileUtil.isFileType(ford, _JAR_MAGIC_NUMBER_)) {
+				throw new InvalidFileTypeException(ford.getPath() + " Is Not A Zip/Jar");
+			}
 
-            _LAF_CLASS_LOADER = new JarClassLoader(ford);
-        } else {
-            _LAF_CLASS_LOADER = new DirectoryClassLoader(ford);
-        }
+			_LAF_CLASS_LOADER = new JarClassLoader(ford);
+		} else {
+			_LAF_CLASS_LOADER = new DirectoryClassLoader(ford);
+		}
 
-        _CLASSNAME = lookandfeelclassname;
+		_CLASSNAME = lookandfeelclassname;
 
-        final MyClassloader MY_LOADER = (MyClassloader)_LAF_CLASS_LOADER;
+		final MyClassloader MY_LOADER = (MyClassloader)_LAF_CLASS_LOADER;
 
-        MY_LOADER.addCloseShutdownHook();
+		MY_LOADER.addCloseShutdownHook();
 
-        if(!MY_LOADER.resourceExists(_CLASSNAME.replace('.', '/') + ".class")) {
-            throw new ClassNotFoundException("Look And Feel Class: " + lookandfeelclassname + " Not Found");
-        }
-    }
+		if(!MY_LOADER.resourceExists(_CLASSNAME.replace('.', '/') + ".class")) {
+			throw new ClassNotFoundException("Look And Feel Class: " + lookandfeelclassname + " Not Found");
+		}
+	}
 
-    public LookAndFeelLoader(ClassLoader classloader, String lookandfeelclassname) throws ClassNotFoundException {
-        if(classloader == null) {
-            throw new RuntimeException("Variable[jarfile] - Is Null");
-        }
+	public LookAndFeelLoader(ClassLoader classloader, String lookandfeelclassname) throws ClassNotFoundException {
+		if(classloader == null) {
+			throw new RuntimeException("Variable[jarfile] - Is Null");
+		}
 
-        if(lookandfeelclassname == null) {
-            throw new RuntimeException("Variable[lookandfeelclassname] - Is Null");
-        }
+		if(lookandfeelclassname == null) {
+			throw new RuntimeException("Variable[lookandfeelclassname] - Is Null");
+		}
 
-        _LAF_CLASS_LOADER = classloader;
-        _CLASSNAME = lookandfeelclassname;
+		_LAF_CLASS_LOADER = classloader;
+		_CLASSNAME = lookandfeelclassname;
 
-        if(_LAF_CLASS_LOADER instanceof MyClassloader) {
-            final MyClassloader MY_LOADER = (MyClassloader)_LAF_CLASS_LOADER;
+		if(_LAF_CLASS_LOADER instanceof MyClassloader) {
+			final MyClassloader MY_LOADER = (MyClassloader)_LAF_CLASS_LOADER;
 
-            MY_LOADER.addCloseShutdownHook();
+			MY_LOADER.addCloseShutdownHook();
 
-            if(!MY_LOADER.resourceExists(_CLASSNAME.replace('.', '/') + ".class")) {
-                throw new ClassNotFoundException("Look And Feel Class: " + lookandfeelclassname + " Not Found");
-            }
-        } else {
-            _LAF_CLASS_LOADER.loadClass(_CLASSNAME);
-        }
-    }
+			if(!MY_LOADER.resourceExists(_CLASSNAME.replace('.', '/') + ".class")) {
+				throw new ClassNotFoundException("Look And Feel Class: " + lookandfeelclassname + " Not Found");
+			}
+		} else {
+			_LAF_CLASS_LOADER.loadClass(_CLASSNAME);
+		}
+	}
 
-    public void revertToDefaultLookAndFeel() throws IllegalAccessException, InstantiationException, ClassNotFoundException, UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-    }
+	public void revertToDefaultLookAndFeel() throws IllegalAccessException, InstantiationException, ClassNotFoundException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+	}
 
-    public void setAsLookAndFeel() throws LookAndFeelNotFoundException, 
-            ClassLoaderNotFoundException, UnsupportedLookAndFeelException {
+	public void setAsLookAndFeel() throws LookAndFeelNotFoundException, ClassLoaderNotFoundException, UnsupportedLookAndFeelException {
 
-        final LookAndFeel L_A_F = getLookAndFeel();
+		final LookAndFeel L_A_F = getLookAndFeel();
 
-        if(L_A_F == null) {//LookAndFeelNotFound
-            throw new LookAndFeelNotFoundException("Look And Feel Not Found");
-        } else {
-            final ClassLoader CLASSLOADER = getClassLoader();
+		if(L_A_F == null) {//LookAndFeelNotFound
+			throw new LookAndFeelNotFoundException("Look And Feel Not Found");
+		} else {
+			final ClassLoader CLASSLOADER = getClassLoader();
 
-            if(CLASSLOADER == null) {
-                throw new ClassLoaderNotFoundException("Look And Feel ClassLoader Not Found");
-            } else {
-                UIManager.getDefaults().put("ClassLoader", CLASSLOADER);
-                UIManager.setLookAndFeel(getLookAndFeel());
-            }
-        }
-    }
+			if(CLASSLOADER == null) {
+				throw new ClassLoaderNotFoundException("Look And Feel ClassLoader Not Found");
+			} else {
+				UIManager.getDefaults().put("ClassLoader", CLASSLOADER);
+				UIManager.setLookAndFeel(getLookAndFeel());
+			}
+		}
+	}
 
-    public ClassLoader getClassLoader() {
-        return _LAF_CLASS_LOADER;
-    }
+	public ClassLoader getClassLoader() {
+		return _LAF_CLASS_LOADER;
+	}
 
-    public LookAndFeel getLookAndFeel() {
-        if(_LookAndFeelInstance == null) {
-            if(isLoaded()) {
-                try {
-                    final Class<?> CLASS = _LAF_CLASS_LOADER.loadClass(_CLASSNAME);
+	public LookAndFeel getLookAndFeel() {
+		if(_LookAndFeelInstance == null) {
+			if(isLoaded()) {
+				try {
+					final Class<?> CLASS = _LAF_CLASS_LOADER.loadClass(_CLASSNAME);
 
-                    if(CLASS != null) {
-                        return (_LookAndFeelInstance = (LookAndFeel)CLASS.newInstance());
-                    }
-                } catch (Exception e) {}
-            }
+					if(CLASS != null) {
+						return (_LookAndFeelInstance = (LookAndFeel)CLASS.newInstance());
+					}
+				} catch(Exception e) {}
+			}
 
-            return null;
-        } else {
-            return _LookAndFeelInstance;
-        }
-    }
+			return null;
+		} else {
+			return _LookAndFeelInstance;
+		}
+	}
 
-    public boolean isLoaded() {
-        return (_LAF_CLASS_LOADER != null);
-    }
+	public boolean isLoaded() {
+		return (_LAF_CLASS_LOADER != null);
+	}
 
-    public static LookAndFeelLoader getGTKLoader(File jarfile) throws Exception {
-        return new LookAndFeelLoader(jarfile, _GTK_LOOK_AND_FEEL_);
-    }
+	public static LookAndFeelLoader getGTKLoader(File jarfile) throws Exception {
+		return new LookAndFeelLoader(jarfile, _GTK_LOOK_AND_FEEL_);
+	}
 }

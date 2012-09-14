@@ -23,7 +23,7 @@ import java.net.UnknownHostException;
  * </pre>
  */
 //XXX: This Class Might Have Some Blocking Problems
-public abstract class ASimpleDatagramSocketServerv1 extends ASimpleServer {
+public abstract class ASimpleDatagramSocketServer extends ASimpleServer {
 	public static final int _OPTION_SENDBUFFERSIZE_ = 3;
 	public static final int _OPTION_BROADCAST_ = 4;
 	public static final int _OPTION_PACKETSIZE_ = 5;
@@ -42,27 +42,27 @@ public abstract class ASimpleDatagramSocketServerv1 extends ASimpleServer {
 
 	private int _Packet_Size = 1024;
 
-	public ASimpleDatagramSocketServerv1() {
+	public ASimpleDatagramSocketServer() {
 		super("UDP-Server");
 	}
 
-	public ASimpleDatagramSocketServerv1(int port) throws IOException {
+	public ASimpleDatagramSocketServer(int port) throws IOException {
 		this("UDP-Server", NetUtil.getLoopbackAddress(), port, 0);
 	}
 
-	public ASimpleDatagramSocketServerv1(String address, int port) throws UnknownHostException, IOException {
+	public ASimpleDatagramSocketServer(String address, int port) throws UnknownHostException, IOException {
 		this("UDP-Server", InetAddress.getByName(address), port, 0);
 	}
 
-	public ASimpleDatagramSocketServerv1(String address, int port, int maxconnection) throws UnknownHostException, IOException {
+	public ASimpleDatagramSocketServer(String address, int port, int maxconnection) throws UnknownHostException, IOException {
 		this("UDP-Server", InetAddress.getByName(address), port, maxconnection);
 	}
 
-	public ASimpleDatagramSocketServerv1(InetAddress address, int port) throws IOException {
+	public ASimpleDatagramSocketServer(InetAddress address, int port) throws IOException {
 		this("UDP-Server", address, port, 0);
 	}
 
-	public ASimpleDatagramSocketServerv1(String name, InetAddress address, int port, int maxconnection) throws IOException {
+	public ASimpleDatagramSocketServer(String name, InetAddress address, int port, int maxconnection) throws IOException {
 		super(name);
 
 		if(!NetUtil.validPort(port)) {
@@ -72,7 +72,7 @@ public abstract class ASimpleDatagramSocketServerv1 extends ASimpleServer {
 		bind(address, port);
 	}
 
-	public ASimpleDatagramSocketServerv1(String name, DatagramSocket serversocket, int maxconnection) throws IOException {
+	public ASimpleDatagramSocketServer(String name, DatagramSocket serversocket, int maxconnection) throws IOException {
 		super(name);
 
 		setServerSocket(serversocket);
@@ -323,5 +323,6 @@ public abstract class ASimpleDatagramSocketServerv1 extends ASimpleServer {
 	}
 
 	public abstract boolean acceptPacket(DatagramPacket packet);
+
 	public abstract void handlePacket(DatagramPacket packet);
 }

@@ -1,6 +1,7 @@
 package beta.utillib.sections;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -11,37 +12,38 @@ package beta.utillib.sections;
  * </pre>
  */
 public class SectionProperty implements SectionConstants {
-    private final String _COMMENT_START;
+	private final String _COMMENT_START;
 
-    private String _Name  = "";
-    private String _Variable = "";
+	private String _Name = "";
+	private String _Variable = "";
 
-    public SectionProperty() {
-        this("", "", _DEFAULT_COMMENT_START_);
-    }
+	public SectionProperty() {
+		this("", "", _DEFAULT_COMMENT_START_);
+	}
 
-    public SectionProperty(String name, String variable) {
-        this(name, variable, _DEFAULT_COMMENT_START_);
-    }
+	public SectionProperty(String name, String variable) {
+		this(name, variable, _DEFAULT_COMMENT_START_);
+	}
 
-    public SectionProperty(String name, String variable, String commentstart) {
-        if(name == null) {
-            throw new RuntimeException("Variable[name] - Is Null");
-        }
+	public SectionProperty(String name, String variable, String commentstart) {
+		if(name == null) {
+			throw new RuntimeException("Variable[name] - Is Null");
+		}
 
-        if(variable == null) {
-            throw new RuntimeException("Variable[variable] - Is Null");
-        }
+		if(variable == null) {
+			throw new RuntimeException("Variable[variable] - Is Null");
+		}
 
-        if(commentstart == null) {
-            throw new RuntimeException("Variable[commentstart] - Is Null");
-        }
+		if(commentstart == null) {
+			throw new RuntimeException("Variable[commentstart] - Is Null");
+		}
 
-        _Name =  name;
-        _Variable = variable;
+		_Name = name;
+		_Variable = variable;
 
-        _COMMENT_START = commentstart;
-    }
+		_COMMENT_START = commentstart;
+	}
+
 /*
     public SectionProperty(String argument, String commentstart) {
         if(argument == null) {
@@ -59,32 +61,32 @@ public class SectionProperty implements SectionConstants {
         _COMMENT_START = commentstart;
     }
 */
-    public void setName(String name) {
-        _Name = (name == null ? "" : name);
-    }
-    
-    public String getName() {
-        return _Name;
-    }
-    
-    public void setVariable(String variable) {
-        _Variable = (variable == null ? "" : variable);
-    }
-    
-    public String getVariable() {
-        return _Variable;
-    }
-    
-    public boolean isComment() {
-        return _Name.startsWith(_COMMENT_START);
-    }
-    
-    @Override
-    public String toString() {
-        if(isComment()) {//Comment
-            return _Name + _Variable;
-        } else {//Non Comment
-            return _Name + '=' + _Variable;
-        }
-    }
+	public void setName(String name) {
+		_Name = (name == null ? "" : name);
+	}
+
+	public String getName() {
+		return _Name;
+	}
+
+	public void setVariable(String variable) {
+		_Variable = (variable == null ? "" : variable);
+	}
+
+	public String getVariable() {
+		return _Variable;
+	}
+
+	public boolean isComment() {
+		return _Name.startsWith(_COMMENT_START);
+	}
+
+	@Override
+	public String toString() {
+		if(isComment()) {//Comment
+			return _Name + _Variable;
+		} else {//Non Comment
+			return _Name + '=' + _Variable;
+		}
+	}
 }

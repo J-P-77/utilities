@@ -24,7 +24,8 @@ import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -242,7 +243,8 @@ public class FileUtil implements User {
 
 	/**
 	 * 
-	 * @param If path2 Endswith File Separator It Will Be Removed
+	 * @param If
+	 *            path2 Endswith File Separator It Will Be Removed
 	 * @return path1 Plus path2 Combined
 	 */
 	public static String combineTwoPaths(String path1, String path2) {
@@ -251,7 +253,8 @@ public class FileUtil implements User {
 
 	/**
 	 * 
-	 * @param If path2 Endswith File Separator It Will Be Removed
+	 * @param If
+	 *            path2 Endswith File Separator It Will Be Removed
 	 * @return path1 Plus path2 Combined
 	 */
 	public static String combineTwoPaths(String path1, String path2, String separator) {
@@ -386,8 +389,9 @@ public class FileUtil implements User {
 	}
 
 	/**
-	 *
-	 * @param drive If Endswith File Separator It Will Be Removed
+	 * 
+	 * @param drive
+	 *            If Endswith File Separator It Will Be Removed
 	 * @return Application Path Plus path Combined
 	 */
 	@Deprecated
@@ -737,11 +741,14 @@ public class FileUtil implements User {
 	}
 
 	/**
-	 *
-	 * @param istream Stream To Read From
-	 * @param header headerbytes
+	 * 
+	 * @param istream
+	 *            Stream To Read From
+	 * @param header
+	 *            headerbytes
 	 * @param offset
-	 * @param length Length Of Header Bytes
+	 * @param length
+	 *            Length Of Header Bytes
 	 * @return
 	 */
 	public static boolean isFileType(InputStream istream, byte[] header, int offset, int length) {

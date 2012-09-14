@@ -4,7 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -20,11 +21,11 @@ public class MaxLengthTextField extends JTextField {
 	public MaxLengthTextField() {
 		this(-1);
 	}
-	
+
 	public MaxLengthTextField(String text) {
 		this(text, -1);
 	}
-	
+
 	public MaxLengthTextField(int maxlength) {
 		this("", maxlength);
 	}
@@ -33,6 +34,7 @@ public class MaxLengthTextField extends JTextField {
 		setMaxLength(maxlength);
 		this.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent kevent) {}
+
 			public void keyReleased(KeyEvent kevent) {}
 
 			public void keyTyped(KeyEvent kevent) {
@@ -40,7 +42,7 @@ public class MaxLengthTextField extends JTextField {
 			}
 		});
 	}
-	
+
 	private void thiskeyTyped(KeyEvent kevent) {
 		String Str = super.getSelectedText();
 
@@ -58,17 +60,17 @@ public class MaxLengthTextField extends JTextField {
 		} else {
 			if(str.length() > _MaxLength) {
 				super.setText(str.substring(0, _MaxLength));
-			} else {		
+			} else {
 				super.setText(str);
 			}
 		}
 	}
-	
+
 	public void append(char c) {
 		String OldText = super.getText();
 		setText(OldText + c);
 	}
-	
+
 	public void append(String str) {
 		String OldText = super.getText();
 		setText(OldText + str);
@@ -77,7 +79,7 @@ public class MaxLengthTextField extends JTextField {
 	public void setMaxLength(int value) {
 		_MaxLength = value;
 	}
-    
+
 	public int getMaxLength() {
 		return _MaxLength;
 	}

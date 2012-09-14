@@ -1,15 +1,15 @@
 package utillib.exceptions;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class NullPointerException extends Exception {
-    public NullPointerException() {
-        super();
-    }
-    
-    public NullPointerException(String message) {
-        super(message);
-    }
+	public NullPointerException() {
+		super();
+	}
+
+	public NullPointerException(String message) {
+		super(message);
+	}
 }

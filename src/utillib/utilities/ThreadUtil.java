@@ -2,14 +2,15 @@ package utillib.utilities;
 
 import java.lang.Thread.State;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * May 05, 2009 (Version 1.0.0)
  *     -First Released
  * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class ThreadUtil {
@@ -17,7 +18,9 @@ public class ThreadUtil {
 
 	/**
 	 * Creates New Thread.
-	 * @param  name Name Of Thread
+	 * 
+	 * @param name
+	 *            Name Of Thread
 	 * @return new thread
 	 */
 	public static Thread create(String name) {
@@ -26,7 +29,9 @@ public class ThreadUtil {
 
 	/**
 	 * Creates New Thread.
-	 * @param  target implements Runnable target
+	 * 
+	 * @param target
+	 *            implements Runnable target
 	 * @return new thread
 	 */
 	public static Thread create(Runnable target) {
@@ -35,8 +40,11 @@ public class ThreadUtil {
 
 	/**
 	 * Creates New Thread.
-	 * @param  name Name Of Thread
-	 * @param  target implements Runnable target
+	 * 
+	 * @param name
+	 *            Name Of Thread
+	 * @param target
+	 *            implements Runnable target
 	 * @return new thread
 	 */
 	public static Thread create(String name, Runnable target) {
@@ -45,7 +53,9 @@ public class ThreadUtil {
 
 	/**
 	 * Pauses Thread.
-	 * @param  millis time for thread to sleep
+	 * 
+	 * @param millis
+	 *            time for thread to sleep
 	 * @return true if sleep was successful, false if failed
 	 */
 	public static boolean sleep(int millis) {
@@ -60,8 +70,11 @@ public class ThreadUtil {
 
 	/**
 	 * Pauses Thread.
-	 * @param  millis millis seconds for thread to sleep
-	 * @param  nanos nano seconds for thread to sleep
+	 * 
+	 * @param millis
+	 *            millis seconds for thread to sleep
+	 * @param nanos
+	 *            nano seconds for thread to sleep
 	 * @return true if sleep was successful, false if failed
 	 */
 	public static boolean sleep(long millis, int nanos) {
@@ -76,7 +89,9 @@ public class ThreadUtil {
 
 	/**
 	 * Waits For Thread To Die.
-	 * @param  thread thread to join
+	 * 
+	 * @param thread
+	 *            thread to join
 	 * @return true if join was successful, false if failed
 	 */
 	public static boolean join(Thread thread) {
@@ -91,8 +106,12 @@ public class ThreadUtil {
 
 	/**
 	 * Waits For Thread To Die.
-	 * @param  thread thread to join
-	 * @param  millis Waits at most millis milliseconds for this thread to die. A timeout of 0 means to wait forever.
+	 * 
+	 * @param thread
+	 *            thread to join
+	 * @param millis
+	 *            Waits at most millis milliseconds for this thread to die. A
+	 *            timeout of 0 means to wait forever.
 	 * @return true if join was successful, false if failed
 	 */
 	public static boolean join(Thread thread, int millis) {
@@ -107,9 +126,14 @@ public class ThreadUtil {
 
 	/**
 	 * Waits For Thread To Die.
-	 * @param  thread thread to join
-	 * @param  millis Waits at most millis milliseconds for this thread to die. A timeout of 0 means to wait forever.
-	 * @param  nanos nano seconds for thread to sleep
+	 * 
+	 * @param thread
+	 *            thread to join
+	 * @param millis
+	 *            Waits at most millis milliseconds for this thread to die. A
+	 *            timeout of 0 means to wait forever.
+	 * @param nanos
+	 *            nano seconds for thread to sleep
 	 * @return true if join was successful, false if failed
 	 */
 	public static boolean join(Thread thread, long millis, int nanos) {
@@ -123,8 +147,11 @@ public class ThreadUtil {
 	}
 
 	/**
-	 * Waits For Thread To Die. If Thread Was Not Started Method Will Start Thread.
-	 * @param  thread to wait on
+	 * Waits For Thread To Die. If Thread Was Not Started Method Will Start
+	 * Thread.
+	 * 
+	 * @param thread
+	 *            to wait on
 	 * @return true if wait was successful, false if failed
 	 */
 	public static boolean wait(Thread thread) {
@@ -153,6 +180,7 @@ public class ThreadUtil {
 
 	/**
 	 * Gets Last Thread Error.
+	 * 
 	 * @return last thread error Exception
 	 */
 	public static Exception getLastError() {

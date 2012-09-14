@@ -15,7 +15,8 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -27,46 +28,47 @@ import java.util.zip.ZipOutputStream;
  */
 @Deprecated
 public class Zip {
-    @Deprecated
-    public static void decompressZipFile(String filename) {
-        decompressZipFile(filename,"");
-    }
-    @Deprecated
-    public static void decompressZipFile(String filename, String todirectory) {      
-        if(filename == null) {
-            throw new NullPointerException("filename");
-        } else if(!new File(filename).exists()) {
-            printOut("File: " + filename + "Does Not Exists");
-        } else if(!isExtension(filename,".zip")) {
-            printOut("File: " + filename + "Is Not A Zip File");
-        } else if(todirectory == null) {
-            decompressZipFile(filename, "");
-        } else {            
-            ZipFile FileZip = null;
-            int Counter = 1;
-            try {
-                FileZip = new ZipFile(filename);
-                printOut("Number of Entries: " + Integer.toString(FileZip.size()));
+	@Deprecated
+	public static void decompressZipFile(String filename) {
+		decompressZipFile(filename, "");
+	}
 
-                Enumeration Entries = FileZip.entries();
+	@Deprecated
+	public static void decompressZipFile(String filename, String todirectory) {
+		if(filename == null) {
+			throw new NullPointerException("filename");
+		} else if(!new File(filename).exists()) {
+			printOut("File: " + filename + "Does Not Exists");
+		} else if(!isExtension(filename, ".zip")) {
+			printOut("File: " + filename + "Is Not A Zip File");
+		} else if(todirectory == null) {
+			decompressZipFile(filename, "");
+		} else {
+			ZipFile FileZip = null;
+			int Counter = 1;
+			try {
+				FileZip = new ZipFile(filename);
+				printOut("Number of Entries: " + Integer.toString(FileZip.size()));
 
-                while(Entries.hasMoreElements()) {
-                    ZipEntry Entry = (ZipEntry)Entries.nextElement();
+				Enumeration Entries = FileZip.entries();
 
-                    String EntryName = reformatEntryName(Entry);
-                    printEntry(Counter, Entry, EntryName);
+				while(Entries.hasMoreElements()) {
+					ZipEntry Entry = (ZipEntry)Entries.nextElement();
 
-                    if(Entry.isDirectory()) {
-                        createDirectory(EntryName);
-                    } else {
-                        writeFile(FileZip.getInputStream(Entry),todirectory + EntryName);
-                    }
+					String EntryName = reformatEntryName(Entry);
+					printEntry(Counter, Entry, EntryName);
 
-                    Counter++;
+					if(Entry.isDirectory()) {
+						createDirectory(EntryName);
+					} else {
+						writeFile(FileZip.getInputStream(Entry), todirectory + EntryName);
+					}
+
+					Counter++;
 				}
-            } catch (ZipException e) {
+			} catch(ZipException e) {
 				printOut(e.getMessage());
-            } catch (Exception e) {
+			} catch(Exception e) {
 				printOut(e.toString());
 			} finally {
 				try {
@@ -74,120 +76,146 @@ public class Zip {
 						FileZip.close();
 						FileZip = null;
 					}
-				} catch (Exception ex) {
+				} catch(Exception ex) {
 					printOut(ex.toString());
 				}
 			}
-        }
-    }
-    
-    private static void writeFile(InputStream istream, String filename) {
-        if(istream == null) {
-            throw new NullPointerException("istream");
-        } else if(filename == null) {
-            throw new NullPointerException("filename");
-        } else {
-            //READER
-            BufferedInputStream bInput = null;
-            //WRITER
-            FileOutputStream wFile = null;
-            BufferedOutputStream bOutput = null;
+		}
+	}
 
-           try {
-                //READ FROM SOURCE
-                bInput = new BufferedInputStream(istream);
-                //WRITE TO TARGET
-                wFile = new FileOutputStream(filename);
-                bOutput = new BufferedOutputStream(wFile);
+	private static void writeFile(InputStream istream, String filename) {
+		if(istream == null) {
+			throw new NullPointerException("istream");
+		} else if(filename == null) {
+			throw new NullPointerException("filename");
+		} else {
+			//READER
+			BufferedInputStream bInput = null;
+			//WRITER
+			FileOutputStream wFile = null;
+			BufferedOutputStream bOutput = null;
 
-                int B = 0;
-                while((B = bInput.read()) != -1) {
-                    bOutput.write(B);
-                }
-                //CLEAR'S WRITE STREAM BUFFER
-                bOutput.flush();
+			try {
+				//READ FROM SOURCE
+				bInput = new BufferedInputStream(istream);
+				//WRITE TO TARGET
+				wFile = new FileOutputStream(filename);
+				bOutput = new BufferedOutputStream(wFile);
 
-            } catch (Exception e) {         
-                printOut(e.toString());
-            } finally {
-                //CLOSE SOURCE STREAM
-                if(istream != null) {try {istream.close();} catch (Exception e) {System.out.println("InputStream ERROR");}}
-                if(bInput != null) {try {bInput.close();} catch (Exception e) {System.out.println("BufferedInputStream ERROR");}}
-                //CLOSE TARGET FILE
-                if(wFile != null) {try {wFile.close();} catch (Exception e) {System.out.println("FileOutputStream ERROR");}}
-                if(bOutput != null) {try {bOutput.close();} catch (Exception e) {System.out.println("BufferedOutputStream ERROR");}}
-            }  
-        }
-    }
-    
-    private static boolean isExtension(String filename, String ext) {
-       return filename.endsWith(ext);
-    }
-    
-    private static void createDirectory(String directory) {
-        File Folder = new File(directory);
-        
-        if(!Folder.exists()) {
+				int B = 0;
+				while((B = bInput.read()) != -1) {
+					bOutput.write(B);
+				}
+				//CLEAR'S WRITE STREAM BUFFER
+				bOutput.flush();
+
+			} catch(Exception e) {
+				printOut(e.toString());
+			} finally {
+				//CLOSE SOURCE STREAM
+				if(istream != null) {
+					try {
+						istream.close();
+					} catch(Exception e) {
+						System.out.println("InputStream ERROR");
+					}
+				}
+				if(bInput != null) {
+					try {
+						bInput.close();
+					} catch(Exception e) {
+						System.out.println("BufferedInputStream ERROR");
+					}
+				}
+				//CLOSE TARGET FILE
+				if(wFile != null) {
+					try {
+						wFile.close();
+					} catch(Exception e) {
+						System.out.println("FileOutputStream ERROR");
+					}
+				}
+				if(bOutput != null) {
+					try {
+						bOutput.close();
+					} catch(Exception e) {
+						System.out.println("BufferedOutputStream ERROR");
+					}
+				}
+			}
+		}
+	}
+
+	private static boolean isExtension(String filename, String ext) {
+		return filename.endsWith(ext);
+	}
+
+	private static void createDirectory(String directory) {
+		File Folder = new File(directory);
+
+		if(!Folder.exists()) {
 			Folder.mkdir();
 		}
-    }
-   
-    private static void printOut(String msg) {
-         System.out.println(msg);
-    }
-    
-    private static void printEntry(int Counter, ZipEntry entry) {       
-        printEntry(Counter, entry, reformatEntryName(entry));
-    }
-    
-    private static void printEntry(int Counter, ZipEntry entry, String entryname) {       
-        printOut("Entry " + "Number: " + Integer.toString(Counter));
-        printOut("      " + "Name:   " + entryname);
-        if(!entry.isDirectory()) {
-            printOut("      " + "Size:   " + entry.getSize());
-        }
-    }
-    
-    private static String reformatEntryName(ZipEntry entry) {
-        StringBuffer Buffer = new StringBuffer(entry.getName());
-        int Index = 0;
-        
-        while(Index != -1) {
-            Index = Buffer.indexOf("/", Index);
-            
-            if(Index == -1) {break;}
+	}
 
-            Buffer.replace(Index,Index + FileUtil._S_.length(), FileUtil._S_);
-        }
-        
-        return Buffer.toString();
-    }
+	private static void printOut(String msg) {
+		System.out.println(msg);
+	}
 
-    @Deprecated
-    public static void compressZipFile(File[] files, String toFile) {  
-        if(files == null) {
-            throw new NullPointerException("files");
-        } else if(!isExtension(toFile,".zip")) {
-            printOut("File: " + toFile + "Is Not A Zip File");
-        } else if(toFile == null || toFile.equals("")) {
-            compressZipFile(files,"Temp Name.zip");
-        } else {       
-            ZipOutputStream FileZip = null;
-            FileOutputStream oStream = null;
+	private static void printEntry(int Counter, ZipEntry entry) {
+		printEntry(Counter, entry, reformatEntryName(entry));
+	}
 
-            try {
-                oStream = new FileOutputStream(toFile);
-                FileZip = new ZipOutputStream(oStream);
-				
-                for(int X = 0; X < files.length; X++) {    
-                    ZipEntry Entry = new ZipEntry(files[X].getName());
-                    
-                    FileZip.putNextEntry(Entry);
-                    FileZip.write(getBytes(files[X]));
-                }
-            } catch (ZipException e) {
+	private static void printEntry(int Counter, ZipEntry entry, String entryname) {
+		printOut("Entry " + "Number: " + Integer.toString(Counter));
+		printOut("      " + "Name:   " + entryname);
+		if(!entry.isDirectory()) {
+			printOut("      " + "Size:   " + entry.getSize());
+		}
+	}
+
+	private static String reformatEntryName(ZipEntry entry) {
+		StringBuffer Buffer = new StringBuffer(entry.getName());
+		int Index = 0;
+
+		while(Index != -1) {
+			Index = Buffer.indexOf("/", Index);
+
+			if(Index == -1) {
+				break;
+			}
+
+			Buffer.replace(Index, Index + FileUtil._S_.length(), FileUtil._S_);
+		}
+
+		return Buffer.toString();
+	}
+
+	@Deprecated
+	public static void compressZipFile(File[] files, String toFile) {
+		if(files == null) {
+			throw new NullPointerException("files");
+		} else if(!isExtension(toFile, ".zip")) {
+			printOut("File: " + toFile + "Is Not A Zip File");
+		} else if(toFile == null || toFile.equals("")) {
+			compressZipFile(files, "Temp Name.zip");
+		} else {
+			ZipOutputStream FileZip = null;
+			FileOutputStream oStream = null;
+
+			try {
+				oStream = new FileOutputStream(toFile);
+				FileZip = new ZipOutputStream(oStream);
+
+				for(int X = 0; X < files.length; X++) {
+					ZipEntry Entry = new ZipEntry(files[X].getName());
+
+					FileZip.putNextEntry(Entry);
+					FileZip.write(getBytes(files[X]));
+				}
+			} catch(ZipException e) {
 				printOut(e.getMessage());
-            } catch (Exception e) {
+			} catch(Exception e) {
 				printOut(e.toString());
 			} finally {
 				try {
@@ -195,28 +223,28 @@ public class Zip {
 						FileZip.close();
 						FileZip = null;
 					}
-				} catch (Exception ex) {
+				} catch(Exception ex) {
 					printOut(ex.toString());
 				}
 			}
-        }
-    }
-    
-    private static byte[] getBytes(File file) {
-        FileInputStream rFile = null;
-        byte[] Bytes = null;
+		}
+	}
 
-        try {
-            rFile = new FileInputStream(file);
-            Bytes = new byte[(int)file.length()];
+	private static byte[] getBytes(File file) {
+		FileInputStream rFile = null;
+		byte[] Bytes = null;
 
-            rFile.read(Bytes);
+		try {
+			rFile = new FileInputStream(file);
+			Bytes = new byte[(int)file.length()];
 
-            rFile.close();
-        } catch (Exception e) {}
+			rFile.read(Bytes);
 
-        return Bytes;
-    }
+			rFile.close();
+		} catch(Exception e) {}
+
+		return Bytes;
+	}
 /*
     public static void main(String[] args) {
         String FileName = "C:\\Documents and Settings\\Dalton Dell\\Desktop\\Justin's\\Java\\Projects\\Tests\\";

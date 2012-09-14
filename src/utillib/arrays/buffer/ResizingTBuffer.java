@@ -2,14 +2,15 @@ package utillib.arrays.buffer;
 
 import utillib.arrays.ArraysUtil;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * November 22, 2011 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 @SuppressWarnings("unchecked")
@@ -76,15 +77,15 @@ public class ResizingTBuffer<T> {
 
 	public T[] get(int length) {
 //		synchronized(__LOCK__) {
-			if(length < 0) {
-				throw new RuntimeException("Variable[length] - Must Be Greater Than Zero");
-			}
+		if(length < 0) {
+			throw new RuntimeException("Variable[length] - Must Be Greater Than Zero");
+		}
 
-			final Object[] TEMP = new Object[length];
+		final Object[] TEMP = new Object[length];
 
-			get((T[])TEMP, 0, TEMP.length);
+		get((T[])TEMP, 0, TEMP.length);
 
-			return (T[])TEMP;
+		return (T[])TEMP;
 //		}
 	}
 
@@ -95,24 +96,24 @@ public class ResizingTBuffer<T> {
 	public int get(T[] buffer, int offset, int length) {
 		synchronized(__LOCK__) {
 			ArraysUtil.checkBufferBounds(buffer.length, offset, length);
-			
+
 			final int TO_MOVE = (_Top < length ? _Top : length);
-			
+
 			for(int X = 0; X < TO_MOVE; X++) {
 				buffer[offset + X] = (T)_Buffer[X];
 				X++;
 			}
-			
-			for(int X = 0; (TO_MOVE + X) < _Top; X++) { 
+
+			for(int X = 0; (TO_MOVE + X) < _Top; X++) {
 				_Buffer[X] = _Buffer[TO_MOVE + X];
 			}
-			
+
 			_Top -= TO_MOVE;
-			
+
 			return TO_MOVE;
 		}
 	}
-	
+
 //    public int get(int index) {
 //        if(validIndex(index)) {
 //            return _Buffer[index];
@@ -146,7 +147,7 @@ public class ResizingTBuffer<T> {
 	public int available() {
 		return _Buffer.length - _Top;
 	}
-	
+
 	public void reset() {
 		synchronized(__LOCK__) {
 			_Top = 0;
@@ -188,7 +189,7 @@ public class ResizingTBuffer<T> {
 	public boolean isEmpty() {
 		return _Top == 0;
 	}
-	
+
 	public T[] getArray() {
 		return (T[])_Buffer;
 	}

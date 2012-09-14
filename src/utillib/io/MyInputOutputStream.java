@@ -10,14 +10,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.0
- *
+ * 
  * January 12, 2011 (version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class MyInputOutputStream extends AMyInputOutputStream {

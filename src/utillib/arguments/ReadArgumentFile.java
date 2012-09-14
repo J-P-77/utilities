@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.1</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -19,52 +20,49 @@ import java.io.FileNotFoundException;
  * </pre>
  */
 public class ReadArgumentFile extends ArgumentInput {
-    protected final File _File;
-    
-    public ReadArgumentFile(String file) throws FileNotFoundException {
-        this(new File(file), false);
-    }
-    
-    public ReadArgumentFile(String file, boolean autoread) throws FileNotFoundException {
-        this(new File(file), false);
-    }
+	protected final File _File;
 
-    public ReadArgumentFile(File file) throws FileNotFoundException {
-        this(file, false);
-    }
+	public ReadArgumentFile(String file) throws FileNotFoundException {
+		this(new File(file), false);
+	}
 
-    public ReadArgumentFile(File file, boolean autoread) throws FileNotFoundException {
-        super(new FileInputStream(file));
+	public ReadArgumentFile(String file, boolean autoread) throws FileNotFoundException {
+		this(new File(file), false);
+	}
 
-        if(file == null) {
-            throw new RuntimeException("Variable[file] - Is Null");
-        }
+	public ReadArgumentFile(File file) throws FileNotFoundException {
+		this(file, false);
+	}
 
-        _File = file;
-               
-        if(autoread) {
-            read();
-        }
-    }
+	public ReadArgumentFile(File file, boolean autoread) throws FileNotFoundException {
+		super(new FileInputStream(file));
 
-    public File getFile() {
-        return _File;
-    }
+		if(file == null) {
+			throw new RuntimeException("Variable[file] - Is Null");
+		}
 
-    public static ReadArgumentFile create(String file) {
-        return create(new File(file));
-    }
+		_File = file;
 
-    
-    
-    public static ReadArgumentFile create(File file) {
-        try {
-            return new ReadArgumentFile(file);
-        } catch (Exception e) {}
+		if(autoread) {
+			read();
+		}
+	}
 
-        return null;
-    }
+	public File getFile() {
+		return _File;
+	}
 
+	public static ReadArgumentFile create(String file) {
+		return create(new File(file));
+	}
+
+	public static ReadArgumentFile create(File file) {
+		try {
+			return new ReadArgumentFile(file);
+		} catch(Exception e) {}
+
+		return null;
+	}
 
 //    public boolean read() {
 //        return read(false);

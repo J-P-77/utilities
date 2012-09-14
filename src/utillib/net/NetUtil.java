@@ -22,8 +22,8 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class NetUtil {
 	private static final DebugLogger _LOG_ = LogManager.getInstance().getLogger(NetUtil.class);
@@ -342,6 +342,7 @@ public class NetUtil {
 
 	/**
 	 * Skips Interfaces that are not up
+	 * 
 	 * @param inetaddresses
 	 */
 	public static void getLocalIPs(ResizingArray<InetAddress> inetaddresses, boolean includeloopback) {
@@ -542,13 +543,11 @@ public class NetUtil {
 	}
 
 	/**
-	 *             	context = SSLContext.getInstance("SSL");
-			if(trustManagers == null || trustManagers.length == 0)
-	            			trustManagers = new TrustManager[] { new EasyX509TrustManager(null) };
-	           	context.init(null, trustManagers, null);
-	                context.getClientSessionContext().setSessionTimeout(0);
-	                context.getServerSessionContext().setSessionTimeout(0);
-	           	factory = context.getSocketFactory();
-
+	 * context = SSLContext.getInstance("SSL"); if(trustManagers == null ||
+	 * trustManagers.length == 0) trustManagers = new TrustManager[] { new
+	 * EasyX509TrustManager(null) }; context.init(null, trustManagers, null);
+	 * context.getClientSessionContext().setSessionTimeout(0);
+	 * context.getServerSessionContext().setSessionTimeout(0); factory =
+	 * context.getSocketFactory();
 	 */
 }

@@ -3,7 +3,8 @@ package utillib.textfield;
 import javax.swing.JFormattedTextField;
 import javax.swing.text.MaskFormatter;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
  * 
  * November 02, 2008 (Version 1.0.0)
@@ -13,8 +14,8 @@ import javax.swing.text.MaskFormatter;
  * 
  * </pre>
  */
-public class FormattedTextField extends JFormattedTextField {		
-	public FormattedTextField(String text) {           
+public class FormattedTextField extends JFormattedTextField {
+	public FormattedTextField(String text) {
 		this(text, text.length());
 	}
 
@@ -53,7 +54,7 @@ public class FormattedTextField extends JFormattedTextField {
 
 			this.setFormatter(formatter);
 			this.setText(null);
-		} catch (java.text.ParseException exc) {
+		} catch(java.text.ParseException exc) {
 			System.err.println("!!ERROR!!! - Formatter Is Bad: " + exc.getMessage());
 		}
 	}

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class ParticalOutputStream extends AOutputStream /* implements ISeekable */{

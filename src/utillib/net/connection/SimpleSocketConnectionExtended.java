@@ -14,14 +14,15 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.0
- *
+ * 
  * January 12, 2011 (version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class SimpleSocketConnectionExtended extends SimpleSocketConnection {

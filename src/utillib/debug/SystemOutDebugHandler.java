@@ -7,8 +7,8 @@ import utillib.interfaces.IDebugLogger;
 import utillib.strings.MyStringBuffer;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class SystemOutDebugHandler implements IDebugHandler {
 //	private final String _NAME;

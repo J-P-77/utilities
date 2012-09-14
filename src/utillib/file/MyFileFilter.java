@@ -6,12 +6,13 @@ import javax.swing.filechooser.FileFilter;
 
 import java.io.File;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.2</b>
  * 
  * November 02, 2008 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * October 13, 2009 (Version 1.0.1)
  *     -Internal Stuff
  * 
@@ -23,108 +24,107 @@ import java.io.File;
  * </pre>
  */
 public final class MyFileFilter extends FileFilter {
-    private final String _DESCRIPTION;
-    private final String[] _EXTENSION;
+	private final String _DESCRIPTION;
+	private final String[] _EXTENSION;
 
-    public MyFileFilter(String description, String ext) {
-        _EXTENSION = new String[1];
+	public MyFileFilter(String description, String ext) {
+		_EXTENSION = new String[1];
 
-        final String FILTER = addPeriod(ext);
-        _EXTENSION[0] = (Os.isWindows() ? FILTER.toLowerCase() : FILTER);
+		final String FILTER = addPeriod(ext);
+		_EXTENSION[0] = (Os.isWindows() ? FILTER.toLowerCase() : FILTER);
 
-        _DESCRIPTION = description + " (*" + _EXTENSION[0] + ')';
-    }
+		_DESCRIPTION = description + " (*" + _EXTENSION[0] + ')';
+	}
 
-    /**
-     * ex. (.txt)
-     */
-    public MyFileFilter(String description, String... exts) {
-        _EXTENSION = new String[exts.length];
-        
-        StringBuffer Description = new StringBuffer(description);
-        
-        Description.append(" (");
-        for(int X = 0; X < exts.length; X++) {
-            final String FILTER = addPeriod(exts[X]);
-            _EXTENSION[X] = (Os.isWindows() ? FILTER.toLowerCase() : FILTER);
+	/**
+	 * ex. (.txt)
+	 */
+	public MyFileFilter(String description, String... exts) {
+		_EXTENSION = new String[exts.length];
 
-            Description.append('*');
-            Description.append(_EXTENSION[X]);
-            
-            if(X != (exts.length - 1)) {
-                Description.append(';');
-            }
-        }
-        Description.append(')');
-        
-        _DESCRIPTION = Description.toString();
-    }
+		StringBuffer Description = new StringBuffer(description);
 
-    public String getExtension() {
-        return _EXTENSION[0];
-    }
-    
-    public String getExtensionAt(int index) {
-        if(validIndex(index)) {
-            return _EXTENSION[index];
-        } else {
-            throw new IndexOutOfBoundsException("Index Number: " + index + " Out Of Bounds");
-        }
-    }
-    
-    public int getExtensionCount() {
-        return _EXTENSION.length;
-    }
+		Description.append(" (");
+		for(int X = 0; X < exts.length; X++) {
+			final String FILTER = addPeriod(exts[X]);
+			_EXTENSION[X] = (Os.isWindows() ? FILTER.toLowerCase() : FILTER);
 
-    @Override
-    public String getDescription() {
-        return _DESCRIPTION;
-    }
+			Description.append('*');
+			Description.append(_EXTENSION[X]);
 
-    @Override
-    public boolean accept(File pathname) {
-        if(pathname.isDirectory()) {
-            return true;
-        } else {
-            final String FILENAME =
-                (Os.isWindows() ? pathname.getName().toLowerCase() : pathname.getName());
-          
-            for(int X = 0; X < _EXTENSION.length; X++) {
-                if(FILENAME.endsWith(_EXTENSION[X])) {
-                    return true;
-                }    
-            }
-            
-            return false;
-        }
-    }
-    
-    private boolean validIndex(int index) {
-        if(index >= 0 && index < _EXTENSION.length) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+			if(X != (exts.length - 1)) {
+				Description.append(';');
+			}
+		}
+		Description.append(')');
 
-    private static String addPeriod(String filter) {
-        if(filter.startsWith(".")) {
-            return filter;
-        } else {
-            return '.' + filter;
-        }
+		_DESCRIPTION = Description.toString();
+	}
+
+	public String getExtension() {
+		return _EXTENSION[0];
+	}
+
+	public String getExtensionAt(int index) {
+		if(validIndex(index)) {
+			return _EXTENSION[index];
+		} else {
+			throw new IndexOutOfBoundsException("Index Number: " + index + " Out Of Bounds");
+		}
+	}
+
+	public int getExtensionCount() {
+		return _EXTENSION.length;
+	}
+
+	@Override
+	public String getDescription() {
+		return _DESCRIPTION;
+	}
+
+	@Override
+	public boolean accept(File pathname) {
+		if(pathname.isDirectory()) {
+			return true;
+		} else {
+			final String FILENAME = (Os.isWindows() ? pathname.getName().toLowerCase() : pathname.getName());
+
+			for(int X = 0; X < _EXTENSION.length; X++) {
+				if(FILENAME.endsWith(_EXTENSION[X])) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
+	private boolean validIndex(int index) {
+		if(index >= 0 && index < _EXTENSION.length) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static String addPeriod(String filter) {
+		if(filter.startsWith(".")) {
+			return filter;
+		} else {
+			return '.' + filter;
+		}
+	}
+}
+/*public String getExtension(String path) {
+    int Period = path.lastIndexOf('.');
+
+    if(Period == 0) {
+        throw new IllegalArgumentException("Path Is A Directory");
+    } else {
+        return path.substring(Period + 1);
     }
 }
-    /*public String getExtension(String path) {
-        int Period = path.lastIndexOf('.');
 
-        if(Period == 0) {
-            throw new IllegalArgumentException("Path Is A Directory");
-        } else {
-            return path.substring(Period + 1);
-        }
-    }
-
-    public String getExtension(File file) {
-        return getExtension(file.getName());
-    }*/
+public String getExtension(File file) {
+    return getExtension(file.getName());
+}*/

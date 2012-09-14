@@ -2,23 +2,24 @@ package utillib.collections;
 
 import utillib.arrays.ResizingArray;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.2</b>
- *
+ * 
  * March 10, 2009 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * September 14, 2009 (Version 1.1.0)
  *     -Fixed Some Major Methods Conflicts With <T, U> If T Key Was A Number Class
- *
+ * 
  * August 17, 2010 (Version 1.1.1)
  *     -Added
  *         -Constructor Collection(int, int)
- *
+ * 
  * January 19, 2011 (Version 1.1.2)
  *     -Updated
  *         -<T, U> Stuff
- *
+ * 
  * @author Justin Palinkas
  * 
  * </pre>

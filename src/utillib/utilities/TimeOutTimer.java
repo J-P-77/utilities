@@ -9,7 +9,8 @@ public class TimeOutTimer {
 
 	/**
 	 * 
-	 * @param timeout millis before timeout
+	 * @param timeout
+	 *            millis before timeout
 	 */
 	public TimeOutTimer(int timeout) {
 		setTimeOut(timeout);

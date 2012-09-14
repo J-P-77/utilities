@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class ClassUtil {
@@ -68,8 +68,9 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param clazz Class To Create New Instance From
+	 * 
+	 * @param clazz
+	 *            Class To Create New Instance From
 	 * @param parameters
 	 * @return New Instance Of The Class, null If Failed To Create New Instance
 	 */
@@ -82,8 +83,9 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param clazz Class To Create New Instance From
+	 * 
+	 * @param clazz
+	 *            Class To Create New Instance From
 	 * @param parameters
 	 * @return New Instance Of The Class, null If Failed To Create New Instance
 	 * @throws ClassNotFoundException
@@ -133,8 +135,9 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param classname Class Name (ex. java.swing.JButton)
+	 * 
+	 * @param classname
+	 *            Class Name (ex. java.swing.JButton)
 	 * @param parameters
 	 * @return New Instance Of The Class, null If Failed To Create New Instance
 	 */
@@ -143,9 +146,11 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param classloader Classlodaer To Search For Class
-	 * @param classname Class Name (ex. java.swing.JButton)
+	 * 
+	 * @param classloader
+	 *            Classlodaer To Search For Class
+	 * @param classname
+	 *            Class Name (ex. java.swing.JButton)
 	 * @param parameters
 	 * @return New Instance Of The Class, null If Failed To Create New Instance
 	 */
@@ -158,8 +163,9 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param classname Class Name (ex. java.swing.JButton)
+	 * 
+	 * @param classname
+	 *            Class Name (ex. java.swing.JButton)
 	 * @param parameters
 	 * @return New Instance Of The Class
 	 * @throws ClassNotFoundException
@@ -174,8 +180,9 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param classname Class Name (ex. java.swing.JButton)
+	 * 
+	 * @param classname
+	 *            Class Name (ex. java.swing.JButton)
 	 * @param parameters
 	 * @return New Instance Of The Class
 	 * @throws ClassNotFoundException
@@ -190,9 +197,11 @@ public class ClassUtil {
 	}
 
 	/**
-	 *
-	 * @param classloader Classlodaer To Search For Class
-	 * @param classname Class Name (ex. java.swing.JButton)
+	 * 
+	 * @param classloader
+	 *            Classlodaer To Search For Class
+	 * @param classname
+	 *            Class Name (ex. java.swing.JButton)
 	 * @param parameters
 	 * @return New Instance Of The Class
 	 * @throws ClassNotFoundException

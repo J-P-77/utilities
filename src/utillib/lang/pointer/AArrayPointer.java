@@ -1,64 +1,66 @@
 package utillib.lang.pointer;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * April 12, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public abstract class AArrayPointer {
-    protected int _Pointer = 0;
+	protected int _Pointer = 0;
 
-    public void increment() {
-        _Pointer++;
-    }
+	public void increment() {
+		_Pointer++;
+	}
 
-    public void increment(int value) {
-        _Pointer += value;
-    }
-    
-    public void decrement() {
-        --_Pointer;
-    }
-    
-    public void decrement(int value) {
-        _Pointer -= value;
-    }
+	public void increment(int value) {
+		_Pointer += value;
+	}
 
-    public void reset() {
-        _Pointer = 0;
-    }
+	public void decrement() {
+		--_Pointer;
+	}
 
-    public void reset(int value) {
-        if(value < 0 || value >= length()) {
-            throw new RuntimeException("Variable[value] - Index Out Of Bounds: " + value);
-        }
+	public void decrement(int value) {
+		_Pointer -= value;
+	}
 
-        _Pointer = value;
-    }
+	public void reset() {
+		_Pointer = 0;
+	}
 
-    public boolean hasNext() {
-        return (_Pointer < length());
-    }
+	public void reset(int value) {
+		if(value < 0 || value >= length()) {
+			throw new RuntimeException("Variable[value] - Index Out Of Bounds: " + value);
+		}
 
-    public boolean hasPrevious() {
-        return (_Pointer > 0);
-    }
+		_Pointer = value;
+	}
 
-    public void newLength(int length) {
-        newLength(length, true);
-    }
+	public boolean hasNext() {
+		return (_Pointer < length());
+	}
 
-    public int getPointer() {
-        return _Pointer;
-    }
+	public boolean hasPrevious() {
+		return (_Pointer > 0);
+	}
 
-    public abstract int length();
-    public abstract void newLength(int length, boolean preserve);
+	public void newLength(int length) {
+		newLength(length, true);
+	}
+
+	public int getPointer() {
+		return _Pointer;
+	}
+
+	public abstract int length();
+
+	public abstract void newLength(int length, boolean preserve);
 
 //    public abstract Object get();
 //    public abstract void set(Object value);

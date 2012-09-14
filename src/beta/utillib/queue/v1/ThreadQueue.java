@@ -9,71 +9,71 @@ import utillib.utilities.TimeOutTimer;
 import utillib.collections.MyStackAll;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class ThreadQueue {
-    private final Object __LOCK__ = new Object();
+	private final Object __LOCK__ = new Object();
 
-    private Worker _WorkerThread = null;
-    private Cleanup _CleanupThread = null;
+	private Worker _WorkerThread = null;
+	private Cleanup _CleanupThread = null;
 
-    private final MyStackAll<QueueTask> _QUEUE = new MyStackAll<QueueTask>();
-    private boolean _ShutDown = false;
-    private boolean _Pause = false;
+	private final MyStackAll<QueueTask> _QUEUE = new MyStackAll<QueueTask>();
+	private boolean _ShutDown = false;
+	private boolean _Pause = false;
 
-    private final IQueue _LISTENERS;
+	private final IQueue _LISTENERS;
 
-    private final MyStackAll<QueueTask> _WORKINGON = new MyStackAll<QueueTask>();
+	private final MyStackAll<QueueTask> _WORKINGON = new MyStackAll<QueueTask>();
 
-    public ThreadQueue(IQueue listener) {
-    	if(listener == null) {
+	public ThreadQueue(IQueue listener) {
+		if(listener == null) {
 			throw new RuntimeException("Variable[listener] - Is Null");
 		}
-		
-    	_LISTENERS = listener;
-    }
 
-    public ThreadQueue(IQueue listener, QueueTask initialtask) {
-    	this(listener);
-    	
-        _QUEUE.push(initialtask);
-    }
+		_LISTENERS = listener;
+	}
 
-    public ThreadQueue(IQueue listener, MyStackAll<QueueTask> initialtasks) {
-    	this(listener);
-    	
-        for(int X = 0; X < initialtasks.length(); X++) {
-            _QUEUE.push(initialtasks.getItemAt(X));
-        }
-    }
+	public ThreadQueue(IQueue listener, QueueTask initialtask) {
+		this(listener);
 
-    public ThreadQueue(IQueue listener, QueueTask[] initialtasks) {
-    	this(listener);
-    	
-        for(int X = 0; X < initialtasks.length; X++) {
-            _QUEUE.push(initialtasks[X]);
-        }
-    }
+		_QUEUE.push(initialtask);
+	}
 
-    public void startup() {
-        if(_WorkerThread == null && _CleanupThread == null) {
-            _ShutDown = false;
-            _WorkerThread = new Worker();
+	public ThreadQueue(IQueue listener, MyStackAll<QueueTask> initialtasks) {
+		this(listener);
 
-            _CleanupThread = new Cleanup();            
-            _CleanupThread.setPriority(Thread.MIN_PRIORITY);
+		for(int X = 0; X < initialtasks.length(); X++) {
+			_QUEUE.push(initialtasks.getItemAt(X));
+		}
+	}
 
-            _WorkerThread.start();
-            _CleanupThread.start();
-        } else {
-            throw new RuntimeException("Alreadly Started");
-        }
-    }
+	public ThreadQueue(IQueue listener, QueueTask[] initialtasks) {
+		this(listener);
 
-    public void shutdown() {
-        shutdown(200);
-    }
+		for(int X = 0; X < initialtasks.length; X++) {
+			_QUEUE.push(initialtasks[X]);
+		}
+	}
+
+	public void startup() {
+		if(_WorkerThread == null && _CleanupThread == null) {
+			_ShutDown = false;
+			_WorkerThread = new Worker();
+
+			_CleanupThread = new Cleanup();
+			_CleanupThread.setPriority(Thread.MIN_PRIORITY);
+
+			_WorkerThread.start();
+			_CleanupThread.start();
+		} else {
+			throw new RuntimeException("Alreadly Started");
+		}
+	}
+
+	public void shutdown() {
+		shutdown(200);
+	}
 
 //  //TODO (Keep working on this)
 //    public void shutdown(int maxtimetowait) {
@@ -124,186 +124,186 @@ public class ThreadQueue {
 //        }
 //    }
 
-    public void shutdown(int maxtimetowait) {
-        if(maxtimetowait <= 0) {
-            throw new RuntimeException("Variable[maxtimetowait] - Must Be Greater Than Zero");
-        }
+	public void shutdown(int maxtimetowait) {
+		if(maxtimetowait <= 0) {
+			throw new RuntimeException("Variable[maxtimetowait] - Must Be Greater Than Zero");
+		}
 
-        final TimeOutTimer TIMEOUT = new TimeOutTimer(maxtimetowait);
-        
-        if(!_ShutDown) {
-            _ShutDown = true;
-            
-            while(!TIMEOUT.hasTimedOut()) {            	
-                ThreadUtil.sleep(100);
-            }
-            
-            if(_WorkerThread.isAlive()) {
-	            try {
-	                _WorkerThread.interrupt();
-	                System.out.println("[_WorkerThread] - interrupted");
-	            } catch (Exception e) {}
-            }
-            
-            if(_CleanupThread.isAlive()) {
-	            try {
-	                _CleanupThread.interrupt();
-	                System.out.println("[_CleanupThread] - interrupted");
-	            } catch (Exception e) {}
-            }
+		final TimeOutTimer TIMEOUT = new TimeOutTimer(maxtimetowait);
 
-            _WorkerThread = null;
-            _CleanupThread = null;
-        }
-    }
+		if(!_ShutDown) {
+			_ShutDown = true;
 
-    public void addTask(QueueTask task) {
-        synchronized(__LOCK__) {
-            _QUEUE.push(task);
-        }
+			while(!TIMEOUT.hasTimedOut()) {
+				ThreadUtil.sleep(100);
+			}
 
-        _LISTENERS.taskAdded(task);
-    }
+			if(_WorkerThread.isAlive()) {
+				try {
+					_WorkerThread.interrupt();
+					System.out.println("[_WorkerThread] - interrupted");
+				} catch(Exception e) {}
+			}
 
-    public void removeTask(QueueTask task) {
-        final QueueTask TEMP;
-        synchronized(__LOCK__) {
-            TEMP = _QUEUE.removeItem(task);
-        }
+			if(_CleanupThread.isAlive()) {
+				try {
+					_CleanupThread.interrupt();
+					System.out.println("[_CleanupThread] - interrupted");
+				} catch(Exception e) {}
+			}
 
-        if(TEMP != null) {
-        	_LISTENERS.taskRemoved(TEMP);
-        }
-    }
+			_WorkerThread = null;
+			_CleanupThread = null;
+		}
+	}
 
-    public void removeTask(int index) {
-        final QueueTask TEMP;
-        synchronized(__LOCK__) {
-             TEMP = _QUEUE.removeItemAt(index);
-        }
+	public void addTask(QueueTask task) {
+		synchronized(__LOCK__) {
+			_QUEUE.push(task);
+		}
 
-        if(TEMP != null) {
-        	_LISTENERS.taskRemoved(TEMP);
-        }
-    }
+		_LISTENERS.taskAdded(task);
+	}
 
-    public int taskCount() {
-        return _QUEUE.length();
-    }
-    
-    public void pause(boolean value) {
-        _Pause = value;
-    }
+	public void removeTask(QueueTask task) {
+		final QueueTask TEMP;
+		synchronized(__LOCK__) {
+			TEMP = _QUEUE.removeItem(task);
+		}
 
-    public boolean isPaused() {
-        return _Pause;
-    }
+		if(TEMP != null) {
+			_LISTENERS.taskRemoved(TEMP);
+		}
+	}
 
-    public boolean isRunning() {
-        return !_ShutDown;
-    }
+	public void removeTask(int index) {
+		final QueueTask TEMP;
+		synchronized(__LOCK__) {
+			TEMP = _QUEUE.removeItemAt(index);
+		}
 
-    @Override
-    protected void finalize() throws Throwable {
-        shutdown();
+		if(TEMP != null) {
+			_LISTENERS.taskRemoved(TEMP);
+		}
+	}
 
-        super.finalize();
-    }
+	public int taskCount() {
+		return _QUEUE.length();
+	}
 
-    //CLASSES
-    private class Worker extends Thread {
-        @Override
-        public void run() {
+	public void pause(boolean value) {
+		_Pause = value;
+	}
+
+	public boolean isPaused() {
+		return _Pause;
+	}
+
+	public boolean isRunning() {
+		return !_ShutDown;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		shutdown();
+
+		super.finalize();
+	}
+
+	//CLASSES
+	private class Worker extends Thread {
+		@Override
+		public void run() {
 //            System.out.println("Worker Start");
 
-        	_LISTENERS.started();
+			_LISTENERS.started();
 
-            while(!_ShutDown) {
-                if(pauseCancelCheck()) {
-                    break;
-                }
+			while(!_ShutDown) {
+				if(pauseCancelCheck()) {
+					break;
+				}
 
-                if(_QUEUE.isEmpty()) {
-                    continue;
-                }
+				if(_QUEUE.isEmpty()) {
+					continue;
+				}
 
-                final QueueTask WORKING_ON;
-                synchronized(__LOCK__) {
-                    WORKING_ON = _QUEUE.popItemAt(0);
-                }
-                
-                if(WORKING_ON == null) {
-                    System.out.println("!!!ERROR!!!");
-                } else if(WORKING_ON.isCanceling()) {
-                	
-                } else {
-                    System.out.println("start Task " + WORKING_ON.getName());
+				final QueueTask WORKING_ON;
+				synchronized(__LOCK__) {
+					WORKING_ON = _QUEUE.popItemAt(0);
+				}
 
-                    _WORKINGON.push(WORKING_ON);
+				if(WORKING_ON == null) {
+					System.out.println("!!!ERROR!!!");
+				} else if(WORKING_ON.isCanceling()) {
 
-                    _LISTENERS.startTask(WORKING_ON);
-                }
-            }
+				} else {
+					System.out.println("start Task " + WORKING_ON.getName());
 
-            _LISTENERS.shutdowned();
+					_WORKINGON.push(WORKING_ON);
+
+					_LISTENERS.startTask(WORKING_ON);
+				}
+			}
+
+			_LISTENERS.shutdowned();
 
 //            System.out.println("Worker Stop");
-        }
+		}
 
-        private boolean pauseCancelCheck() {
-            while(_Pause || _QUEUE.isEmpty() || !_LISTENERS.canAcceptTask()) {
-                try {                
-                    if(_ShutDown) {
-                        return true;
-                    }
-                    Thread.sleep(200);
-                } catch (Exception e) {}
-            }
+		private boolean pauseCancelCheck() {
+			while(_Pause || _QUEUE.isEmpty() || !_LISTENERS.canAcceptTask()) {
+				try {
+					if(_ShutDown) {
+						return true;
+					}
+					Thread.sleep(200);
+				} catch(Exception e) {}
+			}
 
-            return _ShutDown;
-        }
-    }
+			return _ShutDown;
+		}
+	}
 
-    private class Cleanup extends Thread {
-        @Override
-        public void run() {
+	private class Cleanup extends Thread {
+		@Override
+		public void run() {
 //            System.out.println("Cleanup Start");
-            while(!_ShutDown) {
-                try {
-                    if(pauseCancelCheck()) {
-                        break;
-                    }
+			while(!_ShutDown) {
+				try {
+					if(pauseCancelCheck()) {
+						break;
+					}
 
-                    for(int X = (_WORKINGON.length() - 1); X > -1; X--) {
-                        if(!_WORKINGON.getItemAt(X).isRunning()) {
-                            System.out.println("removed Task " + _WORKINGON.getItemAt(X).getName());
+					for(int X = (_WORKINGON.length() - 1); X > -1; X--) {
+						if(!_WORKINGON.getItemAt(X).isRunning()) {
+							System.out.println("removed Task " + _WORKINGON.getItemAt(X).getName());
 
-                            final QueueTask TEMP;
-                            synchronized(__LOCK__) {
-                                TEMP = _WORKINGON.removeItemAt(X);
-                            }
+							final QueueTask TEMP;
+							synchronized(__LOCK__) {
+								TEMP = _WORKINGON.removeItemAt(X);
+							}
 
-                            _LISTENERS.endTask(TEMP);
-                        }
+							_LISTENERS.endTask(TEMP);
+						}
 
-                        Thread.sleep(10);
-                    }
-                } catch (Exception e) {}
-            }
+						Thread.sleep(10);
+					}
+				} catch(Exception e) {}
+			}
 //            System.out.println("Cleanup Stop");
-        }
+		}
 
-        private boolean pauseCancelCheck() {
-            while(_Pause || _WORKINGON.isEmpty()) {
-                try {
-                    if(_ShutDown) {
-                        return true;
-                    }
-                    Thread.sleep(200);
-                } catch (Exception e) {}
-            }
+		private boolean pauseCancelCheck() {
+			while(_Pause || _WORKINGON.isEmpty()) {
+				try {
+					if(_ShutDown) {
+						return true;
+					}
+					Thread.sleep(200);
+				} catch(Exception e) {}
+			}
 
-            return _ShutDown;
-        }
-    }
+			return _ShutDown;
+		}
+	}
 }

@@ -22,96 +22,102 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 /**
- *
+ * 
  * @author Justin Palinkas
  */
 public class FrmList extends JDialog {
-    public static final int _RETURN_INTEGER_ = 0;
-    public static final int _RETURN_OBJECT_ = 1;
-    
-    private static final int _DEFAULT_WIDTH_ = 180;
-    private static final int _DEFAULT_HEIGHT_ = 300;
+	public static final int _RETURN_INTEGER_ = 0;
+	public static final int _RETURN_OBJECT_ = 1;
+
+	private static final int _DEFAULT_WIDTH_ = 180;
+	private static final int _DEFAULT_HEIGHT_ = 300;
 
 	private Object _Return = null;
-	
+
 	public FrmList() {
 		this(null, "List");
 	}
 
 	public FrmList(String title) {
-        this(null, title);
+		this(null, title);
 	}
 
 	public FrmList(Window owner, String title) {
-        this(owner, _DEFAULT_WIDTH_, _DEFAULT_HEIGHT_, title, null);
+		this(owner, _DEFAULT_WIDTH_, _DEFAULT_HEIGHT_, title, null);
 	}
 
 	public FrmList(String title, int width, int height) {
-        this(null, width, height, title, null);
+		this(null, width, height, title, null);
 	}
 
-    public FrmList(Window owner, String title, Object[] items) {
-        this(owner, _DEFAULT_WIDTH_, _DEFAULT_HEIGHT_, title, items);
-    }
+	public FrmList(Window owner, String title, Object[] items) {
+		this(owner, _DEFAULT_WIDTH_, _DEFAULT_HEIGHT_, title, items);
+	}
 
 	public FrmList(Window owner, int width, int height, String title, Object[] items) {
-        super(owner, title);
-        super.setSize(width, height);
-        
+		super(owner, title);
+		super.setSize(width, height);
+
 		PositionWindow PosWin = new PositionWindow(this);
-        
+
 		if(owner == null) {
 			PosWin.toCenter();
 		} else {
 			PosWin.putToInCenterOf(owner);
 		}
-        
+
 		initComponents();
-		
+
 		addItems(items);
 	}
-	
+
 	private void initComponents() {
 		super.setModal(true);
-        super.setMinimumSize(new Dimension(_DEFAULT_WIDTH_, _DEFAULT_HEIGHT_));
-        super.setPreferredSize(new Dimension(_DEFAULT_WIDTH_, _DEFAULT_HEIGHT_));
-        super.getContentPane().setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
+		super.setMinimumSize(new Dimension(_DEFAULT_WIDTH_, _DEFAULT_HEIGHT_));
+		super.setPreferredSize(new Dimension(_DEFAULT_WIDTH_, _DEFAULT_HEIGHT_));
+		super.getContentPane().setLayout(new BoxLayout(super.getContentPane(), BoxLayout.PAGE_AXIS));
 		super.addWindowListener(new WindowListener() {
-            public void windowOpened(WindowEvent e) {}
-            public void windowClosing(WindowEvent e) {
-                cancel();
-            }
-            public void windowClosed(WindowEvent e) {}
-            public void windowIconified(WindowEvent e) {}
-            public void windowDeiconified(WindowEvent e) {}
-            public void windowActivated(WindowEvent e) {}
-            public void windowDeactivated(WindowEvent e) {}
-        });
-        
+			public void windowOpened(WindowEvent e) {}
+
+			public void windowClosing(WindowEvent e) {
+				cancel();
+			}
+
+			public void windowClosed(WindowEvent e) {}
+
+			public void windowIconified(WindowEvent e) {}
+
+			public void windowDeiconified(WindowEvent e) {}
+
+			public void windowActivated(WindowEvent e) {}
+
+			public void windowDeactivated(WindowEvent e) {}
+		});
+
 		final Insets Buttons = new Insets(6, 4, 6, 4);
-		
+
 		listModal = new DefaultListModel();
-		
+
 		listInfo = new JList(listModal);
 		//listInfo.setBounds(0,0,195,240);
 		listInfo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		scrollList = new JScrollPane(listInfo);
 		scrollList.setBounds(listInfo.getBounds());
 		super.getContentPane().add(scrollList);
 
-        panelButtons = new JPanel();
-        panelButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 14, 5));
-        panelButtons.setMinimumSize(new Dimension(500, 36));
-        panelButtons.setPreferredSize(new Dimension(500, 36));
-        panelButtons.setMaximumSize(new Dimension(500, 36));
-        super.getContentPane().add(panelButtons);
+		panelButtons = new JPanel();
+		panelButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 14, 5));
+		panelButtons.setMinimumSize(new Dimension(500, 36));
+		panelButtons.setPreferredSize(new Dimension(500, 36));
+		panelButtons.setMaximumSize(new Dimension(500, 36));
+		super.getContentPane().add(panelButtons);
 
 		butOk = new JButton("Ok");
 		//butOk.setBounds(10+6,248,70,24);
-        butOk.setMinimumSize(new Dimension(70, 24));
-        butOk.setPreferredSize(new Dimension(70, 24));
-        butOk.setMaximumSize(new Dimension(70, 24));
+		butOk.setMinimumSize(new Dimension(70, 24));
+		butOk.setPreferredSize(new Dimension(70, 24));
+		butOk.setMaximumSize(new Dimension(70, 24));
 		butOk.setMargin(Buttons);
 		butOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -119,12 +125,12 @@ public class FrmList extends JDialog {
 			}
 		});
 		panelButtons.add(butOk);
-		
+
 		butCancel = new JButton("Cancel");
 		//butCancel.setBounds(200-70-10-8-6,248,70,24);
-        butCancel.setMinimumSize(new Dimension(70, 24));
-        butCancel.setPreferredSize(new Dimension(70, 24));
-        butCancel.setMaximumSize(new Dimension(70, 24));
+		butCancel.setMinimumSize(new Dimension(70, 24));
+		butCancel.setPreferredSize(new Dimension(70, 24));
+		butCancel.setMaximumSize(new Dimension(70, 24));
 		butCancel.setMargin(Buttons);
 		butCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,21 +140,21 @@ public class FrmList extends JDialog {
 		panelButtons.add(butCancel);
 	}
 
-    public Object showDialog() {
-        return showDialog(_RETURN_OBJECT_);
-    }
-    
-    public Object showDialog(int returntype) {
-        if(returntype == _RETURN_INTEGER_) {
-            return getSelectedIndex();
-        } else {
-            return showDialogObject();
-        }
-    }
+	public Object showDialog() {
+		return showDialog(_RETURN_OBJECT_);
+	}
+
+	public Object showDialog(int returntype) {
+		if(returntype == _RETURN_INTEGER_) {
+			return getSelectedIndex();
+		} else {
+			return showDialogObject();
+		}
+	}
 
 	public Object showDialogObject() {
 		this.setVisible(true);
-		
+
 		return _Return;
 	}
 
@@ -158,69 +164,69 @@ public class FrmList extends JDialog {
 		return getSelectedIndex();
 	}
 
-    public int getSelectedIndex() {
-        return listInfo.getSelectedIndex();
-    }
-    
-    public void addItem(Object items) {
-        listModal.addElement(items);
-    }
-    
-    public void addItems(Object[] items) {
+	public int getSelectedIndex() {
+		return listInfo.getSelectedIndex();
+	}
+
+	public void addItem(Object items) {
+		listModal.addElement(items);
+	}
+
+	public void addItems(Object[] items) {
 		if(items != null) {
 			for(int X = 0; X < items.length; X++) {
 				listModal.addElement(items[X]);
 			}
 		}
-    }
+	}
 
-    public void removeItem(Object item) {
-        listModal.removeElement(item);
-    }
+	public void removeItem(Object item) {
+		listModal.removeElement(item);
+	}
 
-    public void removeItemAt(int index) {
-        listModal.removeElementAt(index);
-    }
-    
-    public void removeAllItems() {
-        listModal.removeAllElements();
-    }
+	public void removeItemAt(int index) {
+		listModal.removeElementAt(index);
+	}
 
-    public int itemCount() {
-        return listModal.getSize();
-    }
+	public void removeAllItems() {
+		listModal.removeAllElements();
+	}
 
-    private void cancel() {
+	public int itemCount() {
+		return listModal.getSize();
+	}
+
+	private void cancel() {
 		_Return = null;
 		this.setVisible(false);
-    }
+	}
 
-    private void ok() {
-        int Selected = listInfo.getSelectedIndex();
+	private void ok() {
+		int Selected = listInfo.getSelectedIndex();
 
 		if(Selected == -1) {
-            MsgUtil.msgboxInformation(this, "Nothing Selected", this.getTitle());
-        } else {
+			MsgUtil.msgboxInformation(this, "Nothing Selected", this.getTitle());
+		} else {
 			_Return = listModal.getElementAt(Selected);
 			this.setVisible(false);
 		}
-    }
+	}
 
 	private JList listInfo;
-    private DefaultListModel listModal;
+	private DefaultListModel listModal;
 	private JScrollPane scrollList;
-	
+
 	private JButton butOk;
 	private JButton butCancel;
-    private JPanel panelButtons;
-    
-    public static void main(String[] args) {
-        FrmList Frm = new FrmList("Test");
+	private JPanel panelButtons;
 
-        for(int X = 0; X < 50; X++) {
-            Frm.addItem(X);
-        }
+	public static void main(String[] args) {
+		FrmList Frm = new FrmList("Test");
 
-        Frm.showDialog();
-    }
+		for(int X = 0; X < 50; X++) {
+			Frm.addItem(X);
+		}
+
+		Frm.showDialog();
+	}
 }

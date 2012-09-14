@@ -21,128 +21,121 @@ import java.util.Enumeration;
 
 import java.net.URL;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * March 16, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * August 9, 2010 (Version 1.1.0)
  * 	   -Added
  *         -This Will Now On The Fly Open Jar Files
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class MultiJarClassLoader extends MyLocalClassloader implements ZipJarConstants {
-    private final ResizingArray<Jar> _JARFILES = new ResizingArray<Jar>(1, 2);
+	private final ResizingArray<Jar> _JARFILES = new ResizingArray<Jar>(1, 2);
 
-    private final String _NAME;
+	private final String _NAME;
 
-    public MultiJarClassLoader(String file)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
-        
-        this(new File(file), null, null);
-    }
+	public MultiJarClassLoader(String file) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-    public MultiJarClassLoader(File file) throws FileNotFoundException,
-            InvalidFileTypeException, IOException {
+		this(new File(file), null, null);
+	}
 
-        this(file, null, null);
-    }
-    
-    public MultiJarClassLoader(String file, ClassLoader parent)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(File file) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        this(new File(file), parent, null);
-    }
+		this(file, null, null);
+	}
 
-    public MultiJarClassLoader(String file, ClassLoader parent, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(String file, ClassLoader parent) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        this(new File(file), parent, manager);
-    }
+		this(new File(file), parent, null);
+	}
 
-    public MultiJarClassLoader(String file, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(String file, ClassLoader parent, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        this(new File(file), null, manager);
-    }
+		this(new File(file), parent, manager);
+	}
 
-    public MultiJarClassLoader(File file, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(String file, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        this(file, null, manager);
-    }
+		this(new File(file), null, manager);
+	}
 
-    public MultiJarClassLoader(File file, ClassLoader parent)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(File file, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        this(file, parent, null);
-    }
+		this(file, null, manager);
+	}
 
-    public MultiJarClassLoader(File file, ClassLoader parent, LoadedJarsManager manager)
-            throws FileNotFoundException, InvalidFileTypeException, IOException {
+	public MultiJarClassLoader(File file, ClassLoader parent) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        super(parent);
+		this(file, parent, null);
+	}
 
-        if(file == null) {
-            throw new RuntimeException("Variable[file] - Is Null");
-        }
-        	
-    	if(!file.exists()) {
-            throw new FileNotFoundException(file.getPath() + " Does Not Exists");
-        }
-        
-        if(!FileUtil.isFileType(file, JarClassLoader._JAR_MAGIC_NUMBER_)) {
-            throw new InvalidFileTypeException(file.getPath());
-        }
+	public MultiJarClassLoader(File file, ClassLoader parent, LoadedJarsManager manager) throws FileNotFoundException, InvalidFileTypeException, IOException {
 
-        _NAME = file.getName();
+		super(parent);
 
-        final JarFile JAR_FILE = new JarFile(file);
+		if(file == null) {
+			throw new RuntimeException("Variable[file] - Is Null");
+		}
 
-        super.setManifest(JAR_FILE.getManifest());
-        
-        if(manager != null) {///////////
-            super.setLoadedJarsManager(manager);
-            manager.add(file.getName(), this);
-        }///////////
+		if(!file.exists()) {
+			throw new FileNotFoundException(file.getPath() + " Does Not Exists");
+		}
 
-        if(super.getManifest() == null) {
-            _LOG.printInformation("Manifest In: " + (getName() == null ? "Unknown Name" : getName()) +  " Not Found");
-        } else {
-            _LOG.printInformation("Manifest Found In: " + (getName() == null ? "Unknown Name" : getName()));
-            loadDepends(file.getParentFile(), super.getManifest());
-        }
-    }
+		if(!FileUtil.isFileType(file, JarClassLoader._JAR_MAGIC_NUMBER_)) {
+			throw new InvalidFileTypeException(file.getPath());
+		}
 
-    public void addJar(File jarfile) {
-        if(jarfile.exists() && jarfile.isFile() && jarfile.canRead()) {
-            JarFile JarFile = null;
-            try {
-                JarFile = new JarFile(jarfile);
+		_NAME = file.getName();
 
-                final ResizingArray<JarEntry> JARENTRIES = new ResizingArray<JarEntry>(JarFile.size());
+		final JarFile JAR_FILE = new JarFile(file);
 
-                final Enumeration<JarEntry> ENTRIES = JarFile.entries();
+		super.setManifest(JAR_FILE.getManifest());
 
-                while(ENTRIES.hasMoreElements()) {
-                    final JarEntry ENTRY = ENTRIES.nextElement();
+		if(manager != null) {///////////
+			super.setLoadedJarsManager(manager);
+			manager.add(file.getName(), this);
+		}///////////
 
-                    JARENTRIES.put(ENTRY);
-                }
+		if(super.getManifest() == null) {
+			_LOG.printInformation("Manifest In: " + (getName() == null ? "Unknown Name" : getName()) + " Not Found");
+		} else {
+			_LOG.printInformation("Manifest Found In: " + (getName() == null ? "Unknown Name" : getName()));
+			loadDepends(file.getParentFile(), super.getManifest());
+		}
+	}
 
-                if(JARENTRIES.length() > 0) {
-                    _JARFILES.put(new Jar(jarfile, JARENTRIES.toArray(new JarEntry[JARENTRIES.length()])));
+	public void addJar(File jarfile) {
+		if(jarfile.exists() && jarfile.isFile() && jarfile.canRead()) {
+			JarFile JarFile = null;
+			try {
+				JarFile = new JarFile(jarfile);
 
-                    if(JarFile.getManifest() != null) {
-                        loadDepends(jarfile.getParentFile(), JarFile.getManifest());
-                    }
-                }
-            } catch (Exception e) {
-            	_LOG.printError(e);
+				final ResizingArray<JarEntry> JARENTRIES = new ResizingArray<JarEntry>(JarFile.size());
+
+				final Enumeration<JarEntry> ENTRIES = JarFile.entries();
+
+				while(ENTRIES.hasMoreElements()) {
+					final JarEntry ENTRY = ENTRIES.nextElement();
+
+					JARENTRIES.put(ENTRY);
+				}
+
+				if(JARENTRIES.length() > 0) {
+					_JARFILES.put(new Jar(jarfile, JARENTRIES.toArray(new JarEntry[JARENTRIES.length()])));
+
+					if(JarFile.getManifest() != null) {
+						loadDepends(jarfile.getParentFile(), JarFile.getManifest());
+					}
+				}
+			} catch(Exception e) {
+				_LOG.printError(e);
 			} finally {
 				if(JarFile != null) {
 					try {
@@ -151,253 +144,254 @@ public class MultiJarClassLoader extends MyLocalClassloader implements ZipJarCon
 					JarFile = null;
 				}
 			}
-        }
-    }
+		}
+	}
 
-    public void removeJarFileAt(int index) {
-        if(_JARFILES.validIndex(index)) {
-            _JARFILES.removeAt(index);
-        }
-    }
+	public void removeJarFileAt(int index) {
+		if(_JARFILES.validIndex(index)) {
+			_JARFILES.removeAt(index);
+		}
+	}
+
 /*
     public void removeJarFile(JarFile jarfile) {
         _JARFILES.removeAll(jarfile);
     }
 */
-    public void removeAllJarFiles() {
-        _JARFILES.removeAll();
-    }
+	public void removeAllJarFiles() {
+		_JARFILES.removeAll();
+	}
 
-    public int jarFileCount() {
-        return _JARFILES.length();
-    }
+	public int jarFileCount() {
+		return _JARFILES.length();
+	}
 
-    public JarEntry getJarEntry(String name) {
-    	if(!isClosed()) {
-            for(int X = 0; X < _JARFILES.length(); X++) {
-                final Jar JAR = _JARFILES.getAt(X);
-                final JarEntry ENTRY = JAR.getJarEntry(name);
+	public JarEntry getJarEntry(String name) {
+		if(!isClosed()) {
+			for(int X = 0; X < _JARFILES.length(); X++) {
+				final Jar JAR = _JARFILES.getAt(X);
+				final JarEntry ENTRY = JAR.getJarEntry(name);
 
-                if(ENTRY != null) {
-                    return ENTRY;
-                }
-            }
-        }
+				if(ENTRY != null) {
+					return ENTRY;
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public String getName() {
-        return _NAME;
-    }
+	@Override
+	public String getName() {
+		return _NAME;
+	}
 
-    @Override
-    protected Class<?> findLocalClass(String name) {
-    	if(!isClosed()) {
-            MyStringBuffer Buffer = new MyStringBuffer(name, 6);
-            Buffer.replace('.', '/');
-            Buffer.append(".class");
+	@Override
+	protected Class<?> findLocalClass(String name) {
+		if(!isClosed()) {
+			MyStringBuffer Buffer = new MyStringBuffer(name, 6);
+			Buffer.replace('.', '/');
+			Buffer.append(".class");
 
-            final String CLASS_NAME = Buffer.toString();
+			final String CLASS_NAME = Buffer.toString();
 
-            for(int X = 0; X < _JARFILES.length(); X++) {
-                final Jar JAR = _JARFILES.getAt(X);
-                final JarEntry ENTRY = JAR.getJarEntry(CLASS_NAME);
+			for(int X = 0; X < _JARFILES.length(); X++) {
+				final Jar JAR = _JARFILES.getAt(X);
+				final JarEntry ENTRY = JAR.getJarEntry(CLASS_NAME);
 
-                if(ENTRY != null) {
-                    InputStream IStream = JAR.getInputStream(ENTRY);
-                    
-                    if(IStream != null) {
-	                    try {
-	                        return readClass(name, IStream);
-	                    } catch (Exception e) {
-	                        _LOG.printError(e);
-	                    } finally {
+				if(ENTRY != null) {
+					InputStream IStream = JAR.getInputStream(ENTRY);
+
+					if(IStream != null) {
+						try {
+							return readClass(name, IStream);
+						} catch(Exception e) {
+							_LOG.printError(e);
+						} finally {
 							if(IStream != null) {
 								try {
 									IStream.close();
 								} catch(Exception e) {}
 								IStream = null;
 							}
-	                    }
-                    }
-                        
-                }
-            }
-        }
+						}
+					}
 
-        return null;
-    }
+				}
+			}
+		}
 
-    //jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
-    @Override
-    protected URL findLocalResource(String name) {
-        if(name != null && name.length() > 0) {
-        	if(!isClosed()) {
-                final String NAME = name;
+		return null;
+	}
+
+	//jar:file:/C:/Documents%20and%20Settings/Dalton%20Dell/Desktop/Java%20Test/ClassBrowser.jar!/classbrowser/MyFilter.class
+	@Override
+	protected URL findLocalResource(String name) {
+		if(name != null && name.length() > 0) {
+			if(!isClosed()) {
+				final String NAME = name;
 //                final String NAME = (name.charAt(0) == '/' ? name.substring(1) : name);
 
-                for(int X = 0; X < _JARFILES.length(); X++) {
-                    final Jar JAR = _JARFILES.getAt(X);
-                    final JarEntry ENTRY = JAR.getJarEntry(name);
+				for(int X = 0; X < _JARFILES.length(); X++) {
+					final Jar JAR = _JARFILES.getAt(X);
+					final JarEntry ENTRY = JAR.getJarEntry(name);
 
-                    if(ENTRY != null) {
-                        try {
-                            return new URL("jar:file:/" + JAR._JARPATH.getAbsoluteFile().toURI().toURL() + "!/" + NAME);
-                        } catch (Exception e) {}//e.printStackTrace();
-                    }
-                }
-            }
-        }
+					if(ENTRY != null) {
+						try {
+							return new URL("jar:file:/" + JAR._JARPATH.getAbsoluteFile().toURI().toURL() + "!/" + NAME);
+						} catch(Exception e) {}//e.printStackTrace();
+					}
+				}
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    protected InputStream getLocalResourceAsStream(String name) {
-        for(int X = 0; X < _JARFILES.length(); X++) {
-            final Jar JAR = _JARFILES.getAt(X);
-            final JarEntry ENTRY = JAR.getJarEntry(name);
+	@Override
+	protected InputStream getLocalResourceAsStream(String name) {
+		for(int X = 0; X < _JARFILES.length(); X++) {
+			final Jar JAR = _JARFILES.getAt(X);
+			final JarEntry ENTRY = JAR.getJarEntry(name);
 
-            if(ENTRY != null) {
-            	return JAR.getInputStream(ENTRY);
-            }
-        }
+			if(ENTRY != null) {
+				return JAR.getInputStream(ENTRY);
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    protected boolean localResourceExists(String name) {
-        for(int X = 0; X < _JARFILES.length(); X++) {
-            final JarEntry ENTRY = _JARFILES.getAt(X).getJarEntry(name);
+	@Override
+	protected boolean localResourceExists(String name) {
+		for(int X = 0; X < _JARFILES.length(); X++) {
+			final JarEntry ENTRY = _JARFILES.getAt(X).getJarEntry(name);
 
-            if(ENTRY != null) {
-                return true;
-            }
-        }
+			if(ENTRY != null) {
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean isLocalClosed() {
-        for(int X = 0; X < _JARFILES.length(); X++) {
-            if(!_JARFILES.getAt(X).isClosed()) {
-            	return false;
-            }
-        }
+	@Override
+	public boolean isLocalClosed() {
+		for(int X = 0; X < _JARFILES.length(); X++) {
+			if(!_JARFILES.getAt(X).isClosed()) {
+				return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public void localClose() {
-        close();
+	@Override
+	public void localClose() {
+		close();
 
-        _JARFILES.removeAll();
-        _LOG.printInformation("Local: All Closed");
-    }
+		_JARFILES.removeAll();
+		_LOG.printInformation("Local: All Closed");
+	}
 
-    @Override
-    public void close() {
-        for(int X = 0; X < _JARFILES.length(); X++) {
-            _JARFILES.getAt(X).close(true);
-        }
-    }
+	@Override
+	public void close() {
+		for(int X = 0; X < _JARFILES.length(); X++) {
+			_JARFILES.getAt(X).close(true);
+		}
+	}
 
-    private void closeAllNotUsedButThis(Jar jar) {
-        for(int X = 0; X < _JARFILES.length(); X++) {
-            if(!_JARFILES.getAt(X).equals(jar)) {
-                _JARFILES.getAt(X).close(false);
-            }
-        }
-    }
+	private void closeAllNotUsedButThis(Jar jar) {
+		for(int X = 0; X < _JARFILES.length(); X++) {
+			if(!_JARFILES.getAt(X).equals(jar)) {
+				_JARFILES.getAt(X).close(false);
+			}
+		}
+	}
 
-    @Override
-    protected void finalize() throws Throwable {
-        close();
+	@Override
+	protected void finalize() throws Throwable {
+		close();
 
-        super.finalize();
-    }
+		super.finalize();
+	}
 
-    //CLASSES
-    //Just Used To Keep Track Of The Number Of Streams Open In A Given Jar
-    private class WrapperInputStream extends InputStream {
-        private final Jar _JAR;
-        private InputStream _IStream;
+	//CLASSES
+	//Just Used To Keep Track Of The Number Of Streams Open In A Given Jar
+	private class WrapperInputStream extends InputStream {
+		private final Jar _JAR;
+		private InputStream _IStream;
 
-        public WrapperInputStream(InputStream istream, Jar jar) {
-            _IStream = istream;
-            _JAR = jar;
+		public WrapperInputStream(InputStream istream, Jar jar) {
+			_IStream = istream;
+			_JAR = jar;
 
-            _JAR._OpenStreams++;
-        }
+			_JAR._OpenStreams++;
+		}
 
-        @Override
-        public int read() throws IOException {
-            return _IStream.read();
-        }
+		@Override
+		public int read() throws IOException {
+			return _IStream.read();
+		}
 
-        @Override
-        public int read(byte[] b) throws IOException {
-            return _IStream.read(b);
-        }
+		@Override
+		public int read(byte[] b) throws IOException {
+			return _IStream.read(b);
+		}
 
-        @Override
-        public int read(byte[] b, int off, int len) throws IOException {
-            return _IStream.read(b, off, len);
-        }
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {
+			return _IStream.read(b, off, len);
+		}
 
-        @Override
-        public void close() throws IOException {
-            if(_IStream != null) {
-                _IStream.close();
-                _IStream = null;
-                
-                _JAR._OpenStreams--;
+		@Override
+		public void close() throws IOException {
+			if(_IStream != null) {
+				_IStream.close();
+				_IStream = null;
 
-                if(!_JAR.hasOpenStreams()) {
-                    _JAR.close(false);
-                }
-            }
-        }
-    }
+				_JAR._OpenStreams--;
 
-    private class Jar {
-        private final File _JARPATH;
-        private final JarEntry[] _ENTRIES;
+				if(!_JAR.hasOpenStreams()) {
+					_JAR.close(false);
+				}
+			}
+		}
+	}
 
-        private JarFile _JarFile;
-        
-        private int _OpenStreams = 0;
+	private class Jar {
+		private final File _JARPATH;
+		private final JarEntry[] _ENTRIES;
 
-        private Jar(File jarpath, JarEntry[] entries) {
-            _JARPATH = jarpath;
-            _ENTRIES = entries;
-        }
+		private JarFile _JarFile;
 
-        private boolean open(){
-            closeAllNotUsedButThis(this);
-            
-            if(_JarFile == null) {
-                try {
-                    _JarFile = new JarFile(_JARPATH);
-                } catch (Exception e) {
-                    _LOG.printError(e);
-                    _JarFile = null;
-                }
-            }
+		private int _OpenStreams = 0;
 
-            return !isClosed();
-        }
+		private Jar(File jarpath, JarEntry[] entries) {
+			_JARPATH = jarpath;
+			_ENTRIES = entries;
+		}
 
-        private void close(boolean force) {
-            if(!hasOpenStreams() || force) {
-                close();
-            }
-        }
+		private boolean open() {
+			closeAllNotUsedButThis(this);
+
+			if(_JarFile == null) {
+				try {
+					_JarFile = new JarFile(_JARPATH);
+				} catch(Exception e) {
+					_LOG.printError(e);
+					_JarFile = null;
+				}
+			}
+
+			return !isClosed();
+		}
+
+		private void close(boolean force) {
+			if(!hasOpenStreams() || force) {
+				close();
+			}
+		}
 
 		private void close() {
 			if(_JarFile != null) {
@@ -408,34 +402,34 @@ public class MultiJarClassLoader extends MyLocalClassloader implements ZipJarCon
 			}
 		}
 
-        public boolean hasOpenStreams() {
-            return _OpenStreams > 0;
-        }
+		public boolean hasOpenStreams() {
+			return _OpenStreams > 0;
+		}
 
-        private boolean isClosed() {
-            return _JarFile == null;
-        }
+		private boolean isClosed() {
+			return _JarFile == null;
+		}
 
-        private JarEntry getJarEntry(String name) {
-            for(int X = 0; X < _ENTRIES.length; X++) {
-                if(_ENTRIES[X].getName().equals(name)) {
-                    return _ENTRIES[X];
-                }
-            }
+		private JarEntry getJarEntry(String name) {
+			for(int X = 0; X < _ENTRIES.length; X++) {
+				if(_ENTRIES[X].getName().equals(name)) {
+					return _ENTRIES[X];
+				}
+			}
 
-            return null;
-        }
-        
-        private InputStream getInputStream(JarEntry jarentry) {
-        	if(open()) {
-        		try {
-        			return new WrapperInputStream(_JarFile.getInputStream(jarentry), this);
-        		} catch (Exception e) {
-        			_LOG.printError(e);
-        		}
-        	}
-        	
-        	return null;
-        }
-    }
+			return null;
+		}
+
+		private InputStream getInputStream(JarEntry jarentry) {
+			if(open()) {
+				try {
+					return new WrapperInputStream(_JarFile.getInputStream(jarentry), this);
+				} catch(Exception e) {
+					_LOG.printError(e);
+				}
+			}
+
+			return null;
+		}
+	}
 }

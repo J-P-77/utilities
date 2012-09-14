@@ -1,71 +1,71 @@
 package utillib.lang.unsigned;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.0</b>
- *
+ * 
  * April 08, 2010 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class UnsignedInt {
-    public static final long _MIN_VALUE_ = 0;
-    public static final long _MAX_VALUE_ = 4294967295l;
+	public static final long _MIN_VALUE_ = 0;
+	public static final long _MAX_VALUE_ = 4294967295l;
 
-    private long _Value = 0;
+	private long _Value = 0;
 
-    public UnsignedInt(int value) {
-    	_Value = (long)((value >> 32) & 0xff);
-    }
-    
-    public UnsignedInt(long value) {
-        setValue(value);
-    }
+	public UnsignedInt(int value) {
+		_Value = (long)((value >> 32) & 0xff);
+	}
 
-    public void setValue(long value) {
-        if(value < 0 || value > _MAX_VALUE_) {
-            throw new RuntimeException("Variable[value] - Must Be >= 0 and <= 4294967295");
-        }
+	public UnsignedInt(long value) {
+		setValue(value);
+	}
 
-        _Value = value;
-    }
+	public void setValue(long value) {
+		if(value < 0 || value > _MAX_VALUE_) {
+			throw new RuntimeException("Variable[value] - Must Be >= 0 and <= 4294967295");
+		}
 
-    public long getValue() {
-        return _Value;
-    }
-    
-    public void increment() {
-        _Value++;
-        
-        checkRange(_Value);
-    }
-    
-    public void increment(long value) {
-    	checkRange(value);
+		_Value = value;
+	}
 
-        _Value += value;
-    }
-    
-    
-    public void decrement() {
-        _Value--;
-        
-        checkRange(_Value);
-    }
-    
-    public void decrement(long value) {
-    	checkRange(value);
+	public long getValue() {
+		return _Value;
+	}
 
-        _Value -= value;
-    }
-    
-    public static void checkRange(long value) {
-        if(value < _MIN_VALUE_ || value > _MAX_VALUE_) {
-        	throw new RuntimeException("Variable[value] - Must Be >= 0 and <= " + _MAX_VALUE_);
-        }
-    }
+	public void increment() {
+		_Value++;
+
+		checkRange(_Value);
+	}
+
+	public void increment(long value) {
+		checkRange(value);
+
+		_Value += value;
+	}
+
+	public void decrement() {
+		_Value--;
+
+		checkRange(_Value);
+	}
+
+	public void decrement(long value) {
+		checkRange(value);
+
+		_Value -= value;
+	}
+
+	public static void checkRange(long value) {
+		if(value < _MIN_VALUE_ || value > _MAX_VALUE_) {
+			throw new RuntimeException("Variable[value] - Must Be >= 0 and <= " + _MAX_VALUE_);
+		}
+	}
 }
 /*
 Limits on Integer Constants

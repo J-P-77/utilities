@@ -6,34 +6,34 @@ import utillib.strings.MyStringBuffer;
 import java.io.File;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class DefaultDebugFileHandler /*extends DebugLogger */{
-    private DebugOutputStream _OStream = null;
-    
-    private final File _FILE;
-    private final boolean _APPEND;
-    
-    public DefaultDebugFileHandler(String path) {
-        this(new File(path), false);
-    }
+	private DebugOutputStream _OStream = null;
 
-    public DefaultDebugFileHandler(String path, boolean append) {
-        this(new File(path), append);
-    }
+	private final File _FILE;
+	private final boolean _APPEND;
 
-    public DefaultDebugFileHandler(File file) {
-        this(file, false);
-    }
+	public DefaultDebugFileHandler(String path) {
+		this(new File(path), false);
+	}
 
-    public DefaultDebugFileHandler(File file, boolean append) {
+	public DefaultDebugFileHandler(String path, boolean append) {
+		this(new File(path), append);
+	}
+
+	public DefaultDebugFileHandler(File file) {
+		this(file, false);
+	}
+
+	public DefaultDebugFileHandler(File file, boolean append) {
 //        super(file.getName());
 
-        _FILE = file;
-        _APPEND = append;
-    }    
-    
+		_FILE = file;
+		_APPEND = append;
+	}
+
 //    public void printLog(Log log, String msg) {
 //        _OStream.write(log.toString() + " - ");
 //        _OStream.writeln(msg);
@@ -50,19 +50,19 @@ public class DefaultDebugFileHandler /*extends DebugLogger */{
 //    }
 
 //    @Override
-    public void printBlank(String msg) {
-        _OStream.write(msg);
-        _OStream.newline();
-    }
-    
+	public void printBlank(String msg) {
+		_OStream.write(msg);
+		_OStream.newline();
+	}
+
 //    @Override
-    public void printCustom(String name, String logtype, String msg) {
-    	_OStream.write("[" + name + "] ");
-        _OStream.write(logtype);
-        _OStream.write(msg);
-        _OStream.newline();
-        
-    }
+	public void printCustom(String name, String logtype, String msg) {
+		_OStream.write("[" + name + "] ");
+		_OStream.write(logtype);
+		_OStream.write(msg);
+		_OStream.newline();
+
+	}
 
 //    public void printPlain(String msg) {
 //    	if(super.validLevel(Log_Levels.WARNING)) {
@@ -132,37 +132,37 @@ public class DefaultDebugFileHandler /*extends DebugLogger */{
 //    }
 
 //    @Override
-    public void open() {
-        if(isClosed()) {
-            try {
-            	_OStream = new DebugOutputStream(_FILE, _APPEND);
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		}
-        }
-    }
+	public void open() {
+		if(isClosed()) {
+			try {
+				_OStream = new DebugOutputStream(_FILE, _APPEND);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public boolean isClosed() {
-        if(_OStream == null) {
-            return true;
-        }
-        
-        return _OStream.isClosed();
-    }
+	public boolean isClosed() {
+		if(_OStream == null) {
+			return true;
+		}
 
-    public void close() {
-        if(_OStream != null) {
-        	try {
-        		_OStream.close();
-			} catch (Exception e) {}
+		return _OStream.isClosed();
+	}
+
+	public void close() {
+		if(_OStream != null) {
+			try {
+				_OStream.close();
+			} catch(Exception e) {}
 			_OStream = null;
-        }
-    }
+		}
+	}
 
-    @Override
-    protected void finalize() throws Throwable {
-        close();
-        
-        super.finalize();
-    }
+	@Override
+	protected void finalize() throws Throwable {
+		close();
+
+		super.finalize();
+	}
 }

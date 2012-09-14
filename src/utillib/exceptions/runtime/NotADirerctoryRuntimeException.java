@@ -3,16 +3,16 @@ package utillib.exceptions.runtime;
 import java.io.File;
 
 /**
- *
- * @author Dalton Dell
+ * 
+ * @author Justin Palinkas
  */
 public class NotADirerctoryRuntimeException extends FileRuntimeException {
 
-    public NotADirerctoryRuntimeException(File file) {
-        this("", file);
-    }
+	public NotADirerctoryRuntimeException(File file) {
+		this("", file);
+	}
 
-    public NotADirerctoryRuntimeException(String message, File file) {
-        super(message, file);
-    }
+	public NotADirerctoryRuntimeException(String message, File file) {
+		super(message, file);
+	}
 }

@@ -7,196 +7,197 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 2.0.0</b>
- *
+ * 
  * November 07, 2008 (Version 1.0.0)
  *     -First Released
- *
+ * 
  * December 11, 2009 (Version 1.0.1)
  *     -Updated
  *         -Little Bit Of EveryThing
- *
+ * 
  * March 11, 2010 (Version 1.0.2)
  *     -Fix Bug
  *         -When Checking OS I Used The Wrong File Separator Character
  *     -Updated
  *         -The Checking Of The OS Version
- *
+ * 
  * @author Justin Palinkas
  * 
  * </pre>
  */
-public class SystemProperties implements User {    
-    public static enum Property {
-	    APP_PATH,
-	
+public class SystemProperties implements User {
+	public static enum Property {
+		APP_PATH,
+
 		JAVA_HOME,
 		JAVA_VENDOR,
 		JAVA_VENDOR_URL,
 		JAVA_VERSION,
 		JAVA_CLASS_PATH,
-	    JAVA_CLASS_VERSION,
-	
-	    OS_ARCH,
+		JAVA_CLASS_VERSION,
+
+		OS_ARCH,
 		OS_NAME,
 		OS_VERSION,
-	
+
 		USER_HOME,
 		USER_NAME,
-	    USER_LANGUAGE,
-	    USER_COUNTRY,
-	
-	    FILE_SEPARATOR,
-	    PATH_SEPARATOR,
-	    LINE_SEPARATOR,
-	    
+		USER_LANGUAGE,
+		USER_COUNTRY,
+
+		FILE_SEPARATOR,
+		PATH_SEPARATOR,
+		LINE_SEPARATOR,
+
 		JAVA_SPECIFICATION_VERSION,
 		JAVA_SPECIFICATION_VENDOR,
 		JAVA_SPECIFICATION_NAME,
-	
+
 		JAVA_VM_SPECIFICATION_VERSION,
 		JAVA_VM_SPECIFICATION_VENDOR,
 		JAVA_VM_SPECIFICATION_NAME,
 		JAVA_VM_VERSION,
 		JAVA_VM_VENDOR,
 		JAVA_VM_NAME,
-	
-	    JAVA_CLASS_VERISON,
-	    JAVA_RUNTIME_VERSION,
-	
-	    JAVA_TEMP_DIRECTORY,
-	
-	    SUN_CPU_LIST,
-	    SUN_ARCH_DATA_MODEL,
-	    SUN_CPU_ENDIAN,
-	    SUN_OS_PATCH_LEVEL;
-    };
 
-    public static String getProperty(Property value) {
-        switch(value) {
-            case APP_PATH:
-                return System.getProperty("user.dir");
+		JAVA_CLASS_VERISON,
+		JAVA_RUNTIME_VERSION,
 
-            case JAVA_HOME:
-                return System.getProperty("java.home");
+		JAVA_TEMP_DIRECTORY,
 
-            case JAVA_VENDOR:
-                return System.getProperty("java.vendor");
+		SUN_CPU_LIST,
+		SUN_ARCH_DATA_MODEL,
+		SUN_CPU_ENDIAN,
+		SUN_OS_PATCH_LEVEL;
+	};
 
-            case JAVA_VENDOR_URL:
-                return System.getProperty("java.vendor.url");
+	public static String getProperty(Property value) {
+		switch(value) {
+			case APP_PATH:
+				return System.getProperty("user.dir");
 
-            case JAVA_VERSION:
-                return System.getProperty("java.version");
+			case JAVA_HOME:
+				return System.getProperty("java.home");
 
-            case JAVA_CLASS_PATH:
-                return System.getProperty("java.class.path");
+			case JAVA_VENDOR:
+				return System.getProperty("java.vendor");
 
-            case JAVA_CLASS_VERSION:
-                return System.getProperty("java.class.version");
+			case JAVA_VENDOR_URL:
+				return System.getProperty("java.vendor.url");
 
-            case OS_ARCH:
-                return System.getProperty("os.arch");
+			case JAVA_VERSION:
+				return System.getProperty("java.version");
 
-            case OS_NAME:
-                return System.getProperty("os.name");
+			case JAVA_CLASS_PATH:
+				return System.getProperty("java.class.path");
 
-            case OS_VERSION:
-                return System.getProperty("os.version");
+			case JAVA_CLASS_VERSION:
+				return System.getProperty("java.class.version");
 
-            case USER_HOME:
-                return System.getProperty("user.home");
+			case OS_ARCH:
+				return System.getProperty("os.arch");
 
-            case USER_NAME:
-                return System.getProperty("user.name");
+			case OS_NAME:
+				return System.getProperty("os.name");
 
-            case USER_LANGUAGE:
-                return System.getProperty("user.language");
+			case OS_VERSION:
+				return System.getProperty("os.version");
 
-            case USER_COUNTRY:
-                return System.getProperty("user.country");
+			case USER_HOME:
+				return System.getProperty("user.home");
 
-            case FILE_SEPARATOR:
-                return System.getProperty("file.separator");
+			case USER_NAME:
+				return System.getProperty("user.name");
 
-            case PATH_SEPARATOR:
-                return System.getProperty("path.separator");
+			case USER_LANGUAGE:
+				return System.getProperty("user.language");
 
-            case LINE_SEPARATOR:
-                return System.getProperty("line.separator");
+			case USER_COUNTRY:
+				return System.getProperty("user.country");
 
-            case JAVA_SPECIFICATION_VERSION:
-                return System.getProperty("java.specification.version");
-                
-            case JAVA_SPECIFICATION_VENDOR:
-                return System.getProperty("java.specification.vendor");
+			case FILE_SEPARATOR:
+				return System.getProperty("file.separator");
 
-            case JAVA_SPECIFICATION_NAME:
-                return System.getProperty("java.specification.name");
+			case PATH_SEPARATOR:
+				return System.getProperty("path.separator");
 
-            case JAVA_VM_SPECIFICATION_VERSION:
-                return System.getProperty("java.vm.specification.version");
+			case LINE_SEPARATOR:
+				return System.getProperty("line.separator");
 
-            case JAVA_VM_SPECIFICATION_VENDOR:
-                return System.getProperty("java.vm.specification.vendor");
+			case JAVA_SPECIFICATION_VERSION:
+				return System.getProperty("java.specification.version");
 
-            case JAVA_VM_SPECIFICATION_NAME:
-                return System.getProperty("java.vm.specification.name");
+			case JAVA_SPECIFICATION_VENDOR:
+				return System.getProperty("java.specification.vendor");
 
-            case JAVA_VM_VERSION:
-                return System.getProperty("java.vm.version");
+			case JAVA_SPECIFICATION_NAME:
+				return System.getProperty("java.specification.name");
 
-            case JAVA_VM_VENDOR:
-                return System.getProperty("java.vm.vendor");
+			case JAVA_VM_SPECIFICATION_VERSION:
+				return System.getProperty("java.vm.specification.version");
 
-            case JAVA_VM_NAME:
-                return System.getProperty("java.vm.name");
+			case JAVA_VM_SPECIFICATION_VENDOR:
+				return System.getProperty("java.vm.specification.vendor");
 
-            case JAVA_CLASS_VERISON:
-                return System.getProperty("java.class.version");
+			case JAVA_VM_SPECIFICATION_NAME:
+				return System.getProperty("java.vm.specification.name");
 
-            case JAVA_RUNTIME_VERSION:
-                return System.getProperty("java.runtime.version");
+			case JAVA_VM_VERSION:
+				return System.getProperty("java.vm.version");
 
-            case JAVA_TEMP_DIRECTORY:
-                return System.getProperty("java.io.tmpdir");
+			case JAVA_VM_VENDOR:
+				return System.getProperty("java.vm.vendor");
 
-            case SUN_CPU_LIST:
-                return System.getProperty("sun.cpu.isalist");
+			case JAVA_VM_NAME:
+				return System.getProperty("java.vm.name");
 
-            case SUN_ARCH_DATA_MODEL:
-                return System.getProperty("sun.arch.data.model");
+			case JAVA_CLASS_VERISON:
+				return System.getProperty("java.class.version");
 
-            case SUN_CPU_ENDIAN:
-                return System.getProperty("sun.cpu.endian");
-                
-            case SUN_OS_PATCH_LEVEL:
-                return System.getProperty("sun.os.patch.level");
+			case JAVA_RUNTIME_VERSION:
+				return System.getProperty("java.runtime.version");
 
-        }
+			case JAVA_TEMP_DIRECTORY:
+				return System.getProperty("java.io.tmpdir");
 
-        return null;
-    }    
-    
-    public static String getProperty(String value) {
-        return System.getProperty(value);
-    }
-    
-    public static Collection<String, String> getProperties() {
-    	final Collection<String, String> RESULTS = new Collection<String, String>();
-    	
-        final Properties PROP = System.getProperties();
+			case SUN_CPU_LIST:
+				return System.getProperty("sun.cpu.isalist");
 
-        final Set<?> SET = PROP.entrySet();
-        final Iterator<?> I = SET.iterator();
+			case SUN_ARCH_DATA_MODEL:
+				return System.getProperty("sun.arch.data.model");
 
-        while(I.hasNext()) {
-            final Entry<?, ?> E = ((Entry<?, ?>)I.next());
-            
-            RESULTS.add((String)E.getKey(), (String)E.getValue());
-        }
-    	
-    	return RESULTS;
-    }
+			case SUN_CPU_ENDIAN:
+				return System.getProperty("sun.cpu.endian");
+
+			case SUN_OS_PATCH_LEVEL:
+				return System.getProperty("sun.os.patch.level");
+
+		}
+
+		return null;
+	}
+
+	public static String getProperty(String value) {
+		return System.getProperty(value);
+	}
+
+	public static Collection<String, String> getProperties() {
+		final Collection<String, String> RESULTS = new Collection<String, String>();
+
+		final Properties PROP = System.getProperties();
+
+		final Set<?> SET = PROP.entrySet();
+		final Iterator<?> I = SET.iterator();
+
+		while(I.hasNext()) {
+			final Entry<?, ?> E = ((Entry<?, ?>)I.next());
+
+			RESULTS.add((String)E.getKey(), (String)E.getValue());
+		}
+
+		return RESULTS;
+	}
 }

@@ -13,18 +13,19 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.1.0
- *
+ * 
  * January 12, 2011 (version 1.0.0)
  *     -First Released
- *
+ * 
  * November 5, 2011 (version 1.1.0)
  *     -Fixed bug
  *         -reconnect() method would reconnect to local address and port instead of remote address and port
- *
+ * 
  * @author Justin Palinkas
- *
+ * 
  * </pre>
  */
 public class SimpleSocketConnection {

@@ -13,68 +13,68 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- *
+ * 
  * @author Dalton Dell
  */
 public class XMLReader {
-    private Document _Document = null;
+	private Document _Document = null;
 
-    public boolean parse(String filepath) {
-        return parse(new File(filepath));
-    }
+	public boolean parse(String filepath) {
+		return parse(new File(filepath));
+	}
 
-    public boolean parse(File file) {
-        try {
-            return parse(new FileInputStream(file));
-        } catch (Exception e) {}
+	public boolean parse(File file) {
+		try {
+			return parse(new FileInputStream(file));
+		} catch(Exception e) {}
 
-        return false;
-    }
+		return false;
+	}
 
-    public boolean parse(InputStream istream) {
-        try {
-            if(_Document == null) {
-                final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
-                final DocumentBuilder DB = DBF.newDocumentBuilder();
+	public boolean parse(InputStream istream) {
+		try {
+			if(_Document == null) {
+				final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
+				final DocumentBuilder DB = DBF.newDocumentBuilder();
 
-                _Document = DB.parse(istream);
+				_Document = DB.parse(istream);
 
-                return true;
-            }
-        } catch (Exception e) {}
+				return true;
+			}
+		} catch(Exception e) {}
 
-        return false;
-    }
+		return false;
+	}
 
-    public Node getFirstNode() {
-        return _Document.getDocumentElement();
-    }
+	public Node getFirstNode() {
+		return _Document.getDocumentElement();
+	}
 
-    public Node[] getNodes(Node node, String name) {
-        final ResizingArray<Node> NODES = new ResizingArray<Node>();
+	public Node[] getNodes(Node node, String name) {
+		final ResizingArray<Node> NODES = new ResizingArray<Node>();
 
-        for(int X = 0; X < node.getChildNodes().getLength(); X++) {
-            if(node.getChildNodes().item(X).getNodeName().equals(name)) {
-                NODES.put(node.getChildNodes().item(X));
-            }
-        }
+		for(int X = 0; X < node.getChildNodes().getLength(); X++) {
+			if(node.getChildNodes().item(X).getNodeName().equals(name)) {
+				NODES.put(node.getChildNodes().item(X));
+			}
+		}
 
-        return (NODES.length() == 0 ? null : NODES.toArray(new Node[NODES.length()]));
-    }
+		return (NODES.length() == 0 ? null : NODES.toArray(new Node[NODES.length()]));
+	}
 
-    public Node getNode(Node node, String name) {
-        for(int X = 0; X < node.getChildNodes().getLength(); X++) {
-            if(node.getChildNodes().item(X).getNodeName().equals(name)) {
-                return node.getChildNodes().item(X);
-            }
-        }
+	public Node getNode(Node node, String name) {
+		for(int X = 0; X < node.getChildNodes().getLength(); X++) {
+			if(node.getChildNodes().item(X).getNodeName().equals(name)) {
+				return node.getChildNodes().item(X);
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public Node getAttribute(Node node, String name) {
-        return node.getAttributes().getNamedItem(name);
-    }
+	public Node getAttribute(Node node, String name) {
+		return node.getAttributes().getNamedItem(name);
+	}
 /*
     public static void main(String[] args) {
         final XMLReader READER = new XMLReader();

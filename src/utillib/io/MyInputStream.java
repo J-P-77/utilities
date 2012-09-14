@@ -7,22 +7,23 @@ import utillib.interfaces.IMyInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**<pre>
+/**
+ * <pre>
  * <b>Current Version 1.0.2</b>
- *
+ * 
  * October 14, 2009 (version 1.0.0)
  *     -First Released
- *
+ * 
  * January 10, 2010 (version 1.0.1)
  *     -Added
  *         -Bit Ordering
- *
+ * 
  * March 29, 2010 (version 1.0.2)
  *     -Updated
  *         -Exported Everything To abstract class AMyInputStream
  * 
  * <b>default ordering:</b> Little Endian
- *
+ * 
  * @author Justin Palinkas
  * 
  * </pre>
