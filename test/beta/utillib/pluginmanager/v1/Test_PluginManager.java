@@ -44,7 +44,7 @@ public class Test_PluginManager {
 		//P_MANAGER.loadLibrary("");
 		final InstanceWrapper WRAPPER = new InstanceWrapper(P_MANAGER.getPluginInfoAt(0).getPlugin());
 		
-		final IMethodCall M_handleMsg_int_Object_Object = WRAPPER.getMethodRWPC("handleMsg", Object.class, int.class, Object.class, Object.class);
+		final IMethodCall M_handleMsg_int_Object_Object = WRAPPER.getMethodWPC("handleMsg", Object.class, int.class, Object.class, Object.class);
 		M_handleMsg_int_Object_Object.call(1, "", null);
 		
 		final ClassWrapper C_WRAPPER = new ClassWrapper(P_MANAGER.getPluginInfoAt(0).getPluginClass());

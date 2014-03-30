@@ -1,21 +1,42 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2014 Justin Palinkas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
 package utillib.io;
 
 import utillib.arrays.ArraysUtil;
-
 import utillib.file.FileUtil;
-
 import utillib.strings.MyStringBuffer;
-
 import utillib.utilities.BitOperations;
 import utillib.utilities.BitOperations.Byte_Ordering;
-
+import utillib.interfaces.IInputStream;
 import utillib.interfaces.IMyInputStream;
-
 import utillib.lang.unsigned.UnsignedByte;
 import utillib.lang.unsigned.UnsignedInt;
 import utillib.lang.unsigned.UnsignedShort;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <pre>
@@ -37,8 +58,8 @@ import java.io.IOException;
  * @author Justin Palinkas
  * 
  * </pre>
- */
-public abstract class AMyInputStream extends AInputStream implements IMyInputStream {
+ */									//extends InputStream implements IInputStream
+public abstract class AMyInputStream extends InputStream implements IInputStream, IMyInputStream {
 	private boolean _PreviousCharCR = false;
 
 	private Byte_Ordering _Default_Bit_Ordering;
@@ -507,6 +528,22 @@ public abstract class AMyInputStream extends AInputStream implements IMyInputStr
 		return -1;
 	}
 
+	public float readFloat() throws IOException {
+		return readFloat(_Default_Bit_Ordering);
+	}
+	
+	public float readFloat(Byte_Ordering bitordering) throws IOException {
+		return Float.intBitsToFloat(this.readInt());
+	}
+	
+	public double readDouble() throws IOException {
+		return readDouble(_Default_Bit_Ordering);
+	}
+	
+	public double readDouble(Byte_Ordering bitordering) throws IOException {
+		return Double.longBitsToDouble(this.readLong());
+	}
+	
 	@Deprecated
 	public boolean isOpen() {
 		return !isClosed();

@@ -1,3 +1,51 @@
+/*
+The MIT License (MIT)
+
+Copyright (c) 2014 Justin Palinkas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2014 J-P-77
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
 package utillib.net.protocol.http.client;
 
 import utillib.arrays.ResizingArray;
@@ -600,89 +648,6 @@ public class MyHttpConnection {
 
 		public synchronized void close() throws IOException {
 			_Current_Input = null;
-		}
-	}
-
-	//STATIC	
-	private static void printBuffer(String msg, byte[] buffer, int offset, int length) {
-		System.out.println("[" + msg + " BUFFER START]");
-		for(int X = 0; X < length; X++) {
-			final byte BYTE = buffer[X + offset];
-
-//			switch(BYTE) {
-//				case 10:
-//				case 13:
-//					System.out.print('(' + Byte.toString(BYTE) + ')');					
-//					break;
-//			}
-
-			System.out.print((char)BYTE);
-		}
-	}
-
-	private static void fetch(URL url) {
-		MyHttpConnection Connection = null;
-		try {
-			Connection = new MyHttpConnection(url);
-
-			final HttpEntry ENTRY = new HttpEntry(Method.GET, url.getPath());
-
-			ENTRY.setContentLength(0);
-
-			Connection.request(ENTRY);
-
-			final InputStream ISTREAM = Connection.reply(ENTRY);
-
-			//System.out.println(ENTRY.getStatusCode() + " Status Msg: " + ENTRY.getStatusMsg());
-
-			if(HttpCodes.statusRedirection(ENTRY)) {
-				System.out.println("Redirection From: " + ENTRY.getHost() + " TO " + ENTRY.getHeaderValue("Location"));
-			} else if(HttpCodes.statusSuccess(ENTRY)) {
-				if(ISTREAM == null) {
-					System.out.println("Zero Length Stream");
-				} else {
-//					System.out.println("[              DATA              ]");
-					int Read = -1;
-					while((Read = ISTREAM.read()) != -1) {
-//						System.out.print((char)Read);
-					}
-				}
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(Connection != null) {
-				try {
-					Connection.close();
-				} catch(Exception e2) {}
-				Connection = null;
-			}
-		}
-	}
-
-	public static void main(String[] args) {
-//		try {
-//			System.out.println(InetAddress.getByName("zyn.ga").toString());
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-
-//		System.out.println(Integer.parseInt("f1", 16));
-//		
-//		if(true) return;
-//		
-		try {
-			fetch(new URL("https://www.google.com"));
-			fetch(new URL("http://zyn.ga/1qJ"));
-//			fetch(new URL("http://tinyurl.com/4y7ovhq"));
-//			fetch(new URL("http://www.cnet.com:80"));
-			fetch(new URL("http://www.yahoo.com:80"));
-//			fetch(new URL("http://www.twit.tv:80"));
-//			fetch(new URL("http://wildfiregames.com:80/0ad/"));
-
-			//fetch(new URL("http://www.firefox.com:80"));
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

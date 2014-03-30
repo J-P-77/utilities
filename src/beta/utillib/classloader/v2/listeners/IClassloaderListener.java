@@ -22,23 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package utillib.lang.byref;
+package beta.utillib.classloader.v2.listeners;
+
+import java.io.Closeable;
+import java.io.InputStream;
+
+import java.net.URL;
+
+import java.util.jar.Manifest;
 
 /**
- * <pre>
- * <b>Current Version 1.0.0</b>
  * 
- * April 14, 2010 (Version 1.0.0)
- *     -First Released
- * 
- * @author Justin Palinkas
- * 
- * </pre>
+ * @author Dalton Dell
  */
-public class TByRef<T> {
-	public T value = null;
+public interface IClassloaderListener extends Closeable {
 
-	public TByRef(T value) {
-		this.value = value;
-	}
+	public String getName();
+
+	/**
+	 * Search Local ClassLoader For Class
+	 * 
+	 * @param classname
+	 * @return If Class Does Not Exists return null
+	 */
+	public InputStream findClass(String name);
+
+	/**
+	 * Search Local ClassLoader For Resource
+	 * 
+	 * @param classname
+	 * @return If Resource Does Not Exists return null
+	 */
+	public URL findResource(String name);
+
+	/**
+	 * Search Local ClassLoader For Resource
+	 * 
+	 * @param classname
+	 * @return If Resource Stream Does Not Exists return null
+	 */
+	public InputStream getResourceAsStream(String name);
+
+	public boolean resourceExists(String name);
+
+	public boolean isClosed();
+
+	public Manifest getManifest();
 }
