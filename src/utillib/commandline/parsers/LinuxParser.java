@@ -34,7 +34,7 @@ import utillib.lang.byref.IntByRef;
  * Examples. -openserver server1:local:1234 -openserver:server1:local:1234 -file
  * "text 1.txt" /include
  * 
- * @author Dalton Dell
+ * @author Justin Palinkas
  * 
  */
 public class LinuxParser extends ACmdLineHandler {
